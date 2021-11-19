@@ -46,7 +46,7 @@ export default function TagView(props) {
         return r;
     }
     return (
-        <div>
+        <div className="tagviews-container">
             <TransitionGroup className="breadcrumb-container" >
                 {views.map((v, i) => (
                     <CSSTransition appear key={v.path} timeout={1000} classNames="breadcrumb" nodeRef={refs[i]}>
