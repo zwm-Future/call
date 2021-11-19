@@ -1,7 +1,6 @@
 import React from 'react';
 import { Redirect } from "react-router-dom";
 import Login from '@/pages/login'
-// import Home from '@/pages/home'
 import Subscribe from '@/pages/subscribe'
 import Scene from '@/pages/scene'
 import Urgent from '@/pages/urgent'
