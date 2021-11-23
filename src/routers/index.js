@@ -1,9 +1,7 @@
 import React from 'react';
 import { Redirect } from "react-router-dom";
 import Login from '@/pages/login'
-import Subscribe from '@/pages/subscribe'
-import Scene from '@/pages/scene'
-import Urgent from '@/pages/urgent'
+import Calling from '@/pages/calling'
 import Queue from '@/pages/queue'
 import Main from '@/pages/main'
 
@@ -49,19 +47,9 @@ const routes =  [
                 component: Main,
             },
             {
-                path: '/home/subscribe',
-                component: Subscribe,
-                title: '预订',
-            },
-            {
-                path: '/home/scene',
-                component: Scene,
-                title: '现场',
-            },
-            {
-                path: '/home/urgent',
-                component: Urgent,
-                title: '加急',
+                path: '/home/Calling',
+                component: Calling,
+                title: '叫号',
             },
             {
                 path: '/home/queue',

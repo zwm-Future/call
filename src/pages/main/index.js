@@ -8,7 +8,7 @@ import {
     EditTwoTone
 } from '@ant-design/icons'
 
-import { Modal, Select } from 'antd'
+import { Modal, Select, message } from 'antd'
 
 import './index.less'
 
@@ -21,55 +21,65 @@ const items = [
         to: '/home/queue',
         classNames: 'queue-item',
         icon: () => (<UserOutlined className="item-icon" style={{ color: '#109efc' }} />),
-        hasSelect:false
+        hasSelect: false
     },
     {
         title: '预约',
-        to: '/home/subscribe',
+        to: '/home/calling',
+        type: '1',
         classNames: 'subscribe-item',
         icon: () => (<SafetyCertificateTwoTone className="item-icon" twoToneColor='rgb(21, 245, 133)' />),
-        hasSelect:true
+        hasSelect: true
     },
     {
         title: '现场',
-        to: '/home/scene',
+        to: '/home/calling',
+        type: '2',
         classNames: 'scene-item',
         icon: () => (<EnvironmentTwoTone className="item-icon" twoToneColor='#1890ff' />),
-        hasSelect:true
+        hasSelect: true
     },
     {
         title: '加急',
-        to: '/home/urgent',
+        to: '/home/calling',
+        type: '3',
         classNames: 'urgent-item',
         icon: () => (<ThunderboltTwoTone className="item-icon" twoToneColor='#eccb52fc' />),
-        hasSelect:true
+        hasSelect: true
     },
     {
         title: '信息反馈',
         to: '/home/message',
         classNames: 'message-item',
         icon: () => (<EditTwoTone className="item-icon" twoToneColor='#109efc' />),
-        hasSelect:false
+        hasSelect: false
     },
 ]
 
 export default memo(function Main(props) {
 
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [selectPath, setPath] = useState('/home/queue');
-    const [selectVal, setVal] = useState('1');
+    const [selectItem, setItem] = useState('/home/queue');
+    const [selectVal, setVal] = useState(0);
     const { push } = useHistory();
-    const handleClick = (path,hasSelect) => {
-        if(!hasSelect) {
-            push(path);
+    const handleClick = (item) => {
+        const { to, hasSelect, title } = item;
+        if (!hasSelect) {
+            push({ pathname: to, state: { title } });
             return;
         }
         setIsModalVisible(true);
-        setPath(path)
+        setItem(item);
     };
 
     const handleOk = () => {
-        push({ pathname: selectPath, state: { currentNum: selectVal } });
+        const { to, title, type } = selectItem;
+        console.log(selectVal);
+        if(!selectVal) {
+            message.warning('请选择你当前的窗口');
+            return;
+        }
+        push({ pathname: to, state: { currentNum: selectVal, title, type } });
         setIsModalVisible(false);
     };
 
@@ -80,13 +90,13 @@ export default memo(function Main(props) {
     return (
         <div className="service-container">
             {
-                items.map(i => {
+                items.map(item => {
                     return (
-                        <div onClick={() => handleClick(i.to,i.hasSelect)} className={"service-item " + i.classNames}>
+                        <div onClick={() => handleClick(item)} className={"service-item " + item.classNames}>
                             {
-                                i.icon
+                                item.icon
                             }
-                            <span className="item-title">{i.title}</span>
+                            <span className="item-title">{item.title}</span>
                         </div>
                     )
                 })
