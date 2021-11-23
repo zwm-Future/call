@@ -16,7 +16,7 @@ import Home from '@/layout'
 // const Scene = React.lazy(_ => import("../pages/scene"));
 // const Urgent = React.lazy(_ => import("../pages/urgent"));
 
-export default [
+const routes =  [
     {
         path: "/",
         exact: true,
@@ -71,3 +71,5 @@ export default [
         ]
     },
 ];
+
+export default routes;

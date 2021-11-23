@@ -1,4 +1,4 @@
-import { HashRouter } from 'react-router-dom';
+import { HashRouter, BrowserRouter } from 'react-router-dom';
 // import { renderRoutes } from 'react-router-config';
 
 import routes from './routers';
@@ -8,9 +8,9 @@ const authPath = '/login'
 function App() {
   return (
     <div className="App">
-      <HashRouter>
+      <BrowserRouter>
         {renderRoutes(routes,authed,authPath)}
-      </HashRouter>
+      </BrowserRouter>
     </div>
   );
 }

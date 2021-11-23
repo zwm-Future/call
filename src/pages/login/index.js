@@ -1,16 +1,18 @@
 import React, { memo } from 'react'
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button,message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 import './index.less'
 
 
 export default memo(function Login() {
-    const NormalLoginForm = () => {
-        const onFinish = (values) => {
-            console.log('Received values of form: ', values);
-        };
-    }
+    const onFinish = (values) => {
+    console.log('Success:', values);
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    message.error('提交失败！');
+  };
     return (
         <div className="login-wrap">
             <div className="form-wrap">
@@ -21,6 +23,9 @@ export default memo(function Login() {
                     initialValues={{
                         remember: true,
                     }}
+                    onFinish={onFinish}
+                    onFinishFailed={onFinishFailed}
+                    autoComplete="off"
                 >
                     <Form.Item
                         name="username"
@@ -42,9 +47,8 @@ export default memo(function Login() {
                             },
                         ]}
                     >
-                        <Input
+                        <Input.Password
                             prefix={<LockOutlined className="site-form-item-icon" />}
-                            type="password"
                             placeholder="密码"
                         />
                     </Form.Item>
@@ -53,7 +57,7 @@ export default memo(function Login() {
                             登录
                         </Button>
                     </Form.Item>
-                    <a className="login-form-forgot" href="">
+                    <a className="login-form-forgot" href="javascript:;">
                         忘记密码?
                     </a>
                 </Form>
