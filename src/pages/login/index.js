@@ -11,7 +11,7 @@ export default memo(function Login() {
   };
 
   const onFinishFailed = (errorInfo) => {
-    message.error('提交失败！');
+    // message.error('提交失败！');
   };
     return (
         <div className="login-wrap">

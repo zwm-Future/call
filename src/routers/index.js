@@ -3,18 +3,15 @@ import { Redirect } from "react-router-dom";
 import Login from '@/pages/login'
 import Calling from '@/pages/calling'
 import Queue from '@/pages/queue'
+import Message from '@/pages/message'
 import Main from '@/pages/main'
+import Error_page from '@/pages/404'
 
 import Home from '@/layout'
 
 // import Layout from '../layout'
-// const Login = React.lazy(_ => import("../pages/login"));
-// const Home = React.lazy(_ => import("../pages/home"));
-// const Subscribe = React.lazy(_ => import("../pages/subscribe"));
-// const Scene = React.lazy(_ => import("../pages/scene"));
-// const Urgent = React.lazy(_ => import("../pages/urgent"));
 
-const routes =  [
+const routes = [
     {
         path: "/",
         exact: true,
@@ -47,7 +44,7 @@ const routes =  [
                 component: Main,
             },
             {
-                path: '/home/Calling',
+                path: '/home/calling',
                 component: Calling,
                 title: '叫号',
             },
@@ -55,9 +52,31 @@ const routes =  [
                 path: '/home/queue',
                 component: Queue,
                 title: '队列',
+            },
+            {
+                path: '/home/message',
+                component: Message,
+                title: '信息反馈',
+            },
+            {
+                path: '*',
+                render: () => (
+                    <Redirect to={"/404"} />
+                )
             }
         ]
     },
+    {
+        path: '/404',
+        component: Error_page,
+        title: '404',
+    },
+    {
+        path: '*',
+        render: () => (
+            <Redirect to={"/404"} />
+        )
+    }
 ];
 
 export default routes;

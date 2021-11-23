@@ -33,7 +33,7 @@ export default function TagView(props) {
 
     useEffect(() => {
         // refs = creacteRefs();
-        // console.log('refs', refs);
+        console.log('pathName', pathName);
         console.log('views', views);
         console.log('props', props);
     })
