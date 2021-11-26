@@ -16,8 +16,8 @@ export default memo(function Processing(props) {
             <div style={{
                 display: 'flex'
             }}>
-                <div style={{ flex: 1 }}><Queue title={title} /></div>
-                <div style={{ flex: 3 }}><ProcessTable /></div>
+                <div style={{ width: '25%' }}><Queue title={title} /></div>
+                <div style={{ width:'75%' }}><ProcessTable /></div>
             </div>
         </div>
     )

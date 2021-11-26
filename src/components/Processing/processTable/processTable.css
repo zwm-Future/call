@@ -1,18 +1,15 @@
 .h_pro_table {
-    background-color: #fff;
-    margin-top: 10px;
-    padding: 10px;
+  background-color: #fff;
+  margin-top: 10px;
+  padding: 10px;
 }
-.customer_info{
-    font-size: 24px;
+.h_pro_table .customer_info {
+  font-size: 24px;
 }
-.customer_info div{
-    line-height: 40px;
+.h_pro_table .customer_info div {
+  line-height: 40px;
 }
-.btn_list{
-    padding: 28px;
-    border-top: 10px solid #fafafa;
-}
-.h_pro_table .ant-table-body{
-    height: 415px;
+.h_pro_table .btn_list {
+  padding: 28px;
+  border-top: 4px solid #fafafa;
 }

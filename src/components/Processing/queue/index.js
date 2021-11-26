@@ -2,16 +2,17 @@ import { memo, useState, useEffect } from 'react'
 import './queue.css'
 import { SyncOutlined } from '@ant-design/icons';
 import { Table } from 'antd';
+
 const columns = [{
     // key:'index',
     title: "序号",
     dataIndex: 'index',
-    width: 50
+    width: '30%'
 }, {
     // key:'name',
     title: "姓名",
     dataIndex: 'name',
-    width: 100
+    width: "70%"
 }]
 const data = [
     {
@@ -61,22 +62,22 @@ const data = [
         name: 'JavaScript'
     },
     {
-        key: '8',
+        key: '10',
         index: 3,
         name: 'Hellow'
     },
     {
-        key: '9',
+        key: '11',
         index: 4,
         name: 'JavaScript'
     },
     {
-        key: '8',
+        key: '12',
         index: 3,
         name: 'Hellow'
     },
     {
-        key: '9',
+        key: '13',
         index: 4,
         name: 'JavaScript'
     }]
@@ -92,9 +93,13 @@ export default memo(function Queue(props) {
     }
     console.log('queue', props);
     return (
-        <div className="h_queue">
+        <div className="h_queue h_scroll" >
             <div className="queue_header"><div>当前排队信息</div><SyncOutlined onClick={() => loadingQueue()} spin={isSpin} style={{ color: "#68656a" }} /></div>
-            <Table scroll={{ y: 615 }} pagination={false} columns={columns} dataSource={data} />
+            <Table
+                scroll={{ y: 615}}
+                pagination={false}
+                columns={columns}
+                dataSource={data} />
         </div>
     )
 })
