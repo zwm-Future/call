@@ -40,10 +40,23 @@ const data = [
         id: '999'
     }
 ]
+let synth, msg;
 export default memo(function ProcessTable(props) {
     useEffect(() => {
         console.log('process-table', props);
-    })
+        synth = window.speechSynthesis;
+        // 语音对象
+        msg = new SpeechSynthesisUtterance();
+        msg.rate = 2
+        msg.lang = "zh-CN";  // 使用的语言:中文
+
+        return () => {
+            synth.pause();
+            // 清除语音队列
+            synth.cancel();
+        }
+        // eslint-disable-next-line
+    }, [])
 
     let [list, updateList] = useState(data)
     let [selectedListKey, updateSelectedList] = useState([])
@@ -157,11 +170,23 @@ export default memo(function ProcessTable(props) {
             updateList(newList)
         }, 1000)
     }
+
+
+    function callPerson(info) {
+        msg.text = '请工学号尾号为一零三九的老师或同学到2号窗口办理业务'
+        // synth.pause()
+        synth.cancel();
+        synth.speak(msg)
+    }
+
     return (
         <div className="h_pro_table">
             <div className="customer_info">
-                <div> 当前客户 ： XXX </div>
-                <div> 工学号：1230004949</div>
+                <div>
+                    <div className="item"> 当前客户 ： XXX </div>
+                    <div className="item"> 工学号：1230004949</div>
+                </div>
+                <Button onClick={() => callPerson()} type="primary" className="call_btn" size="large">呼叫客户</Button>
             </div>
             <div className="h_scroll">
                 <div className="list_title">总单数 ( {list.length} )：</div>

@@ -5,9 +5,13 @@
 }
 .h_pro_table .customer_info {
   font-size: 24px;
+  display: flex;
 }
-.h_pro_table .customer_info div {
+.h_pro_table .customer_info .item {
   line-height: 40px;
+}
+.h_pro_table .customer_info .call_btn {
+  margin-left: 100px;
 }
 .h_pro_table .list_title {
   margin: 30px 0 10px 0;

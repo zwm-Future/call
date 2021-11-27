@@ -1,6 +1,7 @@
 import React from 'react'
-import { FullscreenOutlined  } from '@ant-design/icons'
+import { FullscreenOutlined } from '@ant-design/icons'
 import { Button, message } from 'antd'
+import { useEffect } from 'react/cjs/react.development';
 
 
 class fullScreen {
@@ -109,6 +110,14 @@ full.screenError(e => {
 });
 
 export default function FullBtn(props) {
+
+    useEffect(() => {
+        if (props.enter && props.quit) {
+            full.screenChange(props.enter, props.quit)
+        }
+        // eslint-disable-next-line 
+    }, [])
+
     function hanleClick() {
         if (full.isElementFullScreen()) {
             full.exitFullscreen();
@@ -117,7 +126,7 @@ export default function FullBtn(props) {
         full.Fullscreen(props.ele);
     }
     return (
-            <Button icon={<FullscreenOutlined style={{fontSize:'30px'}}/>} onClick={hanleClick} style={{backgroundColor:'transparent',border:'none',color:'#ccc'}}></Button>
+        <Button icon={<FullscreenOutlined style={{ fontSize: '2.5vw', color: '#000' }} />} onClick={hanleClick} style={{ width: '100%', backgroundColor: 'transparent', border: 'none', color: '#ccc' }}></Button>
     )
 }
 
