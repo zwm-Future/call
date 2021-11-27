@@ -32,8 +32,6 @@ class createWebSocket {
             console.log("connection to server is opened")
             this.ocket_open = true;
             this.is_reonnect = true;
-            // this.heartCheck.reset().start()
-            // this.ws.send('succeed')
             // 开启心跳
             // this.heartbeat();
 
@@ -64,8 +62,9 @@ class createWebSocket {
             console.log('WebSocket连接发生错误')
         }
     }
+
+    // 心跳
     heartbeat() {
-        console.log('socket', 'ping')
         if (this.hearbeat_timer) {
             clearInterval(this.hearbeat_timer)
         }
@@ -75,6 +74,7 @@ class createWebSocket {
         }, this.hearbeat_interval)
     }
 
+    // 发送数据
     send(data, callback = null) {
         // 开启状态直接发送
         if (this.ws.readyState === this.ws.OPEN) {
@@ -98,6 +98,7 @@ class createWebSocket {
             }, 1000)
         }
     }
+    // 重连
     reconnect() {
         console.log('发起重新连接', this.reconnect_current)
 
@@ -107,6 +108,8 @@ class createWebSocket {
 
         this.connect(this.myUrl);
     }
+
+    // 关闭
     close() {
         console.log('主动断开连接')
         clearInterval(this.hearbeat_timer)
