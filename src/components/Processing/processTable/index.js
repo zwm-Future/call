@@ -164,12 +164,9 @@ export default memo(function ProcessTable(props) {
                 <div> 工学号：1230004949</div>
             </div>
             <div className="h_scroll">
-                <div style={{
-                    margin: '30px 0 10px 0',
-                    fontSize: 20
-                }}>总单数 ( {list.length} )：</div>
+                <div className="list_title">总单数 ( {list.length} )：</div>
                 <Table
-                    scroll={{ y: 420 }}
+                    scroll={{ y: 380 }}
                     bordered
                     pagination={false}
                     rowSelection={{
@@ -183,8 +180,8 @@ export default memo(function ProcessTable(props) {
                         render={(text, record) => {
                             // console.log('record', record.id);
                             return (
-                                <div style={{ display: 'flex' }}>
-                                    <Button type="primary" onClick={() => handleList(record.key, 'fail')} ghost style={{ borderColor: 'orange', color: 'orange' }}>未处理</Button>&nbsp;&nbsp;
+                                <div>
+                                    <Button type="primary" onClick={() => handleList(record.key, 'fail')} ghost style={{ borderColor: 'orange', color: 'orange', marginRight: 12 }}>未处理</Button>
                                     <Button type="primary" onClick={() => handleList(record.key, 'sccuess')}>已处理</Button>
                                 </div>
                             )
@@ -193,15 +190,10 @@ export default memo(function ProcessTable(props) {
                 </Table>
             </div>
             {/* <input > */}
-            <div style={{ display: 'flex' }} className="btn_list">
-                <div style={{
-                    flex: 1
-                }}></div>
-                <div style={{
-                    flex: 1,
-                    display: 'flex'
-                }}>
-                    <Button onClick={() => switchShowFeedback(true)} type="primary" size="large" ghost style={{ borderColor: 'orange', color: 'orange' }}>批量未处理</Button>&nbsp;&nbsp;
+            <div
+                className="btn_list">
+                <div className="float_r">
+                    <Button onClick={() => switchShowFeedback(true)} type="primary" size="large" ghost style={{ borderColor: 'orange', color: 'orange', marginRight: 12 }}>批量未处理</Button>
                     <Button onClick={() => handledMany()} type="primary" size="large" >批量已处理</Button>
                 </div>
             </div>

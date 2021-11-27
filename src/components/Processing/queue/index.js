@@ -3,6 +3,7 @@ import './queue.css'
 import { SyncOutlined } from '@ant-design/icons';
 import { Table } from 'antd';
 
+// thead 数据
 const columns = [{
     // key:'index',
     title: "序号",
@@ -14,6 +15,7 @@ const columns = [{
     dataIndex: 'name',
     width: "70%"
 }]
+// tbody 模拟数据
 const data = [
     {
         key: '1',
@@ -85,6 +87,7 @@ const data = [
 
 export default memo(function Queue(props) {
     let [isSpin, Spin] = useState(false)
+    
     let loadingQueue = () => {
         Spin(true)
         setTimeout(() => {
@@ -96,7 +99,7 @@ export default memo(function Queue(props) {
         <div className="h_queue h_scroll" >
             <div className="queue_header"><div>当前排队信息</div><SyncOutlined onClick={() => loadingQueue()} spin={isSpin} style={{ color: "#68656a" }} /></div>
             <Table
-                scroll={{ y: 615}}
+                scroll={{ y: 555 }}
                 pagination={false}
                 columns={columns}
                 dataSource={data} />

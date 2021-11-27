@@ -11,8 +11,28 @@
         line-height: 40px;
     }
 
-    .btn_list {
-        padding: 28px;
-        border-top: 4px solid #fafafa;
+    .list_title {
+        margin: 30px 0 10px 0;
+        font-size: 20px;
     }
+
+    .btn_list {
+        padding: 28px 0;
+        border-top: 1px solid #f0f0f0;
+
+        .float_r {
+            width: 50%;
+            float: right;
+        }
+
+        .float_r::before {
+            content: '';
+            visibility: hidden;
+            display: block;
+            clear: both;
+            height: 0;
+        }
+    }
+
+
 }
