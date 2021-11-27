@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react'
+import React, { memo, useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import {
     SafetyCertificateTwoTone,
@@ -86,15 +86,14 @@ export default memo(function Main(props) {
     const handleCancel = () => {
         setIsModalVisible(false);
     };
-
     return (
         <div className="service-container">
             {
                 items.map(item => {
                     return (
-                        <div onClick={() => handleClick(item)} className={"service-item " + item.classNames}>
+                        <div key={item.title} onClick={() => handleClick(item)} className={"service-item " + item.classNames}>
                             {
-                                item.icon
+                                item.icon()
                             }
                             <span className="item-title">{item.title}</span>
                         </div>
