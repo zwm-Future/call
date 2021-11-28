@@ -17,11 +17,19 @@ export default memo(function Queue(props) {
         // 监听数据
         const getMes = (e) => {
             const { subscribe, site, urgent } = JSON.parse(e.data);
-            console.log("getMes",e.data);
+            const d = JSON.parse(e.data);
+            console.log("getMes", e.data);
             // 全屏下才可播放
-            if (isFullScreen) {
-                handleSpeak(synth, msg, e.data)
-            }
+            // const fullscreenElement =
+            // document.fullscreenElement ||
+            // document.msFullscreenElement ||
+            // document.mozFullScreenElement ||
+            // document.webkitFullscreenElement;
+            // if (fullscreenElement) {
+                console.log('进入播放');
+                console.log(d.subscribeUnCall);
+                handleSpeak(synth, msg, d.subscribeUnCall)
+            // }
         }
         // websocket实例 开启连接
         const call_ws = new createWebSocket('ws://114.132.235.87:8081/queue', getMes);
@@ -42,8 +50,12 @@ export default memo(function Queue(props) {
     function handleSpeak(synth, msg, textArr) {
         if (textArr.length > 0) {
             textArr.map(t => {
-                const str = "、" + t.num.slice(t.num.length - 4).split("").join("、");
-                msg.text = "请学工号尾号为" + str + "到12号窗口办理业务";
+                // const str = "、" + t.num.slice(t.num.length - 4).split("").join("、");
+
+                // 测试
+                const str = t.user.gmtModified.toString()
+                const strRead = "、" + str.slice(str.length - 4).split("").join("、");
+                msg.text = "请学工号尾号为" + strRead + "到12号窗口办理业务";
                 synth.speak(msg);
                 synth.speak(msg);
             })
@@ -62,10 +74,12 @@ export default memo(function Queue(props) {
     // 点击全屏回调
     function fullScreenCallb() {
         updateFSstatues(true)
+        console.log(isFullScreen);
     }
     // 退出全屏时回调
     function quitFullScreenCallb() {
-        updateFSstatues(false)
+        console.log('退出全屏');
+        updateFSstatues(isFullScreen)
     }
 
     return (
