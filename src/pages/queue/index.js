@@ -19,7 +19,7 @@ export default memo(function Queue(props) {
             
             // const { subscribe, site, urgent } = JSON.parse(e.data);
             // const d = JSON.parse(e.data);
-            console.log("getMes", e.data);
+            console.log("getMes", JSON.parse(e.data));
             // console.log('进入播放');
             // console.log(d.subscribeUnCall);
             // handleSpeak(synth, msg, d.subscribeUnCall)

@@ -37,8 +37,7 @@ for (let i = 1; i <= 23; i++) {
 }
 
 export default memo(function Cqueue(props) {
-    console.log('Cqueue', props.isFullScreen);
-    console.log('是否全屏', props.isFullScreen)
+    // console.log('是否全屏', props.isFullScreen)
     return (
         <div className="queue_con" >
             <div className="header" >
