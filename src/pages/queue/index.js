@@ -2,7 +2,7 @@ import React, { memo, useEffect, useRef, useState } from 'react'
 import './index.less'
 import createWebSocket from '@/utils/websocket'
 import FullBtn from '@/components/fullBtn'
-import Qlists from './Qlists'
+import Cqueue from '@/components/Cqueue'
 
 export default memo(function Queue(props) {
     const full_timer = useRef(null);
@@ -19,6 +19,8 @@ export default memo(function Queue(props) {
 
         // 监听数据
         call_ws.ws.onmessage = (e) => {
+            console.log('数据e', e)
+            console.log('数据e.data', JSON.parse(e.data))
             // const {subscribe, site, urgent} = JSON.parse(e.data);
             // 全屏状态
             const fullscreenElement =
@@ -62,7 +64,7 @@ export default memo(function Queue(props) {
     // 处理移动显示全屏icon
     function handleMove() {
         if (full_timer.current) clearTimeout(full_timer.current)
-        if (btn_class.search("full-btn-move") == -1) setClass(btn_class + " full-btn-move");
+        if (btn_class.search("full-btn-move") === -1) setClass(btn_class + " full-btn-move");
         full_timer.current = setTimeout(() => {
             setClass("full-btn");
         }, 3000)
@@ -79,15 +81,29 @@ export default memo(function Queue(props) {
 
     return (
         <div style={{ display: 'flex', padding: 10 }} className="queue-container">
-            <div style={{ width: '86%' }}><Qlists isFullScreen={isFullScreen} /></div>
-            {/* 二维码 */}
+            {/* 队列数据 */}
+            <div style={{ width: '86%' }}>
+                <div className="h_scroll queues" style={{ padding: 10, display: 'flex' }}>
+                    <div style={{ boxSizing: 'border-box', width: '34%', paddingRight: '2.1%' }}>
+                        <Cqueue isFullScreen={isFullScreen} type="预约" />
+                    </div>
+                    <div style={{ boxSizing: 'border-box', width: '34%', paddingRight: '2.1%' }}>
+                        <Cqueue isFullScreen={isFullScreen} type="现场" />
+                    </div>
+                    <div style={{ boxSizing: 'border-box', width: '32.6%' }} >
+                        <Cqueue isFullScreen={isFullScreen} type="加急" />
+                    </div>
+                </div>
 
+            </div>
+            {/* 二维码 */}
             <div style={{ width: '14%' }} onMouseMove={handleMove} >
                 <div className={btn_class}>
                     <FullBtn ele=".queue-container" enter={fullScreenCallb} quit={quitFullScreenCallb}></FullBtn>
                 </div>
                 <div className="qr-wrap">
-                    <img className="qr-code" src="https://www.rdcmy.com/static/reservationSystem/QRCode/QRCode.jpg" alt="签到码" />
+                    <img className="qr-code" src="https://www.rdcmy.com/reservationSystem/QRCode/QRCode.jpg" alt="签到码" />
+                    <div className="qr-tip">请扫码签到排队</div>
                 </div>
             </div>
         </div>
