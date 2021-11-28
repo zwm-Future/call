@@ -1,7 +1,7 @@
 import React, { memo, useContext } from 'react'
 import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, LockOutlined, SmileOutlined } from '@ant-design/icons';
-import { login, logout } from '@/api/user'
+import { login } from '@/api/user'
 import './index.less'
 
 import { Authtext } from '@/auth'

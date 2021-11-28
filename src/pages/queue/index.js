@@ -9,32 +9,23 @@ export default memo(function Queue(props) {
     const [btn_class, setClass] = useState("full-btn")
     const [isFullScreen, updateFSstatues] = useState(false)
     useEffect(() => {
-        // websocket实例
-        const call_ws = new createWebSocket('ws://114.132.235.87:8081/queue');
         // 语音合成服务
         const synth = window.speechSynthesis;
         // 语音对象
         const msg = new SpeechSynthesisUtterance();
         msg.lang = "zh-CN";  // 使用的语言:中文
-
         // 监听数据
-        call_ws.ws.onmessage = (e) => {
-            // const {subscribe, site, urgent} = JSON.parse(e.data);
-            // 全屏状态
-            const fullscreenElement =
-                document.fullscreenElement ||
-                document.msFullscreenElement ||
-                document.mozFullScreenElement ||
-                document.webkitFullscreenElement;
+        const getMes = (e) => {
+            const { subscribe, site, urgent } = JSON.parse(e.data);
+            console.log("getMes",e.data);
             // 全屏下才可播放
-            if (fullscreenElement) {
-                handleSpeak(synth, msg, [{
-                    order: '1',
-                    name: '彭于晏',
-                    num: '312xxx4860'
-                }])
+            if (isFullScreen) {
+                handleSpeak(synth, msg, e.data)
             }
         }
+        // websocket实例 开启连接
+        const call_ws = new createWebSocket('ws://114.132.235.87:8081/queue', getMes);
+
         return () => {
             // 关闭websocket
             call_ws.close();

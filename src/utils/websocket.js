@@ -1,7 +1,7 @@
 import { message } from 'antd'
 class createWebSocket {
-
-    constructor(url) {
+    // ws 地址  url, 接受信息回调 getMes
+    constructor(url, getMes) {
         this.myUrl = url
         // 开启标识
 
@@ -21,6 +21,7 @@ class createWebSocket {
         this.reconnect_timer = null
         // 重连频率
         this.reconnect_interval = 3000
+        this.getMessage = getMes;
         this.connect(url)
     }
 
@@ -36,6 +37,7 @@ class createWebSocket {
             // this.heartbeat();
 
         }
+        this.ws.onmessage = this.getMessage;
         // 关闭回调
         this.ws.onclose = function (e) {
             console.log('连接已断开')
