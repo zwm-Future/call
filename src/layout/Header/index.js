@@ -1,9 +1,8 @@
 import React from 'react'
 import './index.less'
-import { Button } from 'antd';
-import { ApiTwoTone } from '@ant-design/icons'
 
 import TagView from './Tagsview';
+import LogoutBtn from '@/components/logoutBtn'
 export default function Header(props) {
     return (
         <div className="header-wrap">
@@ -14,9 +13,7 @@ export default function Header(props) {
             <TagView />
             <div className="right-menu">
                 <div className="logout-wrap">
-                    <Button type="primary" size="middle" shape="round" icon={<ApiTwoTone style={{ fontSize: '17px' }} twoToneColor="#ffffff" />} className="logout-btn">
-                        退出
-                    </Button>
+                    <LogoutBtn />
                 </div>
             </div>
         </div>
