@@ -9,34 +9,25 @@ export default memo(function Queue(props) {
     const [btn_class, setClass] = useState("full-btn")
     const [isFullScreen, updateFSstatues] = useState(false)
     useEffect(() => {
-        // websocket实例
-        const call_ws = new createWebSocket('ws://114.132.235.87:8081/queue');
         // 语音合成服务
         const synth = window.speechSynthesis;
         // 语音对象
         const msg = new SpeechSynthesisUtterance();
         msg.lang = "zh-CN";  // 使用的语言:中文
-
         // 监听数据
-        call_ws.ws.onmessage = (e) => {
-            console.log('数据e', e)
-            console.log('数据e.data', JSON.parse(e.data))
-            // const {subscribe, site, urgent} = JSON.parse(e.data);
-            // 全屏状态
-            const fullscreenElement =
-                document.fullscreenElement ||
-                document.msFullscreenElement ||
-                document.mozFullScreenElement ||
-                document.webkitFullscreenElement;
-            // 全屏下才可播放
-            if (fullscreenElement) {
-                handleSpeak(synth, msg, [{
-                    order: '1',
-                    name: '彭于晏',
-                    num: '312xxx4860'
-                }])
-            }
+        const getMes = (e) => {
+            
+            // const { subscribe, site, urgent } = JSON.parse(e.data);
+            // const d = JSON.parse(e.data);
+            console.log("getMes", e.data);
+            // console.log('进入播放');
+            // console.log(d.subscribeUnCall);
+            // handleSpeak(synth, msg, d.subscribeUnCall)
+            // }
         }
+        // websocket实例 开启连接
+        const call_ws = new createWebSocket('ws://114.132.235.87:8081/queue', getMes);
+
         return () => {
             // 关闭websocket
             call_ws.close();
@@ -53,8 +44,12 @@ export default memo(function Queue(props) {
     function handleSpeak(synth, msg, textArr) {
         if (textArr.length > 0) {
             textArr.map(t => {
-                const str = "、" + t.num.slice(t.num.length - 4).split("").join("、");
-                msg.text = "请学工号尾号为" + str + "到12号窗口办理业务";
+                // const str = "、" + t.num.slice(t.num.length - 4).split("").join("、");
+
+                // 测试
+                const str = t.user.gmtModified.toString()
+                const strRead = "、" + str.slice(str.length - 4).split("").join("、");
+                msg.text = "请学工号尾号为" + strRead + "到12号窗口办理业务";
                 synth.speak(msg);
                 synth.speak(msg);
             })
@@ -73,10 +68,12 @@ export default memo(function Queue(props) {
     // 点击全屏回调
     function fullScreenCallb() {
         updateFSstatues(true)
+        console.log(isFullScreen);
     }
     // 退出全屏时回调
     function quitFullScreenCallb() {
-        updateFSstatues(false)
+        console.log('退出全屏');
+        updateFSstatues(isFullScreen)
     }
 
     return (

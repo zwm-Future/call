@@ -1,18 +1,32 @@
-import React, { memo } from 'react'
-import { Form, Input, Button,message } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
-
+import React, { memo, useContext } from 'react'
+import { Form, Input, Button, message } from 'antd';
+import { UserOutlined, LockOutlined, SmileOutlined } from '@ant-design/icons';
+import { login } from '@/api/user'
 import './index.less'
+
+import { Authtext } from '@/auth'
 
 
 export default memo(function Login() {
+    const { authed, dispatch } = useContext(Authtext);
     const onFinish = (values) => {
-    console.log('Success:', values);
-  };
+        login(values).then(res => {
+            console.log(res);
+            const { code, message, data } = res;
+            if (code == 0 && message == "成功") {
+                dispatch("addAuth");
+                // 本地存user
+                localStorage.setItem("user",JSON.stringify(data))
+            }
+        })
+        // logout().then(data => {
+        //     console.log(data);
+        // })
+    };
 
-  const onFinishFailed = (errorInfo) => {
-    // message.error('提交失败！');
-  };
+    const onFinishFailed = (errorInfo) => {
+        // message.error('提交失败！');
+    };
     return (
         <div className="login-wrap">
             <div className="form-wrap">
@@ -32,11 +46,22 @@ export default memo(function Login() {
                         rules={[
                             {
                                 required: true,
+                                message: '请输入姓名',
+                            },
+                        ]}
+                    >
+                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="姓名" />
+                    </Form.Item>
+                    <Form.Item
+                        name="name"
+                        rules={[
+                            {
+                                required: true,
                                 message: '请输入用户名',
                             },
                         ]}
                     >
-                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="用户名" />
+                        <Input prefix={<SmileOutlined className="site-form-item-icon" />} placeholder="用户名" />
                     </Form.Item>
                     <Form.Item
                         name="password"
@@ -57,7 +82,7 @@ export default memo(function Login() {
                             登录
                         </Button>
                     </Form.Item>
-                    <a className="login-form-forgot" href="javascript:;">
+                    <a className="login-form-forgot">
                         忘记密码?
                     </a>
                 </Form>

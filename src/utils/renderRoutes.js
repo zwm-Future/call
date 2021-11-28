@@ -17,7 +17,7 @@ const renderRoutes = (routes, authed, authPath, extraProps = {}, switchProps = {
 const routeRender = (route, authed, authPath = '/login', props, extraProps) => {
     if(authed && route.path === authPath) {
         return (
-            <Redirect to={{ pathname: '/home' }} />
+            <Redirect to={{ pathname: '/home/index' }} />
         )
     }
     if (authed || !route.requiresAuth) {
