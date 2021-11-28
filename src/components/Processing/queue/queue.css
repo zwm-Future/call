@@ -1,0 +1,30 @@
+.h_queue {
+  padding: 10px;
+  margin-top: 10px;
+  width: 100%;
+  height: 670px;
+  border-right: 1px solid #f0f0f0;
+}
+.h_queue .queue_header {
+  display: flex;
+  justify-content: space-between;
+  padding-right: 10px;
+  height: 40px;
+  font-size: 24px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.h_scroll .ant-table-body::-webkit-scrollbar {
+  width: 10px;
+}
+.h_scroll .ant-table-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 2px;
+}
+.h_scroll .ant-table-body::-webkit-scrollbar-thumb {
+  background: #40a0ff49;
+  border-radius: 10px;
+}
+.h_scroll .ant-table-body::-webkit-scrollbar-thumb:hover {
+  background: #40a0ff;
+}

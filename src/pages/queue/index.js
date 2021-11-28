@@ -2,10 +2,12 @@ import React, { memo, useEffect, useRef, useState } from 'react'
 import './index.less'
 import createWebSocket from '@/utils/websocket'
 import FullBtn from '@/components/fullBtn'
+import Qlists from './Qlists'
 
 export default memo(function Queue(props) {
-    const  full_timer = useRef(null);
+    const full_timer = useRef(null);
     const [btn_class, setClass] = useState("full-btn")
+    const [isFullScreen, updateFSstatues] = useState(false)
     useEffect(() => {
         // websocket实例
         const call_ws = new createWebSocket('ws://114.132.235.87:8081/queue');
@@ -14,7 +16,7 @@ export default memo(function Queue(props) {
         // 语音对象
         const msg = new SpeechSynthesisUtterance();
         msg.lang = "zh-CN";  // 使用的语言:中文
-       
+
         // 监听数据
         call_ws.ws.onmessage = (e) => {
             // const {subscribe, site, urgent} = JSON.parse(e.data);
@@ -24,14 +26,14 @@ export default memo(function Queue(props) {
                 document.msFullscreenElement ||
                 document.mozFullScreenElement ||
                 document.webkitFullscreenElement;
-                // 全屏下才可播放
-                if(fullscreenElement) {
-                    handleSpeak(synth, msg, [{
-                        order: '1',
-                        name: '彭于晏',
-                        num: '312xxx4860'
-                    }])
-                }
+            // 全屏下才可播放
+            if (fullscreenElement) {
+                handleSpeak(synth, msg, [{
+                    order: '1',
+                    name: '彭于晏',
+                    num: '312xxx4860'
+                }])
+            }
         }
         return () => {
             // 关闭websocket
@@ -49,7 +51,7 @@ export default memo(function Queue(props) {
     function handleSpeak(synth, msg, textArr) {
         if (textArr.length > 0) {
             textArr.map(t => {
-                const str = "、"  + t.num.slice(t.num.length - 4).split("").join("、");
+                const str = "、" + t.num.slice(t.num.length - 4).split("").join("、");
                 msg.text = "请学工号尾号为" + str + "到12号窗口办理业务";
                 synth.speak(msg);
                 synth.speak(msg);
@@ -65,14 +67,28 @@ export default memo(function Queue(props) {
             setClass("full-btn");
         }, 3000)
     }
+
+    // 点击全屏回调
+    function fullScreenCallb() {
+        updateFSstatues(true)
+    }
+    // 退出全屏时回调
+    function quitFullScreenCallb() {
+        updateFSstatues(false)
+    }
+
     return (
-        <div onMouseMove={handleMove} className="queue-container">
-           
-            <div className={btn_class}>
-                <FullBtn ele=".queue-container"></FullBtn>
-            </div>
-            <div className="qr-wrap">
-                <img className="qr-code" src="https://www.rdcmy.com/static/reservationSystem/QRCode/QRCode.jpg" alt="签到码" />
+        <div style={{ display: 'flex', padding: 10 }} className="queue-container">
+            <div style={{ width: '86%' }}><Qlists isFullScreen={isFullScreen} /></div>
+            {/* 二维码 */}
+
+            <div style={{ width: '14%' }} onMouseMove={handleMove} >
+                <div className={btn_class}>
+                    <FullBtn ele=".queue-container" enter={fullScreenCallb} quit={quitFullScreenCallb}></FullBtn>
+                </div>
+                <div className="qr-wrap">
+                    <img className="qr-code" src="https://www.rdcmy.com/static/reservationSystem/QRCode/QRCode.jpg" alt="签到码" />
+                </div>
             </div>
         </div>
     )
