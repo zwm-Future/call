@@ -1,4 +1,5 @@
 import React, { memo, useContext } from 'react'
+import { useHistory } from 'react-router-dom'
 import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, LockOutlined, SmileOutlined } from '@ant-design/icons';
 import { login } from '@/api/user'
@@ -8,7 +9,8 @@ import { Authtext } from '@/auth'
 
 
 export default memo(function Login() {
-    const { authed, dispatch } = useContext(Authtext);
+    const { hasAuth, dispatch } = useContext(Authtext);
+    const {push} = useHistory()
     const onFinish = (values) => {
         login(values).then(res => {
             console.log(res);
@@ -17,11 +19,9 @@ export default memo(function Login() {
                 dispatch("addAuth");
                 // 本地存user
                 localStorage.setItem("user",JSON.stringify(data))
+                push('/home/index');
             }
         })
-        // logout().then(data => {
-        //     console.log(data);
-        // })
     };
 
     const onFinishFailed = (errorInfo) => {

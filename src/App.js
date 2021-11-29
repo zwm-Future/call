@@ -9,13 +9,12 @@ import { Authtext } from '@/auth'
 // const authed = false //登录权限
 const authPath = '/login'
 function App() {
-  const { authed } = useContext(Authtext);
-  const hasAuth = authed || localStorage.getItem("user");
+  const { hasAuth } = useContext(Authtext);
   return (
     <div className="App">
-        <HashRouter>
+        <BrowserRouter>
           {renderRoutes(routes, hasAuth, authPath)}
-        </HashRouter>
+        </BrowserRouter>
     </div>
   );
 }

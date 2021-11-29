@@ -1,14 +1,17 @@
 .main-wrap {
     height: auto;
-    padding: 120px 70px 20px 70px;
-    .main-container {
+    // padding: 120px 70px 20px 70px;11
+      .main-container {
         position: relative;
-        width: 100%;
-        margin: 0 auto ;
+        width: 1200px;
+        // margin: 0 auto ;11
+        margin: 20px auto;
         background-color: #fff;
-        min-height: 797px;
-        overflow: hidden;
-    }
+        // min-height: 797px; 11
+        min-height: 85vh;
+        // overflow: hidden;11
+        overflow: hidden;//防止动画溢出产生滚动条
+      }
 }
 
 /* 路由前进时的入场/离场动画 */
@@ -20,7 +23,7 @@
   .forward-enter-active {
     opacity: 1;
     transform: translateX(0);
-    transition: all .5s;
+    transition: all .3s;
   } 
   
   .forward-exit {
@@ -31,7 +34,7 @@
   .forward-exit-active {
     opacity: 0;
     transform: translateX(-100%);
-    transition: all .5s;
+    transition: all .3s;
   }
   
   /* 路由后退时的入场/离场动画 */
@@ -43,7 +46,7 @@
   .back-enter-active {
     opacity: 1;
     transform: translateX(0);
-    transition: all .5s;
+    transition: all .3s;
   }
   
   .back-exit {
@@ -54,5 +57,5 @@
   .back-exit-active {
     opacity: 0;
     transform: translate(100%);
-    transition: all .5s;
+    transition: all .3s;
   }

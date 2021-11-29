@@ -13,8 +13,10 @@ const Authreducer = (state, action) => {
 }
 export default function Auth(props){
     const [authed,dispatch] = useReducer(Authreducer,false)
+    const hasAuth = authed || localStorage.getItem("user");
+    console.log('hasAuth',hasAuth);
     return (
-        <Authtext.Provider value={{authed,dispatch}}>
+        <Authtext.Provider value={{hasAuth,dispatch}}>
             {props.children}
         </Authtext.Provider>
     )
