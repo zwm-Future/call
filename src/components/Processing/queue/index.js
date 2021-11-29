@@ -1,5 +1,5 @@
 import { memo, useState } from 'react'
-import './queue.css'
+import './queue.less'
 import { SyncOutlined } from '@ant-design/icons';
 import { Table } from 'antd';
 

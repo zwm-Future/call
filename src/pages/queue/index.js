@@ -3,57 +3,62 @@ import './index.less'
 import createWebSocket from '@/utils/websocket'
 import FullBtn from '@/components/fullBtn'
 import Cqueue from '@/components/Cqueue'
+import Speaker from '@/utils/Speaker'
+
 
 export default memo(function Queue(props) {
+    // const QueueSpeaker = useRef(new Speaker('zh-CN', 2, 2, 2)).current
+    const QueueSpeaker = new Speaker({ lang: 'zh-CN', pitch: 1, rate: 1, volume: 1 }, { endCallb(e) { console.log('end', e) } })
     const full_timer = useRef(null);
     const [btn_class, setClass] = useState("full-btn")
     const [isFullScreen, updateFSstatues] = useState(false)
     useEffect(() => {
-        // 语音合成服务
-        const synth = window.speechSynthesis;
-        // 语音对象
-        const msg = new SpeechSynthesisUtterance();
-        msg.lang = "zh-CN";  // 使用的语言:中文
-        // 监听数据
         const getMes = (e) => {
-            
+
             // const { subscribe, site, urgent } = JSON.parse(e.data);
             // const d = JSON.parse(e.data);
             console.log("getMes", JSON.parse(e.data));
             // console.log('进入播放');
             // console.log(d.subscribeUnCall);
-            // handleSpeak(synth, msg, d.subscribeUnCall)
-            // }
         }
         // websocket实例 开启连接
         const call_ws = new createWebSocket('ws://114.132.235.87:8081/queue', getMes);
 
         return () => {
+            QueueSpeaker.cancel()
             // 关闭websocket
             call_ws.close();
-            //停止播放
-            synth.pause();
-            // 清除语音队列
-            synth.cancel();
             clearTimeout(full_timer.current)
         }
 
+        // eslint-disable-next-line
     }, [])
 
-    // 语音合成服务 语音对象 叫号数组
-    function handleSpeak(synth, msg, textArr) {
-        if (textArr.length > 0) {
-            textArr.map(t => {
-                // const str = "、" + t.num.slice(t.num.length - 4).split("").join("、");
+    // 将传入的字符串里的阿拉伯数字转换成汉语数字
+    function numToChNum(str) {
+        return str.replace(/1/g, '一')
+            .replace(/2/g, '二')
+            .replace(/3/g, '三')
+            .replace(/4/g, '四')
+            .replace(/5/g, '五')
+            .replace(/6/g, '六')
+            .replace(/7/g, '七')
+            .replace(/8/g, '八')
+            .replace(/9/g, '九')
+            .replace(/0/g, '零')
+    }
 
-                // 测试
-                const str = t.user.gmtModified.toString()
-                const strRead = "、" + str.slice(str.length - 4).split("").join("、");
-                msg.text = "请学工号尾号为" + strRead + "到12号窗口办理业务";
-                synth.speak(msg);
-                synth.speak(msg);
-            })
-        }
+    // 叫号
+    function callPerson(callV) {
+        let text = numToChNum('请工学号3346到2号窗口')
+        console.log(text)
+
+        // let text = '请工学号尾号维 四七八七的客户到4号窗口办理业务'
+        QueueSpeaker.speak(text)
+
+
+        // QueueSpeaker.speakMany(['你好','23'], 0)
+        // QueueSpeaker.cancel()
     }
 
     // 处理移动显示全屏icon
@@ -77,7 +82,7 @@ export default memo(function Queue(props) {
     }
 
     return (
-        <div style={{ display: 'flex', padding: 10 }} className="queue-container">
+        <div onClick={() => callPerson()} style={{ display: 'flex', padding: 10 }} className="queue-container">
             {/* 队列数据 */}
             <div style={{ width: '86%' }}>
                 <div className="h_scroll queues" style={{ padding: 10, display: 'flex' }}>
@@ -87,7 +92,7 @@ export default memo(function Queue(props) {
                     <div style={{ boxSizing: 'border-box', width: '34%', paddingRight: '2.1%' }}>
                         <Cqueue isFullScreen={isFullScreen} type="现场" />
                     </div>
-                    <div style={{ boxSizing: 'border-box', width: '32.6%' }} >
+                    <div style={{ boxSizing: 'border-box', width: '32%' }} >
                         <Cqueue isFullScreen={isFullScreen} type="加急" />
                     </div>
                 </div>

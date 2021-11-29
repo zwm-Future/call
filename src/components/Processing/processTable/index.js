@@ -1,10 +1,10 @@
 import { memo, useState, useEffect } from 'react'
 import './processTable.css'
 import { WrappedTextarea } from './style'
+import Speaker from '@/utils/Speaker'
 import { Table, Button, Modal, notification, Input } from 'antd';
 const { TextArea } = Input;
 const { Column } = Table;
-
 
 const data = [
     {
@@ -40,20 +40,12 @@ const data = [
         id: '999'
     }
 ]
-let synth, msg;
 export default memo(function ProcessTable(props) {
+    const CallingSpeaker = new Speaker({rate:1.2})
     useEffect(() => {
         console.log('process-table', props);
-        synth = window.speechSynthesis;
-        // 语音对象
-        msg = new SpeechSynthesisUtterance();
-        msg.rate = 2
-        msg.lang = "zh-CN";  // 使用的语言:中文
-
         return () => {
-            synth.pause();
-            // 清除语音队列
-            synth.cancel();
+            CallingSpeaker.cancel();
         }
         // eslint-disable-next-line
     }, [])
@@ -171,12 +163,24 @@ export default memo(function ProcessTable(props) {
         }, 1000)
     }
 
+    // 将传入的字符串里的阿拉伯数字转换成汉语数字
+    function numToChNum(str) {
+        return str.replace(/1/g, '一')
+            .replace(/2/g, '二')
+            .replace(/3/g, '三')
+            .replace(/4/g, '四')
+            .replace(/5/g, '五')
+            .replace(/6/g, '六')
+            .replace(/7/g, '七')
+            .replace(/8/g, '八')
+            .replace(/9/g, '九')
+            .replace(/0/g, '零')
+    }
 
+    // 叫号
     function callPerson(info) {
-        msg.text = '请工学号尾号为一零三九的老师或同学到2号窗口办理业务'
-        // synth.pause()
-        synth.cancel();
-        synth.speak(msg)
+        const text = numToChNum('请工学号尾号 3187 到 4号窗口')
+        CallingSpeaker.speak(text)
     }
 
     return (
