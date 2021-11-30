@@ -82,7 +82,7 @@ export default memo(function Queue(props) {
     }
 
     return (
-        <div onClick={() => callPerson()} style={{ display: 'flex', padding: 10 }} className="queue-container">
+        <div style={{ display: 'flex', padding: 10 }} className="queue-container">
             {/* 队列数据 */}
             <div style={{ width: '86%' }}>
                 <div className="h_scroll queues" style={{ padding: 10, display: 'flex' }}>
@@ -105,7 +105,7 @@ export default memo(function Queue(props) {
                 </div>
                 <div className="qr-wrap">
                     <img className="qr-code" src="https://www.rdcmy.com/reservationSystem/QRCode/QRCode.jpg" alt="签到码" />
-                    <div className="qr-tip">请扫码签到排队</div>
+                    <div onClick={() => callPerson()}  className="qr-tip">请扫码签到排队</div>
                 </div>
             </div>
         </div>

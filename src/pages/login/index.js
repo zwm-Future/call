@@ -15,9 +15,6 @@ export default memo(function Login() {
         login(values).then(res => {
             console.log(res);
             const { code, message, data } = res;
-            // 先通过
-            dispatch("addAuth");
-
             if (code == 0 && message == "成功") {
                 dispatch("addAuth");
                 // 本地存user

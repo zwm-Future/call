@@ -32,7 +32,7 @@ for (let i = 1; i <= 23; i++) {
         name: 'Jack' + i,
         id: '******' + num,
         key: i,
-        windowNum: (<div style={{ textAlign: 'center', color: status ? 'red' : '#000' }} > {status ? status : '待定'}</ div>)
+        windowNum: (<div style={{ textAlign: 'center', color: status ? 'red' : '#000', fontWeight: status ? 'bold' : 'normal' }} > {status ? status : '待定'}</ div>)
     })
 }
 
@@ -46,7 +46,7 @@ export default memo(function Cqueue(props) {
             </div>
             <Table
                 scroll={{
-                    y: props.isFullScreen ? '87vh' : '74vh'
+                    y: props.isFullScreen ? '87vh' : '71vh'
                 }}
                 bordered pagination={false}
                 columns={columns} dataSource={dataSource} />
