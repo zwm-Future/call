@@ -4,11 +4,11 @@ import createWebSocket from '@/utils/websocket'
 import FullBtn from '@/components/fullBtn'
 import Cqueue from '@/components/Cqueue'
 import Speaker from '@/utils/Speaker'
-
+import { InfoCircleOutlined } from '@ant-design/icons'
 
 export default memo(function Queue(props) {
     // const QueueSpeaker = useRef(new Speaker('zh-CN', 2, 2, 2)).current
-    const QueueSpeaker = new Speaker({ lang: 'zh-CN', pitch: 1, rate: 1, volume: 1 }, { endCallb(e) { console.log('end', e) } })
+    const QueueSpeaker = new Speaker({ lang: 'zh-CN', pitch: 1, rate: 1, volume: 1 })
     const full_timer = useRef(null);
     const [btn_class, setClass] = useState("full-btn")
     const [isFullScreen, updateFSstatues] = useState(false)
@@ -50,11 +50,12 @@ export default memo(function Queue(props) {
 
     // 叫号
     function callPerson(callV) {
-        let text = numToChNum('请工学号3346到2号窗口')
+        let text = numToChNum('请排队序号为 a-m-1 到3号窗口')
         console.log(text)
 
         // let text = '请工学号尾号维 四七八七的客户到4号窗口办理业务'
-        QueueSpeaker.speak(text)
+        // QueueSpeaker.speak(text)
+        QueueSpeaker.speakMany(['请排队序号为, a-m-1, 到3号窗口', '请排队序号为 ,p-m-3, 到3号窗口'])
 
 
         // QueueSpeaker.speakMany(['你好','23'], 0)
@@ -105,7 +106,11 @@ export default memo(function Queue(props) {
                 </div>
                 <div className="qr-wrap">
                     <img className="qr-code" src="https://www.rdcmy.com/reservationSystem/QRCode/QRCode.jpg" alt="签到码" />
-                    <div onClick={() => callPerson()}  className="qr-tip">请扫码签到排队</div>
+                    <div onClick={() => callPerson()} className="qr-tip">请扫码签到排队</div>
+                </div>
+                <div className="alter">
+                    <div className="alter_title"><InfoCircleOutlined style={{ fontSize: '2.2vh', color: '#109efc', paddingRight: 11 }} />相关说明</div>
+                    <div className="alter_body">请扫码签，选择相应的业务后进行排队！注意排队无法临时取消！如有意外，请联系现场工作人员处理</div>
                 </div>
             </div>
         </div>

@@ -10,7 +10,7 @@ let columns = [
         width: '35%'
     },
     {
-        title: '工学号',
+        title: '排队序号',
         dataIndex: 'id',
         key: 'id',
         width: '40%'
@@ -26,11 +26,9 @@ let columns = [
 let dataSource = []
 for (let i = 1; i <= 23; i++) {
     let status = i <= 5 ? i : 0
-    let num = Math.round(Math.random() * (9000))
-    num = num > 1000 ? num : num + 1000
     dataSource.push({
         name: 'Jack' + i,
-        id: '******' + num,
+        id: 'am-' + i,
         key: i,
         windowNum: (<div style={{ textAlign: 'center', color: status ? 'red' : '#000', fontWeight: status ? 'bold' : 'normal' }} > {status ? status : '待定'}</ div>)
     })
