@@ -18,6 +18,7 @@ export default memo(function AppMain(props) {
     })
     return (
         <div className="main-wrap">
+            <div className="main">
                 <TransitionGroup
                     // className={'router-wrapper'}
                     childFactory={child => React.cloneElement(
@@ -33,6 +34,7 @@ export default memo(function AppMain(props) {
                         {renderRoutes(props.route.routes, props.authed, props.authPath, {}, { location: props.location })}
                     </CSSTransition>
                 </TransitionGroup>
+            </div>
         </div>
     )
 })

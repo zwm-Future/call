@@ -75,7 +75,7 @@ export default memo(function Main(props) {
     const handleOk = () => {
         const { to, title, type } = selectItem;
         console.log(selectVal);
-        if(!selectVal) {
+        if (!selectVal) {
             message.warning('请选择你当前的窗口');
             return;
         }
@@ -87,42 +87,45 @@ export default memo(function Main(props) {
         setIsModalVisible(false);
     };
     return (
-        <div className="service-container">
-            {
-                items.map(item => {
-                    return (
-                        <div key={item.title} onClick={() => handleClick(item)} className={"service-item " + item.classNames}>
-                            {
-                                item.icon()
-                            }
-                            <span className="item-title">{item.title}</span>
-                        </div>
-                    )
-                })
-            }
-            <Modal
-                centered
-                keyboard
-                cancelText='取消'
-                okText='确定'
-                width='400px'
-                visible={isModalVisible}
-                onOk={handleOk}
-                onCancel={handleCancel}>
-                <span>当前窗口为：</span>
-                <Select
-                    size='large'
-                    style={{ width: 200 }}
-                    placeholder="请选择你当前的窗口"
-                    onChange={(value) => setVal(value)}
-                >
-                    <Option value="1">1</Option>
-                    <Option value="2">2</Option>
-                    <Option value="3">3</Option>
-                    <Option value="4">4</Option>
-                    <Option value="5">5</Option>
-                </Select>
-            </Modal>
+        <div className="services-wrap">
+            <div className="service-container">
+                {
+                    items.map(item => {
+                        return (
+                            <div key={item.title} onClick={() => handleClick(item)} className={"service-item " + item.classNames}>
+                                {
+                                    item.icon()
+                                }
+                                <span className="item-title">{item.title}</span>
+                            </div>
+                        )
+                    })
+                }
+                <Modal
+                    centered
+                    keyboard
+                    cancelText='取消'
+                    okText='确定'
+                    width='400px'
+                    visible={isModalVisible}
+                    onOk={handleOk}
+                    onCancel={handleCancel}>
+                    <span>当前窗口为：</span>
+                    <Select
+                        size='large'
+                        style={{ width: 200 }}
+                        placeholder="请选择你当前的窗口"
+                        onChange={(value) => setVal(value)}
+                    >
+                        <Option value="1">1</Option>
+                        <Option value="2">2</Option>
+                        <Option value="3">3</Option>
+                        <Option value="4">4</Option>
+                        <Option value="5">5</Option>
+                    </Select>
+                </Modal>
+               
+            </div>
         </div>
     )
 })
