@@ -1,11 +1,12 @@
 import React,{useState, useContext} from 'react'
+import { useHistory } from 'react-router-dom'
 import { Button, Modal } from 'antd';
 import { ApiTwoTone,ExclamationCircleOutlined } from '@ant-design/icons'
 import {  logout } from '@/api/user'
 import { Authtext } from '@/auth'
 export default function LogoutBtn() {
-    const { authed,dispatch } = useContext(Authtext);
-
+    const { hasAuth,dispatch } = useContext(Authtext);
+    const {replace} = useHistory()
     const [isModalVisible, setIsModalVisible] = useState(false);
 
     const showModal = () => {
@@ -16,6 +17,7 @@ export default function LogoutBtn() {
         localStorage.removeItem("user")
         logout().then(res => {
             dispatch("removeAuth");
+            replace('/login')
             console.log(res);
         })
         setIsModalVisible(false);

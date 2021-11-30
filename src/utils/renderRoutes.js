@@ -15,12 +15,13 @@ const renderRoutes = (routes, authed, authPath, extraProps = {}, switchProps = {
 ) : null
 
 const routeRender = (route, authed, authPath = '/login', props, extraProps) => {
-    if(authed && route.path === authPath) {
+    const hasAuth = localStorage.getItem("user");
+    if(hasAuth && route.path === authPath) {
         return (
             <Redirect to={{ pathname: '/home/index' }} />
         )
     }
-    if (authed || !route.requiresAuth) {
+    if (hasAuth || !route.requiresAuth) {
         return route.render
             ? route.render({ ...props,authed, authPath, ...extraProps, route: route })
             : route.component && (

@@ -95,7 +95,7 @@ class fullScreen {
             document.msFullscreenElement ||
             document.mozFullScreenElement ||
             document.webkitFullscreenElement;
-        if (fullscreenElement === null) {
+        if (fullscreenElement === null || fullscreenElement === undefined) {
             return false; // 当前没有元素在全屏状态
         } else {
             return true; // 有元素在全屏状态
@@ -108,7 +108,6 @@ let full = new fullScreen(() => {
 full.screenError(e => {
     message.warning("全屏失败")
 });
-
 export default function FullBtn(props) {
 
     useEffect(() => {

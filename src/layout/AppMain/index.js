@@ -18,21 +18,21 @@ export default memo(function AppMain(props) {
     })
     return (
         <div className="main-wrap">
-            <TransitionGroup
-                // className={'router-wrapper'}
-                childFactory={child => React.cloneElement(
-                    child,
-                    { classNames: ANIMATION_MAP[props.history.action] }
-                )}
-                className="main-container"
-            >
-                <CSSTransition
-                    timeout={500}
-                    key={props.location.pathname}
+                <TransitionGroup
+                    // className={'router-wrapper'}
+                    childFactory={child => React.cloneElement(
+                        child,
+                        { classNames: ANIMATION_MAP[props.history.action] }
+                    )}
+                    className="main-container"
                 >
-                    {renderRoutes(props.route.routes, props.authed, props.authPath, {}, { location: props.location })}
-                </CSSTransition>
-            </TransitionGroup>
+                    <CSSTransition
+                        timeout={500}
+                        key={props.location.pathname}
+                    >
+                        {renderRoutes(props.route.routes, props.authed, props.authPath, {}, { location: props.location })}
+                    </CSSTransition>
+                </TransitionGroup>
         </div>
     )
 })
