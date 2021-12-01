@@ -8,7 +8,7 @@ import {
 
 import routes from '@/routers'
 
-
+// 匹配路由表，获取当前路由标签
 function getViews(pathName, routes) {
     let views = [];
     routes.forEach(r => {
