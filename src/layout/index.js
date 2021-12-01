@@ -1,23 +1,26 @@
-import React, { memo, useEffect, createContext } from 'react'
+import React, { memo, useEffect } from 'react'
+import {Redirect} from 'react-router-dom'
 
 
 import Header from './Header'
 import AppMain from './AppMain'
 
-export const HeaderContext = createContext();
 
 export default memo(function Home(props) {
     useEffect(() => {
         console.log('Home', props);
+        console.log('Home', props.location.pathname);
     })
+    if(props.location.pathname === '/home'){
+        console.log('comein');
+        return (
+            <Redirect path={"/home" } exact from={"/home"}  to="/home/index" />
+        )
+    }
+
     return (
         <div className="home-wrap">
-            <HeaderContext.Provider
-                value={{
-                    pathName: props.location.pathname
-                }}>
-                <Header />
-            </HeaderContext.Provider>
+            <Header pathName={props.location.pathname} />
             <AppMain  {...props} />
         </div>
     )

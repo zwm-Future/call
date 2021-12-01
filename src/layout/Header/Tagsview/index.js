@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useContext } from 'react'
+import React, {  memo } from 'react'
 import { useHistory } from 'react-router-dom'
 import './index.less'
 import {
@@ -6,7 +6,6 @@ import {
     TransitionGroup
 } from 'react-transition-group';
 
-import { HeaderContext } from '../../index'
 import routes from '@/routers'
 
 
@@ -24,32 +23,15 @@ function getViews(pathName, routes) {
 }
 
 
-export default function TagView(props) {
-    const { pathName } = useContext(HeaderContext)
+export default memo(function TagView(props) {
+    const { pathName } = props
     const { push } = useHistory()
     const views = getViews(pathName, routes)
 
-    let refs = [];
-
-    useEffect(() => {
-        // refs = creacteRefs();
-        console.log('pathName', pathName);
-        console.log('views', views);
-        console.log('props', props);
-    })
-
-    // function creacteRefs() {
-    //     const r = []
-    //     for (let i = 0; i < views.length; i++) {
-    //         r.push(createRef());
-    //     }
-    //     return r;
-    // }
     return (
         <div className="tagviews-container">
             <TransitionGroup className="breadcrumb-container" >
                 {views.map(({ path, title }, index) => {
-                    // refs[index] = React.useRef(null);
                     return (
                         <CSSTransition appear key={path} timeout={1000} classNames="breadcrumb" >
                             {
@@ -70,4 +52,4 @@ export default function TagView(props) {
             </TransitionGroup>
         </div>
     )
-}
+})

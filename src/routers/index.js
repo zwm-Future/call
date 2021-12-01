@@ -9,7 +9,6 @@ import Error_page from '@/pages/404'
 
 import Home from '@/layout'
 
-// import Layout from '../layout'
 
 const routes = [
     {
@@ -32,13 +31,6 @@ const routes = [
         requiresAuth: true, //需要登陆后才能跳转的页面
         title: '首页',
         routes: [
-            {
-                path: "/home",
-                exact: true,
-                render: () => (
-                    <Redirect to={"/home/index"} />
-                )
-            },
             {
                 path: '/home/index',
                 component: Main,

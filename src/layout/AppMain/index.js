@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react'
+import React, { memo } from 'react'
 import {
     CSSTransition,
     TransitionGroup
@@ -13,9 +13,6 @@ const ANIMATION_MAP = {
 }
 
 export default memo(function AppMain(props) {
-    useEffect(() => {
-        console.log('AppMain', props);
-    })
     return (
         <div className="main-wrap">
             <div className="main">
@@ -32,6 +29,7 @@ export default memo(function AppMain(props) {
                         key={props.location.pathname}
                     >
                         {renderRoutes(props.route.routes, props.authed, props.authPath, {}, { location: props.location })}
+                        {/* {renderRoutes(props.route.routes)} */}
                     </CSSTransition>
                 </TransitionGroup>
             </div>

@@ -1,6 +1,5 @@
-import { HashRouter, BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import React, { useContext } from 'react'
-// import { renderRoutes } from 'react-router-config';
 
 import routes from './routers';
 import renderRoutes from './utils/renderRoutes'
@@ -12,9 +11,9 @@ function App() {
   const { hasAuth } = useContext(Authtext);
   return (
     <div className="App">
-        <BrowserRouter>
+        <HashRouter>
           {renderRoutes(routes, hasAuth, authPath)}
-        </BrowserRouter>
+        </HashRouter>
     </div>
   );
 }
