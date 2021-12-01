@@ -8,16 +8,15 @@ export default memo(function Processing(props) {
     // 可能进入此页面时拿不到数据 ，退回到主页面
     useEffect(() => {
         console.log('Processing', props);
-
     })
     return (
-        <div>
+        <div style={{ padding: 10 }}>
             <Header title={title} window={window} />
             <div style={{
                 display: 'flex'
             }}>
-                <div style={{ width: '25%' }}><Queue title={title} /></div>
-                <div style={{ width:'75%' }}><ProcessTable /></div>
+                <div style={{ width: '40%' }}><Queue title={title} /></div>
+                <div style={{ width: '60%' }}><ProcessTable /></div>
             </div>
         </div>
     )

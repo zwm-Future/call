@@ -1,37 +1,67 @@
 .queue-container {
+    --Fontsize: 2.3vh;
     width: 100%;
     background-color: #fff;
+
     .full-btn {
         position: absolute;
         top: 0;
         right: 0;
         opacity: 0;
-        padding:6px;
-        // width: 3vw;
-        // height: 3vw;
-        // display: flex;
-        // justify-content: center;
-        // align-items: center;
+        padding: 6px;
         transition: all .5s;
         cursor: pointer;
         z-index: 99;
     }
+
     .full-btn-move {
         opacity: 1;
         background-color: rgba(0, 110, 255, 0.308);
     }
-    .qr-wrap {
-        // position: absolute;
-        // top: 0;
-        // right: 0;
-        margin-top: 3vw;
-        width: 100%;
 
-        // height: 22.5%;
+    .qr-wrap {
+        margin-top: 6vw;
+        width: 100%;
         background-color: #fff;
+        margin-bottom: 80px;
+
         .qr-code {
             width: 100%;
             height: 100%
         }
+
+        .qr-tip {
+            padding-top: 10px;
+            text-align: center;
+            font-size: var(--Fontsize);
+            letter-spacing: 3px;
+            line-height: 1.2;
+        }
+    }
+
+    .alter {
+        border: 1px solid #8adcff;
+        width: 90%;
+        margin: 0 auto;
+        padding: 10px;
+        background-color: #e6f9ff;
+
+        .alter_title {
+            text-align: center;
+            font-size: 2.2vh;
+        }
+
+        .alter_body {
+            margin-top: 6px;
+            font-size: 2.0vh;
+            line-height: 1.4;
+            // text-align: center;
+        }
+    }
+}
+
+@media screen and (max-height:900px) {
+    .queue-container {
+        --Fontsize: 20px;
     }
 }

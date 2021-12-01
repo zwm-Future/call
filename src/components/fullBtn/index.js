@@ -1,5 +1,5 @@
-import React from 'react'
-import { FullscreenOutlined } from '@ant-design/icons'
+import React, { useState } from 'react'
+import { FullscreenOutlined, FullscreenExitOutlined } from '@ant-design/icons'
 import { Button, message } from 'antd'
 import { useEffect } from 'react/cjs/react.development';
 
@@ -109,7 +109,7 @@ full.screenError(e => {
     message.warning("全屏失败")
 });
 export default function FullBtn(props) {
-
+    const [icon, switchIcon] = useState((<FullscreenOutlined style={{ fontSize: '2.5vw', color: '#000' }} />))
     useEffect(() => {
         if (props.enter && props.quit) {
             full.screenChange(props.enter, props.quit)
@@ -120,12 +120,14 @@ export default function FullBtn(props) {
     function hanleClick() {
         if (full.isElementFullScreen()) {
             full.exitFullscreen();
+            switchIcon((<FullscreenOutlined style={{ fontSize: '2.5vw', color: '#000' }} />))
             return
         }
         full.Fullscreen(props.ele);
+        switchIcon(<FullscreenExitOutlined style={{ fontSize: '2.5vw', color: '#000' }} />)
     }
     return (
-        <Button icon={<FullscreenOutlined style={{ fontSize: '2.5vw', color: '#000' }} />} onClick={hanleClick} style={{ width: '100%', backgroundColor: 'transparent', border: 'none', color: '#ccc' }}></Button>
+        <Button icon={icon} onClick={hanleClick} style={{ width: '100%', backgroundColor: 'transparent', border: 'none', color: '#ccc' }}></Button>
     )
 }
 

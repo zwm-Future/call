@@ -1,7 +1,8 @@
 import { memo, useState } from 'react'
-import './queue.css'
+import './queue.less'
 import { SyncOutlined } from '@ant-design/icons';
-import { Table } from 'antd';
+import { Table, Button } from 'antd';
+const { Column } = Table;
 
 // thead 数据
 const columns = [{
@@ -87,7 +88,7 @@ const data = [
 
 export default memo(function Queue(props) {
     let [isSpin, Spin] = useState(false)
-    
+
     let loadingQueue = () => {
         Spin(true)
         setTimeout(() => {
@@ -99,10 +100,21 @@ export default memo(function Queue(props) {
         <div className="h_queue h_scroll" >
             <div className="queue_header"><div>当前排队信息</div><SyncOutlined onClick={() => loadingQueue()} spin={isSpin} style={{ color: "#68656a" }} /></div>
             <Table
-                scroll={{ y: 555 }}
+                scroll={{ y: 560 }}
                 pagination={false}
-                columns={columns}
-                dataSource={data} />
+                // columns={columns}
+                dataSource={data}>
+                <Column title="排队号" dataIndex="index" />
+                <Column title="姓名" dataIndex="name" />
+                <Column title="操作" dataIndex="action"
+                    render={(text, record) => {
+                        return (
+                            <Button type="error" ghost style={{ borderColor: 'orange', color: 'orange', marginRight: 12 }}>手动处理</Button>
+                        )
+                    }}
+                />
+
+            </Table>
         </div>
     )
 })

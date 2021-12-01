@@ -1,10 +1,9 @@
 import { memo, useState, useEffect } from 'react'
-import './processTable.css'
+import './processTable.less'
 import { WrappedTextarea } from './style'
-import { Table, Button, Modal, notification, Input } from 'antd';
+import { Table, Button, Modal, notification, Input, message } from 'antd';
 const { TextArea } = Input;
 const { Column } = Table;
-
 
 const data = [
     {
@@ -40,28 +39,21 @@ const data = [
         id: '999'
     }
 ]
-let synth, msg;
 export default memo(function ProcessTable(props) {
     useEffect(() => {
         console.log('process-table', props);
-        synth = window.speechSynthesis;
-        // 语音对象
-        msg = new SpeechSynthesisUtterance();
-        msg.rate = 2
-        msg.lang = "zh-CN";  // 使用的语言:中文
-
         return () => {
-            synth.pause();
-            // 清除语音队列
-            synth.cancel();
         }
         // eslint-disable-next-line
     }, [])
 
     let [list, updateList] = useState(data)
-    let [selectedListKey, updateSelectedList] = useState([])
-    let [isshowFeedback, switchShowFeedback] = useState(false)
-    let [reason, updateReason] = useState('')
+    let [selectedListKey, updateSelectedList] = useState([])   // 被选中的数据的 key
+    let [isshowFeedback, switchShowFeedback] = useState(false)  // 是否显示反馈框
+    let [reason, updateReason] = useState('')   // 未通过原因
+    let [isMannual, switchMannul] = useState(false)      // 是否手动处理状态
+    let [processInfo, updateProcessInfo] = useState(false)  // 当前处理的信息
+    let [MannualInfo, updateMannualInfo] = useState({})     // 手动处理信息
 
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
@@ -99,8 +91,6 @@ export default memo(function ProcessTable(props) {
         // selectedListKey.push = key
         switchShowFeedback(true);
     }
-
-
 
     const handleOk = () => {
 
@@ -143,6 +133,10 @@ export default memo(function ProcessTable(props) {
     };
 
     const handledMany = () => {
+        if (selectedListKey.length === 0) {
+            message.warning('默认全选');
+            return
+        }
         let selectedList = []
         selectedListKey.forEach(v => {
             list.forEach(v2 => {
@@ -171,12 +165,13 @@ export default memo(function ProcessTable(props) {
         }, 1000)
     }
 
+    const cancelMany = () => {
+        if (selectedListKey.length === 0) {
+            message.warning('默认全选');
+            switchShowFeedback(true);
+            return
+        }
 
-    function callPerson(info) {
-        msg.text = '请工学号尾号为一零三九的老师或同学到2号窗口办理业务'
-        // synth.pause()
-        synth.cancel();
-        synth.speak(msg)
     }
 
     return (
@@ -186,7 +181,6 @@ export default memo(function ProcessTable(props) {
                     <div className="item"> 当前客户 ： XXX </div>
                     <div className="item"> 工学号：1230004949</div>
                 </div>
-                <Button onClick={() => callPerson()} type="primary" className="call_btn" size="large">呼叫客户</Button>
             </div>
             <div className="h_scroll">
                 <div className="list_title">总单数 ( {list.length} )：</div>
@@ -215,12 +209,11 @@ export default memo(function ProcessTable(props) {
                 </Table>
             </div>
             {/* <input > */}
-            <div
-                className="btn_list">
-                <div className="float_r">
-                    <Button onClick={() => switchShowFeedback(true)} type="primary" size="large" ghost style={{ borderColor: 'orange', color: 'orange', marginRight: 12 }}>批量未处理</Button>
-                    <Button onClick={() => handledMany()} type="primary" size="large" >批量已处理</Button>
-                </div>
+            <div className="btn_list">
+                {/* <Button type="primary" className="call_btn" size="large">下一位</Button> */}
+                <Button type="primary" ghost style={{ borderColor: 'orange', color: 'orange' }} size="large">未到</Button>
+                <Button onClick={() => cancelMany()} type="primary" size="large" ghost style={{ borderColor: 'orange', color: 'orange' }}>批量未处理</Button>
+                <Button onClick={() => handledMany()} type="primary" size="large" >批量已处理</Button>
             </div>
             <Modal
                 okText="确认"
