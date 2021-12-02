@@ -38,7 +38,7 @@ export default memo(function AppMain(props) {
                         key={props.location.pathname}
                     >
                         {/* 渲染routes */}
-                        {renderRoutes(props.route.routes, props.authed, props.authPath, {}, { location: props.location })}
+                        {renderRoutes(props.route.routes, props.authPath, {}, { location: props.location })}
                     </CSSTransition>
                 </TransitionGroup>
             </div>
