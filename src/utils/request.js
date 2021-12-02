@@ -1,5 +1,5 @@
 import axios from 'axios'
-
+import {notification} from 'antd'
 const baseURL = "http://114.132.235.87/"
 
 export default function request(option) {
@@ -20,7 +20,8 @@ export default function request(option) {
             // 3.对请求的参数进行序列化(看服务器是否需要序列化)
             // config.data = qs.stringify(config.data)
             // console.log(config);
-
+            const token = localStorage.getItem("authed");
+            if(token) config.headers.token = token; 
             return config
         }, err => {
             // console.log('来到了request拦截failure中');
@@ -28,7 +29,6 @@ export default function request(option) {
         })
         // 响应拦截
         services.interceptors.response.use(response => {
-            // console.log('来到了response拦截success中');
             return response.data
         }, err => {
             if (err && err.response) {
@@ -37,7 +37,13 @@ export default function request(option) {
                         err.message = '请求错误'
                         break
                     case 401:
-                        err.message = '未授权的访问'
+                        notification.error({
+                            message: '登录超时，请重新登录！',
+                        });
+                        //删除本地token
+                        localStorage.removeItem("authed");
+                        window.history.go('/login');
+                        // err.message = '未授权的访问'
                         break
                     default:
                         err.message = "其他错误信息"

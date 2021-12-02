@@ -1,30 +1,23 @@
-import React, { memo, useContext, useState } from 'react'
+import React, { memo, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, LockOutlined, SmileOutlined } from '@ant-design/icons';
 import { login } from '@/api/user'
 import './index.less'
 
-import { Authtext } from '@/auth'
-
-
 export default memo(function Login() {
     const [isLoading, setLoading] = useState(false);
-    const { hasAuth, dispatch } = useContext(Authtext);
-    const {push} = useHistory()
-
+    const { push } = useHistory()
 
     const onFinish = (values) => {
         login(values).then(res => {
+            const { code, other } = res;
             setLoading(false);
-            console.log(res);
-            const { code,  data } = res;
             if (code == 0 && res.message == "成功") {
-                dispatch("addAuth");
-                // 本地存user
-                localStorage.setItem("user",JSON.stringify(data))
+                // 本地存token
+                localStorage.setItem("authed", other)
                 push('/home/index');
-            }else if(code === 1) {
+            } else if (code === 1) {
                 message.warning(res.message);
             }
         })
