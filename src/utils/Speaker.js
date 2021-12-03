@@ -14,6 +14,8 @@ class Speaker {
         this.msg.rate = config.rate !== undefined ? config.rate : 1.5
         this.msg.volume = config.volume !== undefined ? config.volume : 1
 
+        this.sentenceList = []
+
         if (lifeF) {
             this.lifeF = lifeF
             this.msg.onerror = (lifeF.handleError) ? lifeF.handleError : null
@@ -35,10 +37,10 @@ class Speaker {
     // 单次
     speak(text) {
         this.msg.text = text
-        if (synth.speaking) {
-            message.warn('上一呼叫未结束，请稍后')
-            return
-        }
+        // if (synth.speaking) {
+        //     message.warn('上一呼叫未结束，请稍后')
+        //     return
+        // }
         synth.speak(this.msg)
     }
 
@@ -53,13 +55,42 @@ class Speaker {
             message.warn('上一呼叫未结束，请稍后')
             return
         }
-        this.msg.text = arr[i++]
-        synth.speak(this.msg)
+
+        this.speak(arr[i++])
 
         this.msg.onend = () => {
             this.speakMany(arr, i)
         }
     }
+
+    // 多次可动态添加
+    activeSpeak(arr) {
+        console.log('as')
+        if (arr.length)
+            this.sentenceList.push(arr)
+
+        if (this.sentenceList.length <= 0) {
+            this.msg.onend = (this.lifeF && this.lifeF.endCallb) ? this.lifeF.endCallb : null
+            return
+        }
+
+        if (synth.speaking) {
+            this.msg.onend = () => {
+                this.speak(this.sentenceList[0])
+                this.sentenceList.shift()
+                this.activeSpeak([])
+            }
+        }
+        else {
+            this.speak(this.sentenceList[0])
+            this.sentenceList.shift()
+            this.msg.onend = () => {
+                this.activeSpeak([])
+            }
+        }
+
+    }
+
 
     // 暂停
     pause(callb) {
