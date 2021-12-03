@@ -1,6 +1,10 @@
+/* 
+    根据路由表配置路由
+*/
+
 import React from 'react'
 import { Route, Redirect, Switch } from 'react-router-dom'
-const renderRoutes = (routes, authed, authPath, extraProps = {}, switchProps = {}) => routes ? (
+const renderRoutes = (routes, authPath, extraProps = {}, switchProps = {}) => routes ? (
     <Switch {...switchProps}>
         {routes.map((route, i) => (
             <Route
@@ -8,26 +12,30 @@ const renderRoutes = (routes, authed, authPath, extraProps = {}, switchProps = {
                 path={route.path}
                 exact={route.exact}
                 strict={route.strict}
-                render={props => routeRender(route, authed, authPath, props, extraProps)}
+                render={props => routeRender(route, authPath, props, extraProps)}
             />
         ))}
     </Switch>
 ) : null
 
-const routeRender = (route, authed, authPath = '/login', props, extraProps) => {
-    const hasAuth = localStorage.getItem("user");
-    if(hasAuth && route.path === authPath) {
+//路由渲染前判断
+const routeRender = (route, authPath = '/login', props, extraProps) => {
+    const token = localStorage.getItem("authed");
+    //有token
+    if(token && route.path === authPath) {
         return (
             <Redirect to={{ pathname: '/home/index' }} />
         )
     }
-    if (hasAuth || !route.requiresAuth) {
+    //有token 或者 不是权限路由
+    if (token || !route.requiresAuth) {
         return route.render
-            ? route.render({ ...props,authed, authPath, ...extraProps, route: route })
+            ? route.render({ ...props,authPath, ...extraProps, route: route })
             : route.component && (
-                <route.component {...props} authed={authed} authPath={authPath} {...extraProps} route={route} />
+                <route.component {...props} authPath={authPath} {...extraProps} route={route} />
             );
     } else {
+        //没有token 重定向登录
         return (
             <Redirect to={{ pathname: authPath }} />
         )

@@ -1,32 +1,36 @@
-import React, { memo, useContext } from 'react'
+import React, { memo, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, LockOutlined, SmileOutlined } from '@ant-design/icons';
 import { login } from '@/api/user'
 import './index.less'
 
-import { Authtext } from '@/auth'
-
-
 export default memo(function Login() {
-    const { hasAuth, dispatch } = useContext(Authtext);
-    const {push} = useHistory()
+    const [isLoading, setLoading] = useState(false);
+    const { push } = useHistory()
+
     const onFinish = (values) => {
         login(values).then(res => {
-            console.log(res);
-            const { code, message, data } = res;
-            if (code == 0 && message == "成功") {
-                dispatch("addAuth");
-                // 本地存user
-                localStorage.setItem("user",JSON.stringify(data))
+            const { code, other } = res;
+            setLoading(false);
+            if (code == 0 && res.message == "成功") {
+                // 本地存token
+                localStorage.setItem("authed", other)
                 push('/home/index');
+            } else if (code === 1) {
+                message.warning(res.message);
             }
         })
     };
 
     const onFinishFailed = (errorInfo) => {
-        // message.error('提交失败！');
+        message.error('提交失败！');
     };
+
+    const handleClick = () => {
+        setLoading(true)
+    }
+
     return (
         <div className="login-wrap">
             <div className="form-wrap">
@@ -78,7 +82,7 @@ export default memo(function Login() {
                         />
                     </Form.Item>
                     <Form.Item className="login-button-item">
-                        <Button type="primary" htmlType="submit" className="login-form-button">
+                        <Button loading={isLoading} onClick={handleClick} type="primary" htmlType="submit" className="login-form-button">
                             登录
                         </Button>
                     </Form.Item>

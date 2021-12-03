@@ -1,17 +1,25 @@
 .main-wrap {
-    height: auto;
-    padding: 0 70px 20px 70px;
-    // padding: 120px 70px 20px 70px;11
+    height: 100%;
+    .main {
+      @media screen and (max-width: 1320px) {
+        width: 1068px;
+      }
+      @media (min-width: 1320px) and (max-width: 1380px) {
+        width: 1208px;
+      }
+      @media screen and (min-width: 1380px) {
+        width: 1368px;
+      }
+      position: relative;
+      margin: 20px auto;
+      background-color: #fff;
+    }
       .main-container {
         position: relative;
-        // width: 1200px;  
-        // margin: 0 auto ;11
-        margin: 20px auto;
+        width: 100%;
+        height: 770px;
         background-color: #fff;
-        // min-height: 797px; 11
-        min-height: 84vh;
-        // overflow: hidden;11
-        overflow: hidden;//防止动画溢出产生滚动条
+        overflow: hidden;
       }
 }
 
