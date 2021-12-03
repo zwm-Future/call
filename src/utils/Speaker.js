@@ -88,7 +88,6 @@ class Speaker {
                 this.activeSpeak([])
             }
         }
-
     }
 
 

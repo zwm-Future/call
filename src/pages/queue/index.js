@@ -8,7 +8,7 @@ import { InfoCircleOutlined } from '@ant-design/icons'
 
 export default memo(function Queue(props) {
     // const QueueSpeaker = useRef(new Speaker('zh-CN', 2, 2, 2)).current
-    const QueueSpeaker = new Speaker({ lang: 'zh-CN', pitch: 1, rate: 1, volume: 1 })
+    const QueueSpeaker = new Speaker({ lang: 'zh-CN', pitch: 1, rate: 0.9, volume: 1 })
     const full_timer = useRef(null);
     const [btn_class, setClass] = useState("full-btn")
     const [isFullScreen, updateFSstatues] = useState(false)
@@ -51,22 +51,8 @@ export default memo(function Queue(props) {
     // 叫号
     function callPerson(callV) {
         let text = numToChNum('请排队序号为 a-m-1 到3号窗口')
-        console.log(text)
+        QueueSpeaker.activeSpeak([[text, text, text].join('。。')])
 
-        // let text = '请工学号尾号维 四七八七的客户到4号窗口办理业务'
-        // QueueSpeaker.speak(text)
-        QueueSpeaker.activeSpeak(['请排队序号为, a-m-1, 到1号窗口'])
-
-
-
-        setTimeout(() => {
-            console.log("开始")
-            QueueSpeaker.activeSpeak(['请排队序号为, a-m-1, 到2号窗口', '请排队序号为 ,p-m-3, 到3号窗口'])
-            QueueSpeaker.activeSpeak(['请排队序号为, a-m-1, 到5号窗口', '请排队序号为 ,p-m-3, 到6号窗口'])
-        }, 6000)
-
-        // QueueSpeaker.speakMany(['你好','23'], 0)
-        // QueueSpeaker.cancel()
     }
 
     // 处理移动显示全屏icon
