@@ -5,21 +5,54 @@ import FullBtn from '@/components/fullBtn'
 import Cqueue from '@/components/Cqueue'
 import Speaker from '@/utils/Speaker'
 import { InfoCircleOutlined } from '@ant-design/icons'
+import { handleList, callQueue } from '@/utils/handleQueueDate'
 
 export default memo(function Queue(props) {
     // const QueueSpeaker = useRef(new Speaker('zh-CN', 2, 2, 2)).current
     const QueueSpeaker = new Speaker({ lang: 'zh-CN', pitch: 1, rate: 0.9, volume: 1 })
     const full_timer = useRef(null);
     const [btn_class, setClass] = useState("full-btn")
+    // 队列数据
+    const [appointmentList, updateAList] = useState([])
+    const [siteList, updateSList] = useState([])
+    const [uergentList, updateUKist] = useState([])
     const [isFullScreen, updateFSstatues] = useState(false)
     useEffect(() => {
         const getMes = (e) => {
+            let data = JSON.parse(e.data)
+            if (data.other) {
+                let other = JSON.parse(data.other)
+                let queueMessage = JSON.parse(data.queueMessage)
 
-            // const { subscribe, site, urgent } = JSON.parse(e.data);
-            // const d = JSON.parse(e.data);
-            console.log("getMes", JSON.parse(e.data));
-            // console.log('进入播放');
-            // console.log(d.subscribeUnCall);
+                switch (data.name) {
+                    case '预约队列':
+                        updateAList(handleList([...queueMessage, ...other]))
+                        break
+                    case "现场队列":
+                        updateSList(handleList([...queueMessage, ...other]))
+                        break
+                    case "加急队列":
+                        updateUKist(handleList([...queueMessage, ...other]))
+                        break
+                    default:
+                        console.log("队列匹配失败")
+                }
+                if (data.user) {
+                    callPerson(callQueue(data.user))
+                }
+
+            } else if (data.siteCall) {
+                // 第一次连接
+                let { siteCall, siteUnCall, subscribeCall, subscribeUnCall, urgentCall, urgentUnCall } = data
+
+                updateAList(handleList([...subscribeCall, ...subscribeUnCall]))
+                updateSList(handleList([...siteCall, ...siteUnCall]))
+                updateUKist(handleList([...urgentCall, ...urgentUnCall]))
+
+                console.log("现场队列", [...siteCall, ...siteUnCall])
+                console.log("预约队列", [...subscribeCall, ...subscribeUnCall])
+                console.log("加急队列", [...urgentCall, ...urgentUnCall])
+            }
         }
         // websocket实例 开启连接
         const call_ws = new createWebSocket('ws://114.132.235.87:8081/queue', getMes);
@@ -34,27 +67,12 @@ export default memo(function Queue(props) {
         // eslint-disable-next-line
     }, [])
 
-    // 将传入的字符串里的阿拉伯数字转换成汉语数字
-    function numToChNum(str) {
-        return str.replace(/1/g, '一')
-            .replace(/2/g, '二')
-            .replace(/3/g, '三')
-            .replace(/4/g, '四')
-            .replace(/5/g, '五')
-            .replace(/6/g, '六')
-            .replace(/7/g, '七')
-            .replace(/8/g, '八')
-            .replace(/9/g, '九')
-            .replace(/0/g, '零')
-    }
 
     // 叫号
     function callPerson(callV) {
-        let text = numToChNum('请排队序号为 a-m-1 到3号窗口')
-        QueueSpeaker.activeSpeak([[text, text, text].join('。。')])
+        QueueSpeaker.activeSpeak(callV)
 
     }
-
     // 处理移动显示全屏icon
     function handleMove() {
         if (full_timer.current) clearTimeout(full_timer.current)
@@ -81,13 +99,13 @@ export default memo(function Queue(props) {
             <div style={{ width: '86%' }}>
                 <div className="h_scroll queues" style={{ padding: 10, display: 'flex' }}>
                     <div style={{ boxSizing: 'border-box', width: '34%', paddingRight: '2.1%' }}>
-                        <Cqueue isFullScreen={isFullScreen} type="预约" />
+                        <Cqueue isFullScreen={isFullScreen} type="预约" list={appointmentList} />
                     </div>
                     <div style={{ boxSizing: 'border-box', width: '34%', paddingRight: '2.1%' }}>
-                        <Cqueue isFullScreen={isFullScreen} type="现场" />
+                        <Cqueue isFullScreen={isFullScreen} type="现场" list={siteList} />
                     </div>
                     <div style={{ boxSizing: 'border-box', width: '32%' }} >
-                        <Cqueue isFullScreen={isFullScreen} type="加急" />
+                        <Cqueue isFullScreen={isFullScreen} type="加急" list={uergentList} />
                     </div>
                 </div>
 
@@ -99,7 +117,7 @@ export default memo(function Queue(props) {
                 </div>
                 <div className="qr-wrap">
                     <img className="qr-code" src="https://www.rdcmy.com/reservationSystem/QRCode/QRCode.jpg" alt="签到码" />
-                    <div onClick={() => callPerson()} className="qr-tip">请扫码签到排队</div>
+                    <div className="qr-tip">请扫码签到排队</div>
                 </div>
                 <div className="alter">
                     <div className="alter_title"><InfoCircleOutlined style={{ fontSize: '2.2vh', color: '#109efc', paddingRight: 11 }} />相关说明</div>
