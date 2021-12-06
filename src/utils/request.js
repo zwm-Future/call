@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {notification} from 'antd'
+import { notification } from 'antd'
 const baseURL = "http://114.132.235.87/"
 
 export default function request(option) {
@@ -21,7 +21,7 @@ export default function request(option) {
             // config.data = qs.stringify(config.data)
             // console.log(config);
             const token = localStorage.getItem("authed");
-            if(token) config.headers.token = token; 
+            if (token) config.headers.token = token;
             return config
         }, err => {
             // console.log('来到了request拦截failure中');
