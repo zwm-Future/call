@@ -2,12 +2,36 @@ import { memo, useEffect } from 'react'
 import Header from './header'
 import Queue from './queue'
 import ProcessTable from './processTable'
+import { siteCall, urgentCall, signCall } from '@/api/call.js'
 
 export default memo(function Processing(props) {
     let { type, currentNum: window, title } = props.date
-    // 可能进入此页面时拿不到数据 ，退回到主页面
+
     useEffect(() => {
         console.log('Processing', props);
+        if (type == 1) {
+            signCall(window).then(res => {
+                console.log(res)
+            }).catch(err => {
+                console.log('err', err)
+            })
+        } else if (type == 2) {
+            siteCall(window).then(res => {
+                console.log(res)
+            }).catch(err => {
+                console.log('err', err)
+            })
+        }
+        else if (type == 3) {
+            urgentCall(window).then(res => {
+                console.log(res)
+            }).catch(err => {
+                console.log('err', err)
+            })
+        } else {
+            alert("WRONG")
+        }
+
     })
     return (
         <div style={{ padding: 10 }}>
