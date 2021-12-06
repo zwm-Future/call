@@ -157,7 +157,7 @@ export default memo(function ProcessTable(props) {
             }}>
                 <div className="list_title">总单数 ( {list.length} )：</div>
                 <Table
-                    scroll={{ y: 300 }}
+                    scroll={{ y: 330 }}
                     bordered
                     pagination={false}
                     rowSelection={{
@@ -183,10 +183,10 @@ export default memo(function ProcessTable(props) {
             {/* <input > */}
             <div className="btn_list">
                 {
-                    (processInfo.name === "无数据") ? (<Button onClick={() => props.callNext(processInfo.id)} type="primary" size="large" >呼叫用户</Button>) :
+                    (processInfo.name === "无数据") ? (<Button onClick={() => props.callNext()} type="primary" size="large" >呼叫用户</Button>) :
                         (<>
                             <Button type="primary" ghost style={{ borderColor: 'orange', color: 'orange' }} size="large" onClick={() => props.handleDelay(processInfo.id)}>未到</Button>
-                            <Button onClick={() => props.callNext(processInfo.id)} type="primary" size="large" >下一位</Button>
+                            <Button onClick={() => props.callNext()} type="primary" size="large" >下一位</Button>
                         </>)
                 }
 

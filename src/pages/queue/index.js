@@ -43,7 +43,11 @@ export default memo(function Queue(props) {
                         message.error("匹配失败")
                 }
                 if (data.user) {
-                    callPerson(callQueue(data.user))
+                    console.log("应该叫");
+                    if (data.user.status !== -1) {
+                        console.log("应该叫2");
+                        callPerson(callQueue(data.user))
+                    }
                 }
 
             } else if (data.siteCall) { // 第一次连接
@@ -54,9 +58,9 @@ export default memo(function Queue(props) {
                 updateSList(handleQueues([...siteCall, ...siteUnCall]))
                 updateUKist(handleQueues([...urgentCall, ...urgentUnCall]))
 
-                console.log("现场队列", [...siteCall, ...siteUnCall])
-                console.log("预约队列", [...subscribeCall, ...subscribeUnCall])
-                console.log("加急队列", [...urgentCall, ...urgentUnCall])
+                // console.log("现场队列", [...siteCall, ...siteUnCall])
+                // console.log("预约队列", [...subscribeCall, ...subscribeUnCall])
+                // console.log("加急队列", [...urgentCall, ...urgentUnCall])
             }
         }
         // websocket实例 开启连接

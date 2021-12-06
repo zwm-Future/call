@@ -2,7 +2,8 @@ import { memo, useEffect, useState } from 'react'
 import Header from './header'
 import Queue from './queue'
 import ProcessTable from './processTable'
-import { callApi, getQueue, delay, mannual } from '@/api/call.js'
+
+import { callApi, getQueue, delay, mannual, appointmentMannual } from '@/api/call.js'
 import { handleQueueAtP } from '@/utils/handleQueueData'
 import { message } from 'antd'
 
@@ -25,21 +26,8 @@ export default memo(function Processing(props) {
 
     useEffect(() => {
         getQueueData()
-        return () => {
-            exitCallb()
-        }
-    }, [personInfo, MannualPersonInfo]) // eslint-disable-line
+    }, []) // eslint-disable-line
 
-    // 退出回调
-    function exitCallb() {
-        console.log("退出回调", personInfo.name)
-        // if (personInfo.name !== "无数据") {
-        //     console.log("自动处理", personInfo.id)
-        //     mannual(title, personInfo.id).then(res => {
-        //         console.log("自动处理", res)
-        //     }).catch(err => { console.log("自动处理失败", err) })
-        // }
-    }
 
     // 未到
     function handleDelay(userId) {
@@ -50,45 +38,61 @@ export default memo(function Processing(props) {
         console.log("DELAYID", userId);
         delay(title, userId)
             .then(res => {
-                console.log("Delay", res)
+                console.log("Delay", res.message)
+                if (res.message === "滞后成功") {
+                    callNext(true)
+                } else {
+                    message.error("滞后失败")
+                }
             })
             .catch(err => {
+                message.error("滞后失败")
                 console.log("Delay Error", err);
             })
-        callNext()
     }
 
     // 叫号 （下一位）
-    function callNext() {
+    function callNext(isDelay = false) {
         if (isMannual) {
             switchMannul(0)
+            return
+        }
+        console.log("长度", queueData.length, isDelay);
+        if (queueData.length === 0 && !isDelay) {
+            console.log("布尔", isDelay);
+            mannualHandle(personInfo.id)
+            updatePersonInfo({
+                name: '无数据',
+                id: '无数据',
+                number: "无数据"
+            })
             return
         }
         callApi(title, window)
             .then(res => {
                 if (res.code === 1) {
                     message.warning("当前无人排队")
-                    let personData = {
+                    updatePersonInfo({
                         name: '无数据',
                         id: '无数据',
                         number: "无数据"
-                    }
-                    updatePersonInfo(personData)
+                    })
                     return
                 }
                 console.log(res)
                 console.log('排队信息（仅待定）', res.other)
 
                 console.log("此窗口当前处理对象", JSON.parse(res.message))
-                let { user, appointments } = JSON.parse(res.message)
+                let { user, appointments, location } = JSON.parse(res.message)
                 console.log("appointments", appointments)
                 let infor = {
                     id: user.number,  // 学号
                     name: user.name,
-                    number: appointments ? appointments[0].reservationNumber : 1,
+                    number: appointments ? appointments[0].reservationNumber : location,
                     appointments: handleTickets(appointments)
                 }
                 updatePersonInfo(infor)
+                getQueueData(true)
                 console.log("personInfo", personInfo);
             }).catch(err => {
                 console.log('err', err)
@@ -118,14 +122,16 @@ export default memo(function Processing(props) {
                 }
                 return false
             })
-            // updateQueue(newQueue)
-            // return
+            appointmentMannual(userId).then((res) => {
+                console.log("手动处理", res);
+                getQueueData(true)
+            })
+            return
         }
         mannual(title, userId).then(res => {
             console.log("手动处理", res);
-            console.log("手动处理 data", res.data)
-            console.log("手动处理 message", JSON.parse(res.message))
-            console.log("手动处理 other", res.other)
+            getQueueData(true)
+
         }).catch(err => {
             console.log("手动处理 ERROR ", err);
         })
@@ -149,6 +155,7 @@ export default memo(function Processing(props) {
     // 刷新队列
     function getQueueData(alert = false) {
         getQueue(title + '队列').then(res => {
+            console.log("队列信息", res);
             updateQueue(handleQueueAtP(res.other))
             if (alert) return
             console.log(title + '队列信息', res.other)

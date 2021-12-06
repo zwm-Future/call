@@ -64,7 +64,7 @@ export function delay(type, userId) {
   })
 }
 
-// 手动完成
+// 手动处理完成
 export function mannual(type, userNumber) {
   let url = ''
   switch (type) {
@@ -91,3 +91,15 @@ export function mannual(type, userNumber) {
 
 }
 
+// 预约手动完成
+
+export function appointmentMannual(number) {
+  return request({
+    url: "/appointment/editSelf",
+    method: "PUT",
+    data: {
+      number
+    }
+  })
+
+}
