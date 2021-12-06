@@ -1,7 +1,7 @@
 import { memo, useState, useEffect } from 'react'
 import './processTable.less'
 import { WrappedTextarea } from './style'
-import { Table, Button, Modal, notification, Input, message } from 'antd';
+import { Table, Button, Modal, notification, Input } from 'antd';
 const { TextArea } = Input;
 const { Column } = Table;
 

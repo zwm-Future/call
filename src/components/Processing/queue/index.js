@@ -1,4 +1,4 @@
-import { memo, useState, useEffect } from 'react'
+import { memo, useState } from 'react'
 import './queue.less'
 import { SyncOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { Table, Button, Modal } from 'antd';
