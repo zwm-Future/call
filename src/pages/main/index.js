@@ -1,4 +1,5 @@
 import React, { memo, useState, useEffect } from 'react'
+import qs from 'qs'
 import { useHistory } from 'react-router-dom'
 import {
     SafetyCertificateTwoTone,
@@ -47,13 +48,13 @@ const items = [
         icon: () => (<ThunderboltTwoTone className="item-icon" twoToneColor='#eccb52fc' />),
         hasSelect: true
     },
-    {
-        title: '信息反馈',
-        to: '/home/message',
-        classNames: 'message-item',
-        icon: () => (<EditTwoTone className="item-icon" twoToneColor='#109efc' />),
-        hasSelect: false
-    },
+    // {
+    //     title: '信息查询',
+    //     to: '/home/message',
+    //     classNames: 'message-item',
+    //     icon: () => (<EditTwoTone className="item-icon" twoToneColor='#109efc' />),
+    //     hasSelect: false
+    // },
 ]
 
 export default memo(function Main(props) {
@@ -79,7 +80,7 @@ export default memo(function Main(props) {
             message.warning('请选择你当前的窗口');
             return;
         }
-        push({ pathname: to, state: { currentNum: selectVal, title, type } });
+        push({ pathname: to, search:qs.stringify({currentNum: selectVal, title, type })});
         setIsModalVisible(false);
     };
 
