@@ -1,6 +1,9 @@
 import axios from 'axios'
 import { notification } from 'antd'
-const baseURL = "http://114.132.235.87/"
+import { baseURL } from '@/api/baseUrl'
+// const baseURL = "http://114.132.235.87/"
+// const baseURL = "https://www.rdcmy.com/reservationSystem/"
+
 
 export default function request(option) {
     return new Promise((resolve, reject) => {

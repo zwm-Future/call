@@ -8,6 +8,7 @@ const { Column } = Table;
 export default memo(function ProcessTable(props) {
 
     let [list, updateList] = useState([])
+    let [isLoading, switchLoading] = useState(false)
     let [selectedListKey, updateSelectedList] = useState([])   // 被选中的数据的 key
     let [isshowFeedback, switchShowFeedback] = useState(false)  // 是否显示反馈框
     let [reason, updateReason] = useState('')   // 未通过原因
@@ -28,6 +29,16 @@ export default memo(function ProcessTable(props) {
         // eslint-disable-next-line
     }, [props.personInfo, props.isMannual])
 
+
+    // 点击叫号 
+    function handleCall() {
+        switchLoading(true)
+        props.callNext()
+        setTimeout(() => {
+            switchLoading(false)
+        }, 1000);
+
+    }
 
 
     const rowSelection = {
@@ -183,7 +194,7 @@ export default memo(function ProcessTable(props) {
             {/* <input > */}
             <div className="btn_list">
                 {
-                    (processInfo.name === "无数据") ? (<Button onClick={() => props.callNext()} type="primary" size="large" >呼叫用户</Button>) :
+                    (processInfo.name === "无数据") ? (<Button onClick={() => handleCall()} loading={isLoading} type="primary" size="large" >呼叫用户</Button>) :
                         (<>
                             <Button type="primary" ghost style={{ borderColor: 'orange', color: 'orange' }} size="large" onClick={() => props.handleDelay(processInfo.id)}>未到</Button>
                             <Button onClick={() => props.callNext()} type="primary" size="large" >下一位</Button>
