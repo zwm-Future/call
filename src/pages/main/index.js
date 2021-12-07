@@ -48,13 +48,13 @@ const items = [
         icon: () => (<ThunderboltTwoTone className="item-icon" twoToneColor='#eccb52fc' />),
         hasSelect: true
     },
-    // {
-    //     title: '信息查询',
-    //     to: '/home/message',
-    //     classNames: 'message-item',
-    //     icon: () => (<EditTwoTone className="item-icon" twoToneColor='#109efc' />),
-    //     hasSelect: false
-    // },
+    {
+        title: '信息查询',
+        to: '/home/message',
+        classNames: 'message-item',
+        icon: () => (<EditTwoTone className="item-icon" twoToneColor='#109efc' />),
+        hasSelect: false
+    },
 ]
 
 export default memo(function Main(props) {
