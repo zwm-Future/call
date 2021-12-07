@@ -25,6 +25,7 @@ export default memo(function Login() {
 
     const onFinishFailed = (errorInfo) => {
         message.error('提交失败！');
+        setLoading(false);
     };
 
     const handleClick = () => {
@@ -46,7 +47,7 @@ export default memo(function Login() {
                     autoComplete="off"
                 >
                     <Form.Item
-                        name="username"
+                        name="name"
                         rules={[
                             {
                                 required: true,
@@ -57,15 +58,15 @@ export default memo(function Login() {
                         <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="姓名" />
                     </Form.Item>
                     <Form.Item
-                        name="name"
+                        name="username"
                         rules={[
                             {
                                 required: true,
-                                message: '请输入用户名',
+                                message: '请输入学工号',
                             },
                         ]}
                     >
-                        <Input prefix={<SmileOutlined className="site-form-item-icon" />} placeholder="用户名" />
+                        <Input prefix={<SmileOutlined className="site-form-item-icon" />} placeholder="学工号" />
                     </Form.Item>
                     <Form.Item
                         name="password"
