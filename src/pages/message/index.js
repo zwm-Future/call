@@ -153,6 +153,7 @@ export default memo(function Message(props) {
             message.warning('请输入内容！');
             return;
         }
+        message.error('请求异常');
         //请求数据
     }
     const title = (
@@ -174,7 +175,7 @@ export default memo(function Message(props) {
                 <Table
                     bordered
                     columns={columns}
-                    dataSource={dataSource}
+                    // dataSource={dataSource}
                     rowKey="_id"
                 >
                 </Table>
