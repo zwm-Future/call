@@ -7,6 +7,7 @@ import Speaker from '@/utils/Speaker'
 import { InfoCircleOutlined } from '@ant-design/icons'
 import { handleQueues, callQueue } from '@/utils/handleQueueData'
 import { message } from 'antd'
+import { webSocketUrl } from '@/api/baseUrl'
 
 export default memo(function Queue(props) {
     // const QueueSpeaker = useRef(new Speaker('zh-CN', 2, 2, 2)).current
@@ -64,7 +65,7 @@ export default memo(function Queue(props) {
             }
         }
         // websocket实例 开启连接
-        const call_ws = new createWebSocket('ws://114.132.235.87:8081/queue', getMes);
+        const call_ws = new createWebSocket(webSocketUrl, getMes);
 
         return () => {
             QueueSpeaker.cancel()
