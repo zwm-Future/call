@@ -1,3 +1,3 @@
-export const baseURL = 'https://www.rdcmy.com/reservationSystem/'
+export const baseURL = 'https://www.rdcmy.com/reservation/api/'
 
-export const webSocketUrl = 'wss://www.rdcmy.com/reservationSystem/websocket/queue'
+export const webSocketUrl = 'wss://www.rdcmy.com/reservation/websocket/queue'
