@@ -7,21 +7,19 @@ import { callApi, getQueue, delay, mannual, appointmentMannual } from '@/api/cal
 import { handleQueueAtP } from '@/utils/handleQueueData'
 import { message } from 'antd'
 
+let defaultInfo = () => ({
+    name: '无数据',
+    id: '无数据',
+    number: "无数据"
+})
+
 export default memo(function Processing(props) {
     let { currentNum: window, title } = props.date
 
     let [queueData, updateQueue] = useState([])
-    let [personInfo, updatePersonInfo] = useState({
-        name: '无数据',
-        id: '无数据',
-        number: "无数据"
-    })
+    let [personInfo, updatePersonInfo] = useState(defaultInfo())
 
-    let [MannualPersonInfo, updateMannualPersonInfo] = useState({
-        name: '无数据',
-        id: '无数据',
-        number: "无数据"
-    })
+    let [MannualPersonInfo, updateMannualPersonInfo] = useState(defaultInfo())
     let [isMannual, switchMannul] = useState(0)
 
     useEffect(() => {
@@ -53,36 +51,29 @@ export default memo(function Processing(props) {
 
     // 叫号 （下一位）
     function callNext(isDelay = false) {
-        if (isMannual) {
+        if (isMannual) {  // 处于手动状态
             switchMannul(0)
             return
         }
-        console.log("长度", queueData.length, isDelay);
-        if (queueData.length === 0 && !isDelay) {
+
+        if (queueData.length === 0 && !isDelay && personInfo.name !== "无数据") {   // 无下一位 , 删除当前
             console.log("布尔", isDelay);
             mannualHandle(personInfo.id)
-            updatePersonInfo({
-                name: '无数据',
-                id: '无数据',
-                number: "无数据"
-            })
+            updatePersonInfo(defaultInfo())
+            message.warning("当前无人排队")
             return
         }
         callApi(title, window)
             .then(res => {
                 if (res.code === 1) {
                     message.warning("当前无人排队")
-                    updatePersonInfo({
-                        name: '无数据',
-                        id: '无数据',
-                        number: "无数据"
-                    })
+                    updatePersonInfo(defaultInfo())
                     return
                 }
-                console.log(res)
-                console.log('排队信息（仅待定）', res.other)
+                // console.log(res)
+                // console.log('排队信息（仅待定）', res.other)
 
-                console.log("此窗口当前处理对象", JSON.parse(res.message))
+                // console.log("此窗口当前处理对象", JSON.parse(res.message))
                 let { user, appointments, location } = JSON.parse(res.message)
                 console.log("appointments", appointments)
                 let infor = {
@@ -123,17 +114,27 @@ export default memo(function Processing(props) {
                 return false
             })
             appointmentMannual(userId).then((res) => {
-                console.log("手动处理", res);
+                console.log("手动处理", res.message);
+                if (res.message === "还没有人被叫号") {
+                    message.warning("请先叫号")
+                }
                 getQueueData(true)
+            }).catch(err => {
+                console.log("手动处理 ERROR ", err);
+                message.error("手动处理失败")
             })
             return
         }
         mannual(title, userId).then(res => {
             console.log("手动处理", res);
+            if (res.message === "还没有人被叫号") {
+                message.warning("请先叫号")
+            }
             getQueueData(true)
 
         }).catch(err => {
             console.log("手动处理 ERROR ", err);
+            message.error("手动处理失败")
         })
     }
 

@@ -49,5 +49,6 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.16.4"
-  }
+  },
+  "homepage": "."
 }
