@@ -105,7 +105,9 @@ class Speaker {
 
     // 取消
     cancel(callb) {
+        console.log("关闭叫号");
         synth.cancel()
+        this.sentenceList = ['']
         callb && callb()
     }
 

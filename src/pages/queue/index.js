@@ -5,53 +5,62 @@ import FullBtn from '@/components/fullBtn'
 import Cqueue from '@/components/Cqueue'
 import Speaker from '@/utils/Speaker'
 import { InfoCircleOutlined } from '@ant-design/icons'
-import { handleList, callQueue } from '@/utils/handleQueueDate'
+import { handleQueues, callQueue } from '@/utils/handleQueueData'
+import { message } from 'antd'
 
 export default memo(function Queue(props) {
     // const QueueSpeaker = useRef(new Speaker('zh-CN', 2, 2, 2)).current
     const QueueSpeaker = new Speaker({ lang: 'zh-CN', pitch: 1, rate: 0.9, volume: 1 })
     const full_timer = useRef(null);
     const [btn_class, setClass] = useState("full-btn")
+
     // 队列数据
     const [appointmentList, updateAList] = useState([])
     const [siteList, updateSList] = useState([])
     const [uergentList, updateUKist] = useState([])
+
+    // 是否全屏
     const [isFullScreen, updateFSstatues] = useState(false)
     useEffect(() => {
         const getMes = (e) => {
             let data = JSON.parse(e.data)
-            if (data.other) {
+            console.log("数据变动Data", data);
+            if (data.other) {  // 数据变动
                 let other = JSON.parse(data.other)
                 let queueMessage = JSON.parse(data.queueMessage)
 
                 switch (data.name) {
                     case '预约队列':
-                        updateAList(handleList([...queueMessage, ...other]))
+                        updateAList(handleQueues([...queueMessage, ...other]))
                         break
                     case "现场队列":
-                        updateSList(handleList([...queueMessage, ...other]))
+                        updateSList(handleQueues([...queueMessage, ...other]))
                         break
                     case "加急队列":
-                        updateUKist(handleList([...queueMessage, ...other]))
+                        updateUKist(handleQueues([...queueMessage, ...other]))
                         break
                     default:
-                        console.log("队列匹配失败")
+                        message.error("匹配失败")
                 }
                 if (data.user) {
-                    callPerson(callQueue(data.user))
+                    console.log("应该叫");
+                    if (data.user.status !== -1) {
+                        console.log("应该叫2");
+                        callPerson(callQueue(data.user))
+                    }
                 }
 
-            } else if (data.siteCall) {
-                // 第一次连接
+            } else if (data.siteCall) { // 第一次连接
+
                 let { siteCall, siteUnCall, subscribeCall, subscribeUnCall, urgentCall, urgentUnCall } = data
 
-                updateAList(handleList([...subscribeCall, ...subscribeUnCall]))
-                updateSList(handleList([...siteCall, ...siteUnCall]))
-                updateUKist(handleList([...urgentCall, ...urgentUnCall]))
+                updateAList(handleQueues([...subscribeCall, ...subscribeUnCall]))
+                updateSList(handleQueues([...siteCall, ...siteUnCall]))
+                updateUKist(handleQueues([...urgentCall, ...urgentUnCall]))
 
-                console.log("现场队列", [...siteCall, ...siteUnCall])
-                console.log("预约队列", [...subscribeCall, ...subscribeUnCall])
-                console.log("加急队列", [...urgentCall, ...urgentUnCall])
+                // console.log("现场队列", [...siteCall, ...siteUnCall])
+                // console.log("预约队列", [...subscribeCall, ...subscribeUnCall])
+                // console.log("加急队列", [...urgentCall, ...urgentUnCall])
             }
         }
         // websocket实例 开启连接

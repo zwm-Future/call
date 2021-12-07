@@ -1,59 +1,45 @@
 import { memo, useState, useEffect } from 'react'
 import './processTable.less'
 import { WrappedTextarea } from './style'
-import { Table, Button, Modal, notification, Input, message } from 'antd';
+import { Table, Button, Modal, notification, Input } from 'antd';
 const { TextArea } = Input;
 const { Column } = Table;
 
-const data = [
-    {
-        key: '1',
-        id: '111'
-    },
-    {
-        key: '2',
-        id: '222'
-    }, {
-        key: '3',
-        id: '333'
-    },
-    {
-        key: '4',
-        id: '444'
-    },
-    {
-        key: '5',
-        id: '555'
-    }, {
-        key: '6',
-        id: '666'
-    }, {
-        key: '7',
-        id: '777'
-    },
-    {
-        key: '8',
-        id: '888'
-    }, {
-        key: '9',
-        id: '999'
-    }
-]
 export default memo(function ProcessTable(props) {
-    useEffect(() => {
-        console.log('process-table', props);
-        return () => {
-        }
-        // eslint-disable-next-line
-    }, [])
 
-    let [list, updateList] = useState(data)
+    let [list, updateList] = useState([])
+    let [isLoading, switchLoading] = useState(false)
     let [selectedListKey, updateSelectedList] = useState([])   // 被选中的数据的 key
     let [isshowFeedback, switchShowFeedback] = useState(false)  // 是否显示反馈框
     let [reason, updateReason] = useState('')   // 未通过原因
-    let [isMannual, switchMannul] = useState(false)      // 是否手动处理状态
-    let [processInfo, updateProcessInfo] = useState(false)  // 当前处理的信息
-    let [MannualInfo, updateMannualInfo] = useState({})     // 手动处理信息
+    // let [isMannual, switchMannul] = useState(false)      // 是否手动处理状态
+    let [processInfo, updateProcessInfo] = useState({})  // 当前处理的信息
+    // let [MannualInfo, updateMannualInfo] = useState({})     // 手动处理信息
+
+    useEffect(() => {
+        console.log('process-table', props);
+        if (props.isMannual)
+            updateProcessInfo({ ...props.MannualPersonInfo })
+        else
+            updateProcessInfo({ ...props.personInfo })
+        // switchMannul(props.isMannual)
+
+        return () => {
+        }
+        // eslint-disable-next-line
+    }, [props.personInfo, props.isMannual])
+
+
+    // 点击叫号 
+    function handleCall() {
+        switchLoading(true)
+        props.callNext()
+        setTimeout(() => {
+            switchLoading(false)
+        }, 1000);
+
+    }
+
 
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
@@ -132,69 +118,66 @@ export default memo(function ProcessTable(props) {
         switchShowFeedback(false);
     };
 
-    const handledMany = () => {
-        if (selectedListKey.length === 0) {
-            message.warning('默认全选');
-            return
-        }
-        let selectedList = []
-        selectedListKey.forEach(v => {
-            list.forEach(v2 => {
-                if (v2.key === v) {
-                    selectedList.push(v2)
-                }
-            })
-        })
+    // const handledMany = () => {
+    //     if (selectedListKey.length === 0) {
+    //         message.warning('默认全选');
+    //         return
+    //     }
+    //     let selectedList = []
+    //     selectedListKey.forEach(v => {
+    //         list.forEach(v2 => {
+    //             if (v2.key === v) {
+    //                 selectedList.push(v2)
+    //             }
+    //         })
+    //     })
 
-        setTimeout(() => {
-            console.log('已处理单号', selectedList);
-            console.log('发送请求');
-            console.log('请求成功 ，删除数据');
-            console.log(selectedListKey);
+    //     setTimeout(() => {
+    //         console.log('已处理单号', selectedList);
+    //         console.log('发送请求');
+    //         console.log('请求成功 ，删除数据');
+    //         console.log(selectedListKey);
 
-            let newList = list
-            selectedListKey.forEach(v => {
-                newList = newList.filter(v2 => {
-                    if (v2.key === v) return false
-                    return true
-                })
-            })
+    //         let newList = list
+    //         selectedListKey.forEach(v => {
+    //             newList = newList.filter(v2 => {
+    //                 if (v2.key === v) return false
+    //                 return true
+    //             })
+    //         })
 
-            console.log(newList);
-            updateList(newList)
-        }, 1000)
-    }
+    //         console.log(newList);
+    //         updateList(newList)
+    //     }, 1000)
+    // }
 
-    const cancelMany = () => {
-        if (selectedListKey.length === 0) {
-            message.warning('默认全选');
-            switchShowFeedback(true);
-            return
-        }
-
-    }
 
     return (
         <div className="h_pro_table">
-            <div className="customer_info">
+            <div className="customer_info" style={{
+                marginTop: processInfo.appointments ? '0' : '100px'
+            }}>
                 <div>
-                    <div className="item"> 当前客户 ： XXX </div>
-                    <div className="item"> 工学号：1230004949</div>
+                    <div className="item"> 当前客户 ： {processInfo.name} </div>
+                    <div className="item"> 工学号：{processInfo.id}</div>
+                    <div className="item"> 排队序号：{processInfo.number}</div>
                 </div>
             </div>
-            <div className="h_scroll">
+            <div className="h_scroll" style={{
+                display: processInfo.appointments ? 'block' : 'none'
+            }}>
                 <div className="list_title">总单数 ( {list.length} )：</div>
                 <Table
-                    scroll={{ y: 380 }}
+                    scroll={{ y: 330 }}
                     bordered
                     pagination={false}
                     rowSelection={{
                         type: 'checkbox',
                         ...rowSelection,
                     }}
-                    dataSource={list}
+                    dataSource={processInfo.appointments}
                 >
-                    <Column title="单号" dataIndex="id" width='50%' />
+                    <Column title="单号" dataIndex="key" width='50%' />
                     <Column title="操作" dataIndex="action" width='50%'
                         render={(text, record) => {
                             // console.log('record', record.id);
@@ -210,10 +193,14 @@ export default memo(function ProcessTable(props) {
             </div>
             {/* <input > */}
             <div className="btn_list">
-                {/* <Button type="primary" className="call_btn" size="large">下一位</Button> */}
-                <Button type="primary" ghost style={{ borderColor: 'orange', color: 'orange' }} size="large">未到</Button>
-                <Button onClick={() => cancelMany()} type="primary" size="large" ghost style={{ borderColor: 'orange', color: 'orange' }}>批量未处理</Button>
-                <Button onClick={() => handledMany()} type="primary" size="large" >批量已处理</Button>
+                {
+                    (processInfo.name === "无数据") ? (<Button onClick={() => handleCall()} loading={isLoading} type="primary" size="large" >呼叫用户</Button>) :
+                        (<>
+                            <Button type="primary" ghost style={{ borderColor: 'orange', color: 'orange' }} size="large" onClick={() => props.handleDelay(processInfo.id)}>未到</Button>
+                            <Button onClick={() => props.callNext()} type="primary" size="large" >下一位</Button>
+                        </>)
+                }
+
             </div>
             <Modal
                 okText="确认"

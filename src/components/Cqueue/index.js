@@ -11,7 +11,7 @@ let columns = [
     },
     {
         title: '排队序号',
-        dataIndex: 'number',
+        dataIndex: 'key',
         // key: 'number',
         width: '40%'
     },

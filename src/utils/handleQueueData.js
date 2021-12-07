@@ -1,15 +1,13 @@
-// 处理队列信息
-export function handleList(arr) {
-    console.log("LOG", arr);
+// 处理仅显示排队的队列信息
+export function handleQueues(arr) {
+    // console.log("LOG", arr);
     let newList = []
     arr.forEach((v, i) => {
         newList.push({
             windowNum: (<div style={{ textAlign: 'center', color: v.status !== -1 ? 'red' : '#000', fontWeight: v.status !== -1 ? 'bold' : 'normal' }} > {v.status !== -1 ? v.status : '待定'}</ div>),
-            // windowNum: v.status !== -1 ? v.status : "待定",
             name: handleName(v.user.name + ''),
-            number: v.user.number,
-            key: v.user.id
-            // key: Math.random * 100 + ''
+            key: v.appointments ?
+                v.appointments[0].reservationNumber : v.location,
         })
     })
     return newList
@@ -36,13 +34,15 @@ function handleName(userName) {
 // 获取叫号信息，返回叫号数组
 export function callQueue(user) {
     let window = user.status;
-    let { number } = user.user
-    let text = numToChNum(`请排队序号为-${number}-到-${window}号窗口`)
+    let number = user.appointments ?
+        user.appointments[0].reservationNumber : user.location;
+    // let text = numToChNum(`请排队序号为-${number}-到-${window}号窗口`)
+    let text = `请排队序号为,${number},到,${window}号窗口`
     return [[text, text, text].join('。。')]
 }
 
 
-// 将传入的字符串里的阿拉伯数字转换成汉语数字
+/* 将传入的字符串里的阿拉伯数字转换成汉语数字
 function numToChNum(str) {
     return str.replace(/1/g, '一')
         .replace(/2/g, '二')
@@ -54,4 +54,19 @@ function numToChNum(str) {
         .replace(/8/g, '八')
         .replace(/9/g, '九')
         .replace(/0/g, '零')
+} */
+
+// 处理业务页面的队列
+export function handleQueueAtP(arr) {
+    let newList = []
+    arr.forEach((v, i) => {
+        newList.push({
+            id: v.user.number,  // 学号
+            name: v.user.name,
+            key: v.appointments ?
+                v.appointments[0].reservationNumber : v.location,
+            appointments: v.appointments
+        })
+    })
+    return newList
 }
