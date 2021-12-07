@@ -48,7 +48,7 @@ const routes = [
             {
                 path: '/home/message',
                 component: Message,
-                title: '信息反馈',
+                title: '信息查询',
             },
             {
                 path: '*',
