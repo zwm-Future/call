@@ -1,13 +1,11 @@
 import React, { memo, useEffect } from 'react'
+import qs from 'qs'
 import Processing from '@/components/Processing'
 
 export default memo(function Calling(props) {
-    useEffect(() => {
-        console.log('Calling', props.location.state);
-    })
     return (
         <div>
-            <Processing date={props.location.state} />
+            <Processing date={qs.parse(props.location.search,{ignoreQueryPrefix: true})} />
         </div>
     )
 })

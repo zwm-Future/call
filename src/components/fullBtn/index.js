@@ -3,7 +3,9 @@ import { FullscreenOutlined, FullscreenExitOutlined } from '@ant-design/icons'
 import { Button, message } from 'antd'
 import { useEffect } from 'react/cjs/react.development';
 
-
+/* 
+保证在同一个更新/卸载组件下使用
+*/
 class fullScreen {
     /**
      * @description: 全屏初始化
@@ -12,6 +14,7 @@ class fullScreen {
     constructor(fn) {
         this.prefixName = ""; // 浏览器前缀
         this.isFullscreenData = true; // 浏览器是否支持全屏
+        this.force = false; //在全屏时判断是否强制跳转，是则不进行quit和enter回调，以免组件卸载继续更新
         this.isFullscreen(fn);
     }
     /**
@@ -44,9 +47,9 @@ class fullScreen {
         if (!this.isFullscreenData) return;
         const methodName = `on${this.prefixName}fullscreenchange`;
         document[methodName] = e => {
-            if (this.isElementFullScreen()) {
+            if (this.isElementFullScreen() && !this.force) {
                 enter && enter(e); // 进入全屏回调
-            } else {
+            } else if(!this.force) {
                 quit && quit(e); // 离开全屏的回调
             }
         };
@@ -102,18 +105,20 @@ class fullScreen {
         }
     }
 }
-let full = new fullScreen(() => {
-    message.warning("你的浏览器貌似不支持全屏")
-});
-full.screenError(e => {
-    message.warning("全屏失败")
-});
+let full;
 export default function FullBtn(props) {
     const [icon, switchIcon] = useState((<FullscreenOutlined style={{ fontSize: '2.5vw', color: '#000' }} />))
     useEffect(() => {
+        full = new fullScreen(() => {
+            message.warning("你的浏览器貌似不支持全屏")
+        });
+        full.screenError(e => {
+            message.warning("全屏失败")
+        });
         if (props.enter && props.quit) {
             full.screenChange(props.enter, props.quit)
         }
+        return () => {full.force = true}
         // eslint-disable-next-line 
     }, [])
 
