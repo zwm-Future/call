@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { FullscreenOutlined, FullscreenExitOutlined } from '@ant-design/icons'
 import { Button, message } from 'antd'
-import { useEffect } from 'react/cjs/react.development';
+// import { useEffect } from 'react/cjs/react.development';
 
 /* 
 保证在同一个更新/卸载组件下使用
@@ -49,7 +49,7 @@ class fullScreen {
         document[methodName] = e => {
             if (this.isElementFullScreen() && !this.force) {
                 enter && enter(e); // 进入全屏回调
-            } else if(!this.force) {
+            } else if (!this.force) {
                 quit && quit(e); // 离开全屏的回调
             }
         };
@@ -105,20 +105,19 @@ class fullScreen {
         }
     }
 }
-let full;
+let full = new fullScreen(() => {
+    message.warning("你的浏览器貌似不支持全屏")
+});
+full.screenError(e => {
+    message.warning("全屏失败")
+});
 export default function FullBtn(props) {
     const [icon, switchIcon] = useState((<FullscreenOutlined style={{ fontSize: '2.5vw', color: '#000' }} />))
     useEffect(() => {
-        full = new fullScreen(() => {
-            message.warning("你的浏览器貌似不支持全屏")
-        });
-        full.screenError(e => {
-            message.warning("全屏失败")
-        });
         if (props.enter && props.quit) {
             full.screenChange(props.enter, props.quit)
         }
-        return () => {full.force = true}
+        return () => { full.force = true }
         // eslint-disable-next-line 
     }, [])
 
