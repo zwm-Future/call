@@ -1,20 +1,19 @@
 import { memo, useState, useEffect } from 'react'
 import './processTable.less'
-import { WrappedTextarea } from './style'
-import { Table, Button, Modal, notification, Input } from 'antd';
-const { TextArea } = Input;
+// import { WrappedTextarea } from './style'
+// import { Table, Button, Modal, notification, Input } from 'antd';
+import { Table, Button } from 'antd';
+// const { TextArea } = Input;
 const { Column } = Table;
 
 export default memo(function ProcessTable(props) {
 
-    let [list, updateList] = useState([])
     let [isLoading, switchLoading] = useState(false)
-    let [selectedListKey, updateSelectedList] = useState([])   // 被选中的数据的 key
-    let [isshowFeedback, switchShowFeedback] = useState(false)  // 是否显示反馈框
-    let [reason, updateReason] = useState('')   // 未通过原因
-    // let [isMannual, switchMannul] = useState(false)      // 是否手动处理状态
     let [processInfo, updateProcessInfo] = useState({})  // 当前处理的信息
-    // let [MannualInfo, updateMannualInfo] = useState({})     // 手动处理信息
+
+    // let [selectedListKey, updateSelectedList] = useState([])   // 被选中的数据的 key
+    // let [isshowFeedback, switchShowFeedback] = useState(false)  // 是否显示反馈框
+    // let [reason, updateReason] = useState('')   // 未通过原因
 
     useEffect(() => {
         console.log('process-table', props);
@@ -40,83 +39,83 @@ export default memo(function ProcessTable(props) {
 
     }
 
-
-    const rowSelection = {
-        onChange: (selectedRowKeys, selectedRows) => {
-            updateSelectedList(selectedRowKeys)
-            console.log(selectedRowKeys, selectedRows)
-        },
-        // getCheckboxProps: (record) => {
-        //     // record 是没条数据的数据。
-        //     // 对每个 checkbox 的配置。
-        //     console.log(record);
-        //     console.log('AAAAABABA');
-        //     return ({
-        //         // Column configuration not to be checked
-        //         name: record.name,
-        //     })
-        // },
-    };
-
-    let handleList = (key, htype) => {
-        if (htype === 'sccuess') {
-            let newList = list.filter(v => {
-                if (v.key === key) return false
-                return true
-            })
-            updateList(newList)
-            // 处理成功删除，处理失败弹窗报错
-            notification['error']({
-                message: '未知错误',
-                description:
-                    '请重试',
-            });
-            return
-        }
-        updateSelectedList([key])
-        // selectedListKey.push = key
-        switchShowFeedback(true);
-    }
-
-    const handleOk = () => {
-
-        switchShowFeedback(false);
-
-        let selectedList = []
-        selectedListKey.forEach(v => {
-            list.forEach(v2 => {
-                if (v2.key === v) {
-                    selectedList.push(v2)
-                }
-            })
-        })
-
-        setTimeout(() => {
-            console.log('未处理原因', reason);
-            console.log('未处理单号', selectedList);
-            console.log('发送请求');
-            console.log('请求成功 ，删除数据');
-            updateReason('')
-            console.log(selectedListKey);
-
-            let newList = list
-            selectedListKey.forEach(v => {
-                newList = newList.filter(v2 => {
-                    if (v2.key === v) return false
+    /* 
+        const rowSelection = {
+            onChange: (selectedRowKeys, selectedRows) => {
+                updateSelectedList(selectedRowKeys)
+                console.log(selectedRowKeys, selectedRows)
+            },
+            // getCheckboxProps: (record) => {
+            //     // record 是没条数据的数据。
+            //     // 对每个 checkbox 的配置。
+            //     console.log(record);
+            //     console.log('AAAAABABA');
+            //     return ({
+            //         // Column configuration not to be checked
+            //         name: record.name,
+            //     })
+            // },
+        }; */
+    /* 
+        let handleList = (key, htype) => {
+            if (htype === 'sccuess') {
+                let newList = list.filter(v => {
+                    if (v.key === key) return false
                     return true
                 })
+                updateList(newList)
+                // 处理成功删除，处理失败弹窗报错
+                notification['error']({
+                    message: '未知错误',
+                    description:
+                        '请重试',
+                });
+                return
+            }
+            updateSelectedList([key])
+            // selectedListKey.push = key
+            switchShowFeedback(true);
+        }
+    
+        const handleOk = () => {
+    
+            switchShowFeedback(false);
+    
+            let selectedList = []
+            selectedListKey.forEach(v => {
+                list.forEach(v2 => {
+                    if (v2.key === v) {
+                        selectedList.push(v2)
+                    }
+                })
             })
+    
+            setTimeout(() => {
+                console.log('未处理原因', reason);
+                console.log('未处理单号', selectedList);
+                console.log('发送请求');
+                console.log('请求成功 ，删除数据');
+                updateReason('')
+                console.log(selectedListKey);
+    
+                let newList = list
+                selectedListKey.forEach(v => {
+                    newList = newList.filter(v2 => {
+                        if (v2.key === v) return false
+                        return true
+                    })
+                })
+    
+                console.log(newList);
+                updateList(newList)
+            }, 1000) */
 
-            console.log(newList);
-            updateList(newList)
-        }, 1000)
+    // console.log('selectedList', selectedList);
+    // };
 
-        // console.log('selectedList', selectedList);
-    };
-
-    const handleCancel = () => {
-        switchShowFeedback(false);
-    };
+    // const handleCancel = () => {
+    //     switchShowFeedback(false);
+    // };
 
     // const handledMany = () => {
     //     if (selectedListKey.length === 0) {
@@ -158,27 +157,23 @@ export default memo(function ProcessTable(props) {
                 marginTop: processInfo.appointments ? '0' : '100px'
             }}>
                 <div>
-                    <div className="item"> 当前客户 ： {processInfo.name} </div>
-                    <div className="item"> 工学号：{processInfo.id}</div>
-                    <div className="item"> 排队序号：{processInfo.number}</div>
+                    <div className="item"> <div className="lable">当前客户</div>：{processInfo.name} </div>
+                    <div className="item"> <div className="lable">工学号</div>：{processInfo.id}</div>
+                    <div className="item"> <div className="lable">排队序号</div>：{processInfo.number}</div>
                 </div>
             </div>
             <div className="h_scroll" style={{
                 display: processInfo.appointments ? 'block' : 'none'
             }}>
-                <div className="list_title">总单数 ( {list.length} )：</div>
+                <div className="list_title">总单数 ( {processInfo.appointments ? processInfo.appointments.length : 0} )：</div>
                 <Table
-                    scroll={{ y: 330 }}
+                    scroll={{ y: 310 }}
                     bordered
                     pagination={false}
-                    rowSelection={{
-                        type: 'checkbox',
-                        ...rowSelection,
-                    }}
                     dataSource={processInfo.appointments}
                 >
                     <Column title="单号" dataIndex="key" width='50%' />
-                    <Column title="操作" dataIndex="action" width='50%'
+                    {/* <Column title="操作" dataIndex="action" width='50%'
                         render={(text, record) => {
                             // console.log('record', record.id);
                             return (
@@ -188,7 +183,7 @@ export default memo(function ProcessTable(props) {
                                 </div>
                             )
                         }}
-                    />
+                    /> */}
                 </Table>
             </div>
             {/* <input > */}
@@ -200,9 +195,8 @@ export default memo(function ProcessTable(props) {
                             <Button onClick={() => props.callNext()} type="primary" size="large" >下一位</Button>
                         </>)
                 }
-
             </div>
-            <Modal
+            {/* <Modal
                 okText="确认"
                 cancelText="取消"
                 centered
@@ -212,7 +206,7 @@ export default memo(function ProcessTable(props) {
                         autoFocus
                         style={{ height: 100 }} value={reason} onInput={(e) => updateReason(e.target.value)} />
                 </WrappedTextarea>
-            </Modal>
+            </Modal> */}
         </div >
     )
 })
