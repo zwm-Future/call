@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom'
 import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, LockOutlined, SmileOutlined } from '@ant-design/icons';
 import { login } from '@/api/user'
+import { saveWorker } from '@/utils/user'
 import './index.less'
 
 export default memo(function Login() {
@@ -11,11 +12,12 @@ export default memo(function Login() {
 
     const onFinish = (values) => {
         login(values).then(res => {
-            const { code, other } = res;
+            const { code, other, data } = res;
             setLoading(false);
             if (code == 0 && res.message == "成功") {
-                // 本地存token
+                // 本地存token user
                 localStorage.setItem("authed", other)
+                saveWorker(data);
                 push('/home/index');
             } else if (code === 1) {
                 message.warning(res.message);
