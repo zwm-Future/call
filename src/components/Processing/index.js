@@ -4,6 +4,7 @@ import Queue from './queue'
 import ProcessTable from './processTable'
 
 import { callApi, getQueue, delay, mannual, appointmentMannual } from '@/api/call.js'
+import { getWorker } from '@/utils/user'
 import { handleQueueAtP } from '@/utils/handleQueueData'
 import { message } from 'antd'
 
@@ -92,6 +93,8 @@ export default memo(function Processing(props) {
 
     // 手动处理
     function mannualHandle(userId) {
+        const {id:workerId} = getWorker()
+        if(!workerId) return;
         console.log(title + "手动处理ID", userId)
 
         if (title === "预约") {
@@ -113,7 +116,7 @@ export default memo(function Processing(props) {
                 }
                 return false
             })
-            appointmentMannual(userId).then((res) => {
+            appointmentMannual(userId,workerId).then((res) => {
                 console.log("手动处理", res.message);
                 if (res.message === "还没有人被叫号") {
                     message.warning("请先叫号")
@@ -125,7 +128,7 @@ export default memo(function Processing(props) {
             })
             return
         }
-        mannual(title, userId).then(res => {
+        mannual(title, userId, workerId).then(res => {
             console.log("手动处理", res);
             if (res.message === "还没有人被叫号") {
                 message.warning("请先叫号")
