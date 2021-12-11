@@ -104,7 +104,6 @@ export default memo(function Message(props) {
     //列信息
     const columns = [
         {
-            key: 'index',
             width: 100,
             title: '序号',
             align: 'center',
@@ -113,35 +112,30 @@ export default memo(function Message(props) {
         }
         ,
         {
-            key: 'orderNumber',
             width: 300,
             title: '单号',
             align: 'center',
             dataIndex: 'orderNumber',
         },
         {
-            key: 'id',
             width: 200,
             title: '姓名',
             align: 'center',
             dataIndex: 'id'
         },
         {
-            key: 'userId',
             width: 300,
             title: '学工号',
             align: 'center',
             dataIndex: 'userId'
         },
         {
-            key: 'workerName',
             width: 200,
             title: '审核人员',
             align: 'center',
             dataIndex: 'workerName',
         },
         {
-            key: 'day',
             width: 200,
             title: '处理时间',
             align: 'center',
@@ -167,8 +161,7 @@ export default memo(function Message(props) {
                         }
                     }
                     loading={loading}
-                    // dataSource={dataSource}
-                    rowKey="_id"
+                    rowKey="id"
                 >
                 </Table>
             </Card>
