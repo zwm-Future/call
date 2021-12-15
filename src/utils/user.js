@@ -1,13 +1,13 @@
 import { notification } from 'antd'
 
 export const saveWorker = (worker) => {
-    localStorage.setItem("worker",worker);
+    localStorage.setItem("worker", worker);
 }
 export const getWorker = () => {
     const worker = localStorage.getItem("worker");
-    if(worker && worker.id) {
+    if (worker && worker.id) {
         return worker;
-    }else {
+    } else {
         notification.error({
             message: '登录超时，请重新登录！',
         });

@@ -25,8 +25,7 @@ class createWebSocket {
         // 心跳timer
         this.hearbeat_timer = null
         // 心跳发送频率
-        // this.hearbeat_interval = 60000
-        this.hearbeat_interval = 3000
+        this.hearbeat_interval = 30000
 
         // 是否自动重连
         this.is_reonnect = true
@@ -40,18 +39,23 @@ class createWebSocket {
         this.reconnect_interval = 3000
         this.getMessage = getMes
         this.connect(url)
+
     }
 
     connect(url) {//连接服务器
+
         this.ws = new WebSocket(url)
+
         this.ws.onopen = (e) => {
             this.status = 'open'
             message.info('连接成功')
             console.log("connection to server is opened")
-            this.ocket_open = true;
+            this.socket_open = true;
             this.is_reonnect = true;
+            this.reconnect_current = 1;
             // 开启心跳
             this.heartbeat();
+            notification.close("key")
 
         }
         this.ws.onmessage = (e) => {
@@ -59,9 +63,9 @@ class createWebSocket {
             this.getMessage(e);
         }
         // 关闭回调
-        this.ws.onclose = function (e) {
+        this.ws.onclose = (e) => {
             console.log('连接已断开')
-            console.log("hearbeat_timer", this.hearbeat_timer);
+            openNoti()
             console.log('connection closed (' + e.code + ')')
             clearInterval(this.hearbeat_timer)
             this.socket_open = false
@@ -78,35 +82,27 @@ class createWebSocket {
                     this.reconnect_current++
                     this.reconnect()
                 }, this.reconnect_interval)
-            } else {
-                openNoti()
             }
         }
         // 连接发生错误
-        this.ws.onerror = function () {
+        this.ws.onerror = () => {
             console.log('WebSocket连接发生错误')
         }
     }
 
     // 心跳
-    heartbeat() {
-        let num = 3;
+    heartbeat = () => {
         if (this.hearbeat_timer) {
             clearInterval(this.hearbeat_timer)
         }
 
         this.hearbeat_timer = setInterval(() => {
-            num -= 1;
-            if (!num) {
-                clearInterval(this.hearbeat_timer)
-            }
             this.send('Ping');
         }, this.hearbeat_interval)
     }
 
-
     // 发送数据
-    send(data, callback = null) {
+    send = (data, callback = null) => {
         // 开启状态直接发送
         if (this.ws.readyState === this.ws.OPEN) {
             this.ws.send(JSON.stringify(data))
