@@ -1,4 +1,20 @@
-import { message } from 'antd'
+import { message, notification, Button } from 'antd'
+
+// 关闭连接回调
+function openNoti() {
+    notification.error({
+        description: "连接已断开!可刷新重新连接",
+        duration: 0,
+        key: 'key',
+        btn: (
+            <Button type="primary" size="small" onClick={() => { window.location.reload(true); notification.close("key") }}>
+                刷新
+            </Button>
+        ),
+
+    })
+}
+
 class createWebSocket {
     // ws 地址  url, 接受信息回调 getMes
     constructor(url, getMes) {
@@ -9,7 +25,8 @@ class createWebSocket {
         // 心跳timer
         this.hearbeat_timer = null
         // 心跳发送频率
-        this.hearbeat_interval = 60000
+        // this.hearbeat_interval = 60000
+        this.hearbeat_interval = 3000
 
         // 是否自动重连
         this.is_reonnect = true
@@ -21,7 +38,7 @@ class createWebSocket {
         this.reconnect_timer = null
         // 重连频率
         this.reconnect_interval = 3000
-        this.getMessage = getMes;
+        this.getMessage = getMes
         this.connect(url)
     }
 
@@ -34,13 +51,17 @@ class createWebSocket {
             this.ocket_open = true;
             this.is_reonnect = true;
             // 开启心跳
-            // this.heartbeat();
+            this.heartbeat();
 
         }
-        this.ws.onmessage = this.getMessage;
+        this.ws.onmessage = (e) => {
+            this.heartbeat();
+            this.getMessage(e);
+        }
         // 关闭回调
         this.ws.onclose = function (e) {
             console.log('连接已断开')
+            console.log("hearbeat_timer", this.hearbeat_timer);
             console.log('connection closed (' + e.code + ')')
             clearInterval(this.hearbeat_timer)
             this.socket_open = false
@@ -57,6 +78,8 @@ class createWebSocket {
                     this.reconnect_current++
                     this.reconnect()
                 }, this.reconnect_interval)
+            } else {
+                openNoti()
             }
         }
         // 连接发生错误
@@ -67,14 +90,20 @@ class createWebSocket {
 
     // 心跳
     heartbeat() {
+        let num = 3;
         if (this.hearbeat_timer) {
             clearInterval(this.hearbeat_timer)
         }
 
         this.hearbeat_timer = setInterval(() => {
+            num -= 1;
+            if (!num) {
+                clearInterval(this.hearbeat_timer)
+            }
             this.send('Ping');
         }, this.hearbeat_interval)
     }
+
 
     // 发送数据
     send(data, callback = null) {
@@ -114,6 +143,7 @@ class createWebSocket {
     // 关闭
     close() {
         console.log('主动断开连接')
+        notification.close('key')
         clearInterval(this.hearbeat_timer)
         this.is_reonnect = false
         this.ws.close()

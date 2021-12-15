@@ -32,12 +32,12 @@ function handleName(userName) {
 }
 
 // 获取叫号信息，返回叫号数组
-export function callQueue(user) {
+export function callQueue(queue, user) {
     let window = user.status;
     let number = user.appointments ?
         user.appointments[0].reservationNumber : user.location;
     // let text = numToChNum(`请排队序号为-${number}-到-${window}号窗口`)
-    let text = `请排队序号为,${number},到,${window}号窗口`
+    let text = `请${queue}。排队序号为,${number},到,${window}号窗口`
     return [[text, text, text].join('。。')]
 }
 

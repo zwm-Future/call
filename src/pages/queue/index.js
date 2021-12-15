@@ -23,47 +23,7 @@ export default memo(function Queue(props) {
     // 是否全屏
     const [isFullScreen, updateFSstatues] = useState(false)
     useEffect(() => {
-        const getMes = (e) => {
-            let data = JSON.parse(e.data)
-            console.log("数据变动Data", data);
-            if (data.other) {  // 数据变动
-                let other = JSON.parse(data.other)
-                let queueMessage = JSON.parse(data.queueMessage)
 
-                switch (data.name) {
-                    case '预约队列':
-                        updateAList(handleQueues([...queueMessage, ...other]))
-                        break
-                    case "现场队列":
-                        updateSList(handleQueues([...queueMessage, ...other]))
-                        break
-                    case "加急队列":
-                        updateUKist(handleQueues([...queueMessage, ...other]))
-                        break
-                    default:
-                        message.error("匹配失败")
-                }
-                if (data.user) {
-                    console.log("应该叫");
-                    if (data.user.status !== -1) {
-                        console.log("应该叫2");
-                        callPerson(callQueue(data.user))
-                    }
-                }
-
-            } else if (data.siteCall) { // 第一次连接
-
-                let { siteCall, siteUnCall, subscribeCall, subscribeUnCall, urgentCall, urgentUnCall } = data
-
-                updateAList(handleQueues([...subscribeCall, ...subscribeUnCall]))
-                updateSList(handleQueues([...siteCall, ...siteUnCall]))
-                updateUKist(handleQueues([...urgentCall, ...urgentUnCall]))
-
-                // console.log("现场队列", [...siteCall, ...siteUnCall])
-                // console.log("预约队列", [...subscribeCall, ...subscribeUnCall])
-                // console.log("加急队列", [...urgentCall, ...urgentUnCall])
-            }
-        }
         // websocket实例 开启连接
         const call_ws = new createWebSocket(webSocketUrl, getMes);
 
@@ -77,6 +37,47 @@ export default memo(function Queue(props) {
         // eslint-disable-next-line
     }, [])
 
+
+    function getMes(e) {
+        let data = JSON.parse(e.data)
+        console.log("数据变动Data", data);
+        if (data.other) {  // 数据变动
+            let other = JSON.parse(data.other)
+            let queueMessage = JSON.parse(data.queueMessage)
+
+            switch (data.name) {
+                case '预约队列':
+                    updateAList(handleQueues([...queueMessage, ...other]))
+                    break
+                case "现场队列":
+                    updateSList(handleQueues([...queueMessage, ...other]))
+                    break
+                case "加急队列":
+                    updateUKist(handleQueues([...queueMessage, ...other]))
+                    break
+                default:
+                    message.error("匹配失败")
+            }
+            if (data.user) {    // 有人被叫
+                if (data.user.status !== -1) {
+                    console.log("应该叫");
+                    callPerson(callQueue(data.name, data.user))
+                }
+            }
+
+        } else if (data.siteCall) { // 第一次连接
+
+            let { siteCall, siteUnCall, subscribeCall, subscribeUnCall, urgentCall, urgentUnCall } = data
+
+            updateAList(handleQueues([...subscribeCall, ...subscribeUnCall]))
+            updateSList(handleQueues([...siteCall, ...siteUnCall]))
+            updateUKist(handleQueues([...urgentCall, ...urgentUnCall]))
+
+            // console.log("现场队列", [...siteCall, ...siteUnCall])
+            // console.log("预约队列", [...subscribeCall, ...subscribeUnCall])
+            // console.log("加急队列", [...urgentCall, ...urgentUnCall])
+        }
+    }
 
     // 叫号
     function callPerson(callV) {
@@ -126,7 +127,7 @@ export default memo(function Queue(props) {
                     <FullBtn ele=".queue-container" enter={fullScreenCallb} quit={quitFullScreenCallb}></FullBtn>
                 </div>
                 <div className="qr-wrap">
-                    <img className="qr-code" src="https://www.rdcmy.com/reservationSystem/QRCode/QRCode.jpg" alt="签到码" />
+                    <img className="qr-code" src="https://www.rdcmy.com/reservation/QRCode/QRCode.jpg" alt="签到码" />
                     <div className="qr-tip">请扫码签到排队</div>
                 </div>
                 <div className="alter">
