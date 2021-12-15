@@ -126,7 +126,7 @@ export default memo(function Queue(props) {
                     <FullBtn ele=".queue-container" enter={fullScreenCallb} quit={quitFullScreenCallb}></FullBtn>
                 </div>
                 <div className="qr-wrap">
-                    <img className="qr-code" src="https://www.rdcmy.com/reservation/QRCode/QRCode.jpg" alt="签到码" />
+                    <img className="qr-code" src="https://cwcwx.gdut.edu.cn/reservation/QRCode/QRCode.jpg" alt="签到码" />
                     <div className="qr-tip">请扫码签到排队</div>
                 </div>
                 <div className="alter">
