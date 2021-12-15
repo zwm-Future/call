@@ -121,13 +121,13 @@ export default memo(function Message(props) {
             width: 200,
             title: '姓名',
             align: 'center',
-            dataIndex: 'id'
+            dataIndex: 'principalName'
         },
         {
             width: 300,
             title: '学工号',
             align: 'center',
-            dataIndex: 'userId'
+            dataIndex: 'principalId'
         },
         {
             width: 200,
