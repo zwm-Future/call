@@ -1,4 +1,20 @@
-import { message } from 'antd'
+import { message, notification, Button } from 'antd'
+
+// 关闭连接回调
+function openNoti() {
+    notification.error({
+        description: "连接已断开!可刷新重新连接",
+        duration: 0,
+        key: 'key',
+        btn: (
+            <Button type="primary" size="small" onClick={() => { window.location.reload(true); notification.close("key") }}>
+                刷新
+            </Button>
+        ),
+
+    })
+}
+
 class createWebSocket {
     // ws 地址  url, 接受信息回调 getMes
     constructor(url, getMes) {
@@ -9,7 +25,7 @@ class createWebSocket {
         // 心跳timer
         this.hearbeat_timer = null
         // 心跳发送频率
-        this.hearbeat_interval = 60000
+        this.hearbeat_interval = 30000
 
         // 是否自动重连
         this.is_reonnect = true
@@ -21,26 +37,35 @@ class createWebSocket {
         this.reconnect_timer = null
         // 重连频率
         this.reconnect_interval = 3000
-        this.getMessage = getMes;
+        this.getMessage = getMes
         this.connect(url)
+
     }
 
     connect(url) {//连接服务器
+
         this.ws = new WebSocket(url)
+
         this.ws.onopen = (e) => {
             this.status = 'open'
             message.info('连接成功')
             console.log("connection to server is opened")
-            this.ocket_open = true;
+            this.socket_open = true;
             this.is_reonnect = true;
+            this.reconnect_current = 1;
             // 开启心跳
-            // this.heartbeat();
+            this.heartbeat();
+            notification.close("key")
 
         }
-        this.ws.onmessage = this.getMessage;
+        this.ws.onmessage = (e) => {
+            this.heartbeat();
+            this.getMessage(e);
+        }
         // 关闭回调
-        this.ws.onclose = function (e) {
+        this.ws.onclose = (e) => {
             console.log('连接已断开')
+            openNoti()
             console.log('connection closed (' + e.code + ')')
             clearInterval(this.hearbeat_timer)
             this.socket_open = false
@@ -60,13 +85,13 @@ class createWebSocket {
             }
         }
         // 连接发生错误
-        this.ws.onerror = function () {
+        this.ws.onerror = () => {
             console.log('WebSocket连接发生错误')
         }
     }
 
     // 心跳
-    heartbeat() {
+    heartbeat = () => {
         if (this.hearbeat_timer) {
             clearInterval(this.hearbeat_timer)
         }
@@ -77,7 +102,7 @@ class createWebSocket {
     }
 
     // 发送数据
-    send(data, callback = null) {
+    send = (data, callback = null) => {
         // 开启状态直接发送
         if (this.ws.readyState === this.ws.OPEN) {
             this.ws.send(JSON.stringify(data))
@@ -114,6 +139,7 @@ class createWebSocket {
     // 关闭
     close() {
         console.log('主动断开连接')
+        notification.close('key')
         clearInterval(this.hearbeat_timer)
         this.is_reonnect = false
         this.ws.close()
