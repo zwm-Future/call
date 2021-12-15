@@ -1,4 +1,3 @@
-export const baseURL = 'https://www.rdcmy.com/reservationSystem/'
-// export const baseURL = 'https://www.rdcmy.com/reservationSystem/'
+export const baseURL = 'https://cwcwx.gdut.edu.cn/reservation/api/'
 
-export const webSocketUrl = 'ws://114.132.235.87:8081/queue'
+export const webSocketUrl = 'wss://cwcwx.gdut.edu.cn/reservation/websocket/queue'

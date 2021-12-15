@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { notification } from 'antd'
+import { removeWorker } from '@/utils/user'
 import { baseURL } from '@/api/baseUrl'
 // const baseURL = "http://114.132.235.87/"
 // const baseURL = "https://www.rdcmy.com/reservationSystem/"
@@ -43,7 +44,8 @@ export default function request(option) {
                         notification.error({
                             message: '登录超时，请重新登录！',
                         });
-                        //删除本地token
+                        //删除本地token user
+                        removeWorker();
                         localStorage.removeItem("authed");
                         window.history.go('/login');
                         // err.message = '未授权的访问'

@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom'
 import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, LockOutlined, SmileOutlined } from '@ant-design/icons';
 import { login } from '@/api/user'
+import { saveWorker } from '@/utils/user'
 import './index.less'
 
 export default memo(function Login() {
@@ -11,11 +12,12 @@ export default memo(function Login() {
 
     const onFinish = (values) => {
         login(values).then(res => {
-            const { code, other } = res;
+            const { code, other, data } = res;
             setLoading(false);
             if (code == 0 && res.message == "成功") {
-                // 本地存token
+                // 本地存token user
                 localStorage.setItem("authed", other)
+                saveWorker(data);
                 push('/home/index');
             } else if (code === 1) {
                 message.warning(res.message);
@@ -25,6 +27,7 @@ export default memo(function Login() {
 
     const onFinishFailed = (errorInfo) => {
         message.error('提交失败！');
+        setLoading(false);
     };
 
     const handleClick = () => {
@@ -46,7 +49,7 @@ export default memo(function Login() {
                     autoComplete="off"
                 >
                     <Form.Item
-                        name="username"
+                        name="name"
                         rules={[
                             {
                                 required: true,
@@ -57,15 +60,15 @@ export default memo(function Login() {
                         <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="姓名" />
                     </Form.Item>
                     <Form.Item
-                        name="name"
+                        name="username"
                         rules={[
                             {
                                 required: true,
-                                message: '请输入用户名',
+                                message: '请输入学工号',
                             },
                         ]}
                     >
-                        <Input prefix={<SmileOutlined className="site-form-item-icon" />} placeholder="用户名" />
+                        <Input prefix={<SmileOutlined className="site-form-item-icon" />} placeholder="学工号" />
                     </Form.Item>
                     <Form.Item
                         name="password"

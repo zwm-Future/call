@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Button, Modal } from 'antd';
 import { ApiTwoTone, ExclamationCircleOutlined } from '@ant-design/icons'
+import { removeWorker } from '@/utils/user'
 export default function LogoutBtn() {
     const { replace } = useHistory()
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -11,8 +12,9 @@ export default function LogoutBtn() {
     };
 
     const handleOk = () => {
-        //删除token
+        //删除token user
         localStorage.removeItem("authed")
+        removeWorker();
         replace('/login')
         setIsModalVisible(false);
     };

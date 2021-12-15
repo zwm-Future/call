@@ -65,17 +65,21 @@ export function delay(type, userId) {
 }
 
 // 手动处理完成
-export function mannual(type, userNumber) {
+export function mannual(type, userNumber, workerId) {
+  let dat = {};
   let url = ''
   switch (type) {
     case "预约":
-      url = '/call/signFinish'
+      url = '/call/signFinish';
+      dat = {userNumber,workerId}
       break
     case "现场":
       url = '/call/siteFinish'
+      dat = {userNumber}
       break
     case "加急":
       url = '/call/urgentFinish'
+      dat = {userNumber}
       break
     default:
       return Promise.reject({ data: "类型错误" })
@@ -84,21 +88,20 @@ export function mannual(type, userNumber) {
   return request({
     url,
     method: "DELETE",
-    params: {
-      userNumber
-    }
+    params: dat
   })
 
 }
 
 // 预约手动完成
 
-export function appointmentMannual(number) {
+export function appointmentMannual(number,workerId) {
   return request({
     url: "/appointment/editSelf",
     method: "PUT",
     data: {
-      number
+      number,
+      workerId
     }
   })
 
