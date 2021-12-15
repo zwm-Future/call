@@ -17,7 +17,7 @@ export default memo(function Login() {
             if (code == 0 && res.message == "成功") {
                 // 本地存token user
                 localStorage.setItem("authed", other)
-                saveWorker(data);
+                saveWorker(JSON.stringify(data));
                 push('/home/index');
             } else if (code === 1) {
                 message.warning(res.message);

@@ -4,7 +4,8 @@ export const saveWorker = (worker) => {
     localStorage.setItem("worker",worker);
 }
 export const getWorker = () => {
-    const worker = localStorage.getItem("worker");
+    let worker = localStorage.getItem("worker");
+    worker = JSON.parse(worker);
     if(worker && worker.id) {
         return worker;
     }else {
