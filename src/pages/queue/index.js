@@ -8,6 +8,7 @@ import { InfoCircleOutlined } from '@ant-design/icons'
 import { handleQueues, callQueue } from '@/utils/handleQueueData'
 import { message } from 'antd'
 import { webSocketUrl } from '@/api/baseUrl'
+import img from '@/assets/img/queue.svg'
 
 export default memo(function Queue(props) {
     // const QueueSpeaker = useRef(new Speaker('zh-CN', 2, 2, 2)).current
@@ -119,7 +120,6 @@ export default memo(function Queue(props) {
                         <Cqueue isFullScreen={isFullScreen} type="加急" list={uergentList} />
                     </div>
                 </div>
-
             </div>
             {/* 二维码 */}
             <div style={{ width: '14%' }} onMouseMove={handleMove} >
@@ -134,6 +134,13 @@ export default memo(function Queue(props) {
                     <div className="alter_title"><InfoCircleOutlined style={{ fontSize: '2.2vh', color: '#109efc', paddingRight: 11 }} />相关说明</div>
                     <div className="alter_body">请扫码签，选择相应的业务后进行排队！注意排队无法临时取消！如有意外，请联系现场工作人员处理</div>
                 </div>
+            </div>
+            <div className='dandelions'>
+                <img src={img} className='item' style={{ '--i': 3, '--d': 1 }} alt="" />
+                <img src={img} className='item' style={{ '--i': 1, '--d': 2 }} alt="" />
+                <img src={img} className='item' style={{ '--i': 4, '--d': 3 }} alt="" />
+                <img src={img} className='item' style={{ '--i': 2, '--d': 4 }} alt="" />
+
             </div>
         </div>
     )

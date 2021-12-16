@@ -1,7 +1,9 @@
 .queue-container {
     --Fontsize: 2.3vh;
     width: 100%;
-    background-color: #fff;
+    height: 100%;
+    background-color: rgb(243, 243, 243);
+    position: relative;
 
     .full-btn {
         position: absolute;
@@ -22,7 +24,7 @@
     .qr-wrap {
         margin-top: 6vw;
         width: 100%;
-        background-color: #fff;
+        // background-color: #fff;
         margin-bottom: 80px;
 
         .qr-code {
@@ -56,6 +58,45 @@
             font-size: 2.0vh;
             line-height: 1.4;
             // text-align: center;
+        }
+    }
+
+    .dandelions {
+        position: absolute;
+        bottom: 0;
+
+        .item {
+            opacity: 0.4;
+            position: absolute;
+            width: 8vh;
+
+            animation: Fly 12s calc(var(--d)*3s) linear infinite,
+                Float 6s linear infinite;
+        }
+
+        @keyframes Fly {
+            0% {
+                transform: translate(calc(var(--i)*6vw), 0);
+            }
+
+            100% {
+                transform: translate(calc(var(--i)*20vw), -90vh);
+                opacity: 0;
+            }
+        }
+
+        @keyframes Float {
+            0% {
+                top: 0;
+            }
+
+            50% {
+                top: 20px;
+            }
+
+            100% {
+                top: 0px;
+            }
         }
     }
 }
