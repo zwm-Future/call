@@ -106,9 +106,13 @@ export default memo(function Queue(props) {
     }
 
     return (
-        <div style={{ display: 'flex', padding: 10 }} className="queue-container">
+        <div style={{
+            display: 'flex', padding: 10, backgroundColor: isFullScreen ? '#eaf4fc' : '#fff'
+        }} className="queue-container">
             {/* 队列数据 */}
-            <div style={{ width: '86%' }}>
+            < div style={{
+                width: '86%'
+            }}>
                 <div className="h_scroll queues" style={{ padding: 10, display: 'flex' }}>
                     <div style={{ boxSizing: 'border-box', width: '34%', paddingRight: '2.1%' }}>
                         <Cqueue isFullScreen={isFullScreen} type="预约" list={appointmentList} />
@@ -120,9 +124,9 @@ export default memo(function Queue(props) {
                         <Cqueue isFullScreen={isFullScreen} type="加急" list={uergentList} />
                     </div>
                 </div>
-            </div>
+            </div >
             {/* 二维码 */}
-            <div style={{ width: '14%' }} onMouseMove={handleMove} >
+            < div style={{ width: '14%' }} onMouseMove={handleMove} >
                 <div className={btn_class}>
                     <FullBtn ele=".queue-container" enter={fullScreenCallb} quit={quitFullScreenCallb}></FullBtn>
                 </div>
@@ -131,10 +135,10 @@ export default memo(function Queue(props) {
                     <div className="qr-tip">请扫码签到排队</div>
                 </div>
                 <div className="alter">
-                    <div className="alter_title"><InfoCircleOutlined style={{ fontSize: '2.2vh', color: '#109efc', paddingRight: 11 }} />相关说明</div>
-                    <div className="alter_body">请扫码签，选择相应的业务后进行排队！注意排队无法临时取消！如有意外，请联系现场工作人员处理</div>
+                    <div className="alter_title"><InfoCircleOutlined style={{ fontSize: '2.2vh', color: '#109efc', paddingRight: 11 }} />温馨提示</div>
+                    <div className="alter_body">请扫码签到，选择相应的业务后进行排队！注意排队无法临时取消！如有特殊情况，请联系现场工作人员处理</div>
                 </div>
-            </div>
+            </div >
             <div className='dandelions'>
                 <img src={img} className='item' style={{ '--i': 3, '--d': 1 }} alt="" />
                 <img src={img} className='item' style={{ '--i': 1, '--d': 2 }} alt="" />
@@ -142,6 +146,6 @@ export default memo(function Queue(props) {
                 <img src={img} className='item' style={{ '--i': 2, '--d': 4 }} alt="" />
 
             </div>
-        </div>
+        </div >
     )
 })

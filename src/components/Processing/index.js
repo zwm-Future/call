@@ -58,7 +58,7 @@ export default memo(function Processing(props) {
         }
 
         if (queueData.length === 0 && !isDelay && personInfo.name !== "无数据") {   // 无下一位 , 删除当前
-            console.log("布尔", isDelay);
+            // console.log("布尔", isDelay);
             mannualHandle(personInfo.id)
             updatePersonInfo(defaultInfo())
             message.warning("当前无人排队")
@@ -67,7 +67,7 @@ export default memo(function Processing(props) {
         callApi(title, window)
             .then(res => {
                 if (res.code === 1) {
-                    message.warning("当前无人排队")
+                    message.warning(res.message)
                     updatePersonInfo(defaultInfo())
                     return
                 }

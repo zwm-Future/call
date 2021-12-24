@@ -65,13 +65,13 @@ class createWebSocket {
         // 关闭回调
         this.ws.onclose = (e) => {
             console.log('连接已断开')
-            openNoti()
             console.log('connection closed (' + e.code + ')')
             clearInterval(this.hearbeat_timer)
             this.socket_open = false
 
             // 需要重新连接
             if (this.is_reonnect) {
+                openNoti()
                 this.reconnect_timer = setTimeout(() => {
                     // 超过重连次数
                     if (this.reconnect_current > this.reconnect_count) {

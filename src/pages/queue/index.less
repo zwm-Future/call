@@ -2,7 +2,7 @@
     --Fontsize: 2.3vh;
     width: 100%;
     height: 100%;
-    background-color: rgb(249, 253, 255);
+    background-color: #ddf0ff;
     position: relative;
 
     .full-btn {
@@ -38,6 +38,7 @@
             font-size: var(--Fontsize);
             letter-spacing: 3px;
             line-height: 1.2;
+            font-weight: bold;
         }
     }
 
@@ -70,8 +71,8 @@
             position: absolute;
             width: 8vh;
 
-            animation: Fly 12s calc(var(--d)*3s) linear infinite,
-                Float 6s linear infinite;
+            animation: Fly 15s calc(var(--d)*3s) linear infinite,
+                // Float 2s linear infinite;
         }
 
         @keyframes Fly {
@@ -91,7 +92,7 @@
             }
 
             50% {
-                top: 20px;
+                top: 30px;
             }
 
             100% {
