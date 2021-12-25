@@ -1,12 +1,14 @@
 import request from '@/utils/request.js'
 
 // 叫号
-export function callApi(type, window) {
+export function callApi(type, window, workerId) {
   console.log(type, window)
   let url = ''
+  let data = {window}
   switch (type) {
     case "预约":
       url = '/call/SignCall'
+      data = {window, workerId}
       break
     case "现场":
       url = '/call/siteCall'
@@ -20,9 +22,7 @@ export function callApi(type, window) {
   return request({
     url,
     method: "GET",
-    params: {
-      window
-    }
+    params: data
   })
 }
 
