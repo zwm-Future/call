@@ -56,7 +56,8 @@ export default memo(function Processing(props) {
             switchMannul(0)
             return
         }
-
+        const {id:workerId} = getWorker()//获取工作人员ID
+        if(!workerId) return;
         if (queueData.length === 0 && !isDelay && personInfo.name !== "无数据") {   // 无下一位 , 删除当前
             // console.log("布尔", isDelay);
             mannualHandle(personInfo.id)
@@ -64,7 +65,7 @@ export default memo(function Processing(props) {
             message.warning("当前无人排队")
             return
         }
-        callApi(title, window)
+        callApi(title, window, workerId)
             .then(res => {
                 if (res.code === 1) {
                     message.warning(res.message)
@@ -93,7 +94,7 @@ export default memo(function Processing(props) {
 
     // 手动处理
     function mannualHandle(userId) {
-        const {id:workerId} = getWorker()
+        const {id:workerId} = getWorker()//获取工作人员ID
         if(!workerId) return;
         console.log(title + "手动处理ID", userId)
 
