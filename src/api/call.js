@@ -1,12 +1,17 @@
 import request from '@/utils/request.js'
 
 // 叫号
-export function callApi(type, window) {
+export function callApi(type, window, workerId) {
   console.log(type, window)
-  let url = ''
+  let url = '';
+  let params = { window };
   switch (type) {
     case "预约":
-      url = '/call/SignCall'
+      url = '/call/SignCall';
+      params = {
+        window,
+        workerId
+      }
       break
     case "现场":
       url = '/call/siteCall'
@@ -20,9 +25,7 @@ export function callApi(type, window) {
   return request({
     url,
     method: "GET",
-    params: {
-      window
-    }
+    params
   })
 }
 
@@ -66,20 +69,20 @@ export function delay(type, userId) {
 
 // 手动处理完成
 export function mannual(type, userNumber, workerId) {
-  let dat = {};
+  let data = {};
   let url = ''
   switch (type) {
     case "预约":
       url = '/call/signFinish';
-      dat = {userNumber,workerId}
+      data = { userNumber, workerId }
       break
     case "现场":
       url = '/call/siteFinish'
-      dat = {userNumber}
+      data = { userNumber }
       break
     case "加急":
       url = '/call/urgentFinish'
-      dat = {userNumber}
+      data = { userNumber }
       break
     default:
       return Promise.reject({ data: "类型错误" })
@@ -88,14 +91,14 @@ export function mannual(type, userNumber, workerId) {
   return request({
     url,
     method: "DELETE",
-    params: dat
+    data
   })
 
 }
 
-// 预约手动完成
+// // 预约手动完成
 
-export function appointmentMannual(number,workerId) {
+export function appointmentMannual(number, workerId) {
   return request({
     url: "/appointment/editSelf",
     method: "PUT",

@@ -135,7 +135,7 @@ export default memo(function Queue(props) {
                     <div className="qr-tip">请扫码签到排队</div>
                 </div>
                 <div className="alter">
-                    <div className="alter_title"><InfoCircleOutlined style={{ fontSize: '2.2vh', color: '#109efc', paddingRight: 11 }} />温馨提示</div>
+                    <div className="alter_title"><InfoCircleOutlined style={{ fontSize: '2.5vh', color: '#109efc', paddingRight: 11 }} />温馨提示</div>
                     <div className="alter_body">请扫码签到，选择相应的业务后进行排队！注意排队无法临时取消！如有特殊情况，请联系现场工作人员处理</div>
                 </div>
             </div >
@@ -144,7 +144,6 @@ export default memo(function Queue(props) {
                 <img src={img} className='item' style={{ '--i': 1, '--d': 2 }} alt="" />
                 <img src={img} className='item' style={{ '--i': 4, '--d': 3 }} alt="" />
                 <img src={img} className='item' style={{ '--i': 2, '--d': 4 }} alt="" />
-
             </div>
         </div >
     )

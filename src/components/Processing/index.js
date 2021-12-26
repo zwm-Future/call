@@ -3,7 +3,7 @@ import Header from './header'
 import Queue from './queue'
 import ProcessTable from './processTable'
 
-import { callApi, getQueue, delay, mannual, appointmentMannual } from '@/api/call.js'
+import { callApi, getQueue, delay, mannual,appointmentMannual} from '@/api/call.js'
 import { getWorker } from '@/utils/user'
 import { handleQueueAtP } from '@/utils/handleQueueData'
 import { message } from 'antd'
@@ -20,10 +20,15 @@ export default memo(function Processing(props) {
     let [queueData, updateQueue] = useState([])
     let [personInfo, updatePersonInfo] = useState(defaultInfo())
 
+    // eslint-disable-next-line
     let [MannualPersonInfo, updateMannualPersonInfo] = useState(defaultInfo())
     let [isMannual, switchMannul] = useState(0)
 
+    let [workerId, getWorkerId] = useState('0')
     useEffect(() => {
+        const { id: _workerId } = getWorker()
+        if (!_workerId) return;
+        getWorkerId(_workerId);
         getQueueData()
     }, []) // eslint-disable-line
 
@@ -57,24 +62,14 @@ export default memo(function Processing(props) {
             return
         }
 
-        if (queueData.length === 0 && !isDelay && personInfo.name !== "无数据") {   // 无下一位 , 删除当前
-            // console.log("布尔", isDelay);
-            mannualHandle(personInfo.id)
-            updatePersonInfo(defaultInfo())
-            message.warning("当前无人排队")
-            return
-        }
-        callApi(title, window)
+        callApi(title, window,workerId)
             .then(res => {
                 if (res.code === 1) {
                     message.warning(res.message)
                     updatePersonInfo(defaultInfo())
                     return
                 }
-                // console.log(res)
-                // console.log('排队信息（仅待定）', res.other)
-
-                // console.log("此窗口当前处理对象", JSON.parse(res.message))
+               
                 let { user, appointments, location } = JSON.parse(res.message)
                 console.log("appointments", appointments)
                 let infor = {
@@ -93,43 +88,43 @@ export default memo(function Processing(props) {
 
     // 手动处理
     function mannualHandle(userId) {
-        const {id:workerId} = getWorker()
-        if(!workerId) return;
         console.log(title + "手动处理ID", userId)
 
         if (title === "预约") {
-            queueData.some(v => {
-                if (v.id === userId) {
-                    // updateMannualPersonInfo()
-                    console.log("手动处理人的信息?", v)
-                    let { appointments } = v
-                    console.log("appointments", appointments)
-                    let infor = {
-                        id: userId,  // 学号
-                        name: v.name,
-                        number: appointments ? appointments[0].reservationNumber : 1,
-                        appointments: handleTickets(appointments)
-                    }
-                    updateMannualPersonInfo(infor)
-                    switchMannul(++isMannual)
-                    return true
-                }
-                return false
-            })
-            appointmentMannual(userId,workerId).then((res) => {
-                console.log("手动处理", res.message);
-                if (res.message === "还没有人被叫号") {
-                    message.warning("请先叫号")
-                }
-                getQueueData(true)
-            }).catch(err => {
-                console.log("手动处理 ERROR ", err);
-                message.error("手动处理失败")
-            })
-            return
+        //     queueData.some(v => {
+        //         if (v.id === userId) {
+        //             // updateMannualPersonInfo()
+        //             console.log("手动处理人的信息?", v)
+        //             let { appointments } = v
+        //             console.log("appointments", appointments)
+        //             let infor = {
+        //                 id: userId,  // 学号
+        //                 name: v.name,
+        //                 number: appointments ? appointments[0].reservationNumber : 1,
+        //                 appointments: handleTickets(appointments)
+        //             }
+        //             updateMannualPersonInfo(infor)
+        //             switchMannul(++isMannual)
+        //             return true
+        //         }
+        //         return false
+        //     })
+        appointmentMannual(userId, workerId).then(res => {
+            console.log("手动处理!", res);
+            if (res.message === "还没有人被叫号") {
+                message.warning("请先叫号")
+            }
+            getQueueData(true)
+
+        }).catch(err => {
+            console.log("手动处理 ERROR ", err);
+            message.error("手动处理失败")
+        })
+            return;
         }
+
         mannual(title, userId, workerId).then(res => {
-            console.log("手动处理", res);
+            console.log("手动处理!", res);
             if (res.message === "还没有人被叫号") {
                 message.warning("请先叫号")
             }
