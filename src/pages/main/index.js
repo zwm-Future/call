@@ -11,6 +11,8 @@ import {
 
 import { Modal, Select, message } from 'antd'
 
+import { getWorker } from '@/utils/user'
+
 import './index.less'
 
 const { Option } = Select;
@@ -30,7 +32,9 @@ const items = [
         type: '1',
         classNames: 'subscribe-item',
         icon: () => (<SafetyCertificateTwoTone className="item-icon" twoToneColor='rgb(21, 245, 133)' />),
-        hasSelect: true
+        hasSelect: true,
+        //拥有的窗口号
+        powers: ['1', '2', '3', '4', '5']
     },
     {
         title: '现场',
@@ -38,7 +42,9 @@ const items = [
         type: '2',
         classNames: 'scene-item',
         icon: () => (<EnvironmentTwoTone className="item-icon" twoToneColor='#1890ff' />),
-        hasSelect: true
+        hasSelect: true,
+        //拥有的窗口号
+        powers: ['6', '7', '8']
     },
     {
         title: '加急',
@@ -46,7 +52,9 @@ const items = [
         type: '3',
         classNames: 'urgent-item',
         icon: () => (<ThunderboltTwoTone className="item-icon" twoToneColor='#eccb52fc' />),
-        hasSelect: true
+        hasSelect: true,
+        //拥有的窗口号
+        powers: ['9', '10']
     },
     {
         title: '信息查询',
@@ -59,34 +67,42 @@ const items = [
 
 export default memo(function Main(props) {
 
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [selectItem, setItem] = useState('/home/queue');
-    const [selectVal, setVal] = useState(0);
+    // const [isModalVisible, setIsModalVisible] = useState(false);
+    // const [selectItem, setItem] = useState('/home/queue');
+    // const [selectVal, setVal] = useState(0);
     const { push } = useHistory();
+    const worker = getWorker();
     const handleClick = (item) => {
-        const { to, hasSelect, title } = item;
+        const { to, hasSelect, title, powers ,type} = item;
         if (!hasSelect) {
             push({ pathname: to, state: { title } });
             return;
         }
-        setIsModalVisible(true);
-        setItem(item);
-    };
-
-    const handleOk = () => {
-        const { to, title, type } = selectItem;
-        console.log(selectVal);
-        if (!selectVal) {
-            message.warning('请选择你当前的窗口');
-            return;
+        //是否选择了与之对应的窗口号类型
+        const selectRight = powers.includes(String(worker.windowNumber));
+        if (selectRight) {
+            push({ pathname: to, search: qs.stringify({ currentNum: worker.windowNumber, title, type }) });
+        }else {
+            message.warning('请选择属于你的业务类型!');
         }
-        push({ pathname: to, search:qs.stringify({currentNum: selectVal, title, type })});
-        setIsModalVisible(false);
+        // setIsModalVisible(true);
+        // setItem(item);
     };
 
-    const handleCancel = () => {
-        setIsModalVisible(false);
-    };
+    // const handleOk = () => {
+    //     const { to, title, type } = selectItem;
+    //     console.log(selectVal);
+    //     if (!selectVal) {
+    //         message.warning('请选择你当前的窗口');
+    //         return;
+    //     }
+    //     push({ pathname: to, search: qs.stringify({ currentNum: selectVal, title, type }) });
+    //     setIsModalVisible(false);
+    // };
+
+    // const handleCancel = () => {
+    //     setIsModalVisible(false);
+    // };
     return (
         <div className="services-wrap">
             <div className="service-container">
@@ -102,7 +118,7 @@ export default memo(function Main(props) {
                         )
                     })
                 }
-                <Modal
+                {/* <Modal
                     centered
                     keyboard
                     cancelText='取消'
@@ -124,8 +140,8 @@ export default memo(function Main(props) {
                         <Option value="4">4</Option>
                         <Option value="5">5</Option>
                     </Select>
-                </Modal>
-               
+                </Modal> */}
+
             </div>
         </div>
     )
