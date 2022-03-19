@@ -41,7 +41,7 @@ export default memo(function Queue(props) {
 
     function getMes(e) {
         let data = JSON.parse(e.data)
-        // console.log("数据变动Data", data);
+        console.log("数据变动Data", data);
         if (data.other) {  // 数据变动
             let other = JSON.parse(data.other)
             let queueMessage = JSON.parse(data.queueMessage)
@@ -62,6 +62,7 @@ export default memo(function Queue(props) {
             if (data.user) {    // 有人被叫
                 if (data.user.status !== -1) {
                     console.log("应该叫");
+                    data.name = data.name == "加急队列"? '对外队列' : data.name;
                     callPerson(callQueue(data.name, data.user))
                 }
             }
@@ -121,7 +122,7 @@ export default memo(function Queue(props) {
                         <Cqueue isFullScreen={isFullScreen} type="现场" list={siteList} />
                     </div>
                     <div style={{ boxSizing: 'border-box', width: '32%' }} >
-                        <Cqueue isFullScreen={isFullScreen} type="加急" list={uergentList} />
+                        <Cqueue isFullScreen={isFullScreen} type="对外" list={uergentList} />
                     </div>
                 </div>
             </div >
@@ -131,7 +132,8 @@ export default memo(function Queue(props) {
                     <FullBtn ele=".queue-container" enter={fullScreenCallb} quit={quitFullScreenCallb}></FullBtn>
                 </div>
                 <div className="qr-wrap">
-                    <img className="qr-code" src="https://cwcwx.gdut.edu.cn/reservation/QRCode/QRCode.jpg" alt="签到码" />
+                    <img className="qr-code" src="http://cwcwx.gdut.edu.cn/reservation/QRCode/QRCode.jpg" alt="签到码" />
+                    {/* <img className="qr-code" src="https://www.rdcmy.com/reservation/QRCode/QRCode.jpg" alt="签到码" /> */}
                     <div className="qr-tip">请扫码签到排队</div>
                 </div>
                 <div className="alter">
