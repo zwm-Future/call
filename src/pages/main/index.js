@@ -73,17 +73,12 @@ export default memo(function Main(props) {
     const { push } = useHistory();
     const worker = getWorker();
     const handleClick = (item) => {
-        const { to, hasSelect, title, powers ,type} = item;
+        const { to, hasSelect, title, powers, type } = item;
         if (!hasSelect) {
             push({ pathname: to, state: { title } });
             return;
-        }
-        //是否选择了与之对应的窗口号类型
-        const selectRight = powers.includes(String(worker.windowNumber));
-        if (selectRight) {
+        } else {
             push({ pathname: to, search: qs.stringify({ currentNum: worker.windowNumber, title, type }) });
-        }else {
-            message.warning('请选择属于你的业务类型!');
         }
         // setIsModalVisible(true);
         // setItem(item);
