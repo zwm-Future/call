@@ -14,8 +14,8 @@ export default memo(function Login() {
         try {
             const res = await login(values);
             const { code, other, data } = res;
+            setLoading(false);
             if (code == 0 && res.message == "成功") {
-                setLoading(false);
                 // 本地存token user
                 localStorage.setItem("authed", other)
                 saveWorker(JSON.stringify(data));
