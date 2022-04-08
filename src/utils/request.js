@@ -7,11 +7,14 @@ import { baseURL } from '@/api/baseUrl'
 
 
 export default function request(option) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
 
         const services = axios.create({
             baseURL,
-            timeout: 10000
+            timeout: 10000,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+            }
         });
 
         // 请求拦截
@@ -54,7 +57,7 @@ export default function request(option) {
                         err.message = "其他错误信息"
                 }
             }
-            return err
+            return Promise.reject(err);
         })
 
         // 2.传入对象进行网络请求
