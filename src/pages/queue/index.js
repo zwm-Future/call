@@ -8,6 +8,7 @@ import { InfoCircleOutlined } from '@ant-design/icons'
 import { handleQueues, callQueue } from '@/utils/handleQueueData'
 import { message } from 'antd'
 import { webSocketUrl } from '@/api/baseUrl'
+import { getTips } from '@/api/tips'
 import img from '@/assets/img/queue.svg'
 
 export default memo(function Queue(props) {
@@ -23,8 +24,18 @@ export default memo(function Queue(props) {
 
     // 是否全屏
     const [isFullScreen, updateFSstatues] = useState(false)
-    useEffect(() => {
-
+    const [tips, setTips] = useState('');
+    useEffect(async () => {
+        async function getText() {
+            try {
+                const { code, message: mes } = await getTips();
+                !code && mes && setTips(mes);
+                code && mes && message.error(mes);
+            } catch (err) {
+                message.error(err.message)
+            }
+        }
+        await getText();
         // websocket实例 开启连接
         const call_ws = new createWebSocket(webSocketUrl, getMes);
 
@@ -37,7 +48,6 @@ export default memo(function Queue(props) {
 
         // eslint-disable-next-line
     }, [])
-
 
     function getMes(e) {
         let data = JSON.parse(e.data)
@@ -62,7 +72,7 @@ export default memo(function Queue(props) {
             if (data.user) {    // 有人被叫
                 if (data.user.status !== -1) {
                     console.log("应该叫");
-                    data.name = data.name == "加急队列"? '对外队列' : data.name;
+                    data.name = data.name == "加急队列" ? '对外队列' : data.name;
                     callPerson(callQueue(data.name, data.user))
                 }
             }
@@ -132,15 +142,17 @@ export default memo(function Queue(props) {
                     <FullBtn ele=".queue-container" enter={fullScreenCallb} quit={quitFullScreenCallb}></FullBtn>
                 </div>
                 <div className="qr-wrap">
-                    <img className="qr-code" src="http://cwcwx.gdut.edu.cn/reservation/QRCode/QRCode.jpg" alt="签到码" />
+                    {/* <img className="qr-code" src="http://cwcwx.gdut.edu.cn/reservation/QRCode/QRCode.jpg" alt="签到码" /> */}
+                    <img className="qr-code" src="http://192.168.9.198:8081/reservation/QRCode/QRCode.jpg" alt="签到码" />
                     {/* <img className="qr-code" src="https://www.rdcmy.com/reservation/QRCode/QRCode.jpg" alt="签到码" /> */}
                     <div className="qr-tip">请扫码签到排队</div>
                 </div>
                 <div className="alter">
                     <div className="alter_title"><InfoCircleOutlined style={{ fontSize: '2.2vh', color: '#109efc', paddingRight: 11 }} />温馨提示</div>
                     <div className="alter_body">
-                        请扫码签到，选择相应的业务后进行排队！注意排队无法临时取消！如有特殊情况，请联系现场工作人员处理.
-                        <div>对外窗口(办理医药费报销、校内转账业务、无须预约，请现场排队)</div>
+                        {/* 请扫码签到，选择相应的业务后进行排队！注意排队无法临时取消！如有特殊情况，请联系现场工作人员处理.
+                        <div>对外窗口(办理医药费报销、校内转账业务、无须预约，请现场排队)</div> */}
+                        {tips}
                     </div>
                 </div>
             </div >
