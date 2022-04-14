@@ -1,7 +1,7 @@
 import React, { memo, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Form, Input, Button, message } from 'antd';
-import { UserOutlined, LockOutlined, SmileOutlined } from '@ant-design/icons';
+import { LockOutlined, SmileOutlined } from '@ant-design/icons';
 import { login } from '@/api/user'
 import { saveWorker } from '@/utils/user'
 import './index.less'
@@ -10,8 +10,9 @@ export default memo(function Login() {
     const [isLoading, setLoading] = useState(false);
     const { push } = useHistory()
 
-    const onFinish = (values) => {
-        login(values).then(res => {
+    const onFinish = async (values) => {
+        try {
+            const res = await login(values);
             const { code, other, data } = res;
             setLoading(false);
             if (code == 0 && res.message == "成功") {
@@ -19,10 +20,13 @@ export default memo(function Login() {
                 localStorage.setItem("authed", other)
                 saveWorker(JSON.stringify(data));
                 push('/home/index');
-            } else if (code === 1) {
-                message.warning(res.message);
+            } else {
+                message.warning(res.message)
             }
-        })
+        } catch (err) {
+            setLoading(false);
+            message.error(err.message)
+        }
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -48,17 +52,6 @@ export default memo(function Login() {
                     onFinishFailed={onFinishFailed}
                     autoComplete="off"
                 >
-                    <Form.Item
-                        name="name"
-                        rules={[
-                            {
-                                required: true,
-                                message: '请输入姓名',
-                            },
-                        ]}
-                    >
-                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="姓名" />
-                    </Form.Item>
                     <Form.Item
                         name="username"
                         rules={[
@@ -89,9 +82,6 @@ export default memo(function Login() {
                             登录
                         </Button>
                     </Form.Item>
-                    <a className="login-form-forgot">
-                        忘记密码?
-                    </a>
                 </Form>
             </div>
         </div>

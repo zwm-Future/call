@@ -14,21 +14,21 @@ const routes = [
     {
         path: "/",
         exact: true,
-        requiresAuth: false,
+        // requiresAuth: false,
         render: () => (
-            <Redirect to="/home" />
+            <Redirect to="/home/index" />
         )
     },
     {
         path: '/login',
         component: Login,
-        requiresAuth: false,
+        // requiresAuth: false,
         title: '登录'
     },
     {
         path: '/home',
         component: Home,
-        requiresAuth: true, //需要登陆后才能跳转的页面
+        // requiresAuth: true, 
         title: '首页',
         routes: [
             {

@@ -34,13 +34,19 @@ export default memo(function Processing(props) {
 
 
     // 未到
-    function handleDelay(userId) {
+    function handleDelay(userInfo) {
+        console.log(userInfo);
+
         if (isMannual) {
             switchMannul(0)
             return
         }
-        console.log("DELAYID", userId);
-        delay(title, userId)
+        let {id,name} = userInfo;
+        let query = {}
+        if(title === '对外') query.name = name
+        else query.userId = id
+        // console.log("DELAYID", userId);
+        delay(title, query)
             .then(res => {
                 console.log("Delay", res.message)
                 if (res.message === "滞后成功") {
@@ -87,8 +93,8 @@ export default memo(function Processing(props) {
     }
 
     // 手动处理
-    function mannualHandle(userId) {
-        console.log(title + "手动处理ID", userId)
+    function mannualHandle({name,id}) {
+        console.log(title + "手动处理ID", id)
 
         if (title === "预约") {
         //     queueData.some(v => {
@@ -109,7 +115,7 @@ export default memo(function Processing(props) {
         //         }
         //         return false
         //     })
-        appointmentMannual(userId, workerId).then(res => {
+        appointmentMannual(id, workerId).then(res => {
             console.log("手动处理!", res);
             if (res.message === "还没有人被叫号") {
                 message.warning("请先叫号")
@@ -122,8 +128,9 @@ export default memo(function Processing(props) {
         })
             return;
         }
-
-        mannual(title, userId, workerId).then(res => {
+        let query2 = id
+        if(title === '对外') query2 = name
+        mannual(title, query2, workerId).then(res => {
             console.log("手动处理!", res);
             if (res.message === "还没有人被叫号") {
                 message.warning("请先叫号")

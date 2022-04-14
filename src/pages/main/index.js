@@ -47,7 +47,7 @@ const items = [
         powers: ['6', '7', '8']
     },
     {
-        title: '加急',
+        title: '对外',
         to: '/home/calling',
         type: '3',
         classNames: 'urgent-item',
@@ -73,6 +73,7 @@ export default memo(function Main(props) {
     const { push } = useHistory();
     const worker = getWorker();
     const handleClick = (item) => {
+        // eslint-disable-next-line
         const { to, hasSelect, title, powers, type } = item;
         if (!hasSelect) {
             push({ pathname: to, state: { title } });

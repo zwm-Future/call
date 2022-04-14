@@ -65,7 +65,7 @@ class Speaker {
 
     // 多次可动态添加
     activeSpeak(arr) {
-        console.log('as')
+
         if (arr.length)
             this.sentenceList.push(arr)
 
@@ -73,7 +73,7 @@ class Speaker {
             this.msg.onend = (this.lifeF && this.lifeF.endCallb) ? this.lifeF.endCallb : null
             return
         }
-
+        // alert(synth.speaking)
         if (synth.speaking) {
             this.msg.onend = () => {
                 this.speak(this.sentenceList[0])

@@ -61,7 +61,7 @@ export default memo(function ProcessTable(props) {
                 {
                     (processInfo.name === "无数据") ? (<Button onClick={() => handleCall()} loading={isLoading} type="primary" size="large" >呼叫用户</Button>) :
                         (<>
-                            <Button type="primary" ghost style={{ borderColor: 'orange', color: 'orange' }} size="large" onClick={() => props.handleDelay(processInfo.id)}>未到</Button>
+                            <Button type="primary" ghost style={{ borderColor: 'orange', color: 'orange' }} size="large" onClick={() => props.handleDelay(processInfo)}>未到</Button>
                             <Button onClick={() => props.callNext()} type="primary" size="large" >下一位</Button>
                         </>)
                 }

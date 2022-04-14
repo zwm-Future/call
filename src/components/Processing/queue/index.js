@@ -13,8 +13,9 @@ export default memo(function Queue(props) {
             Spin(false)
         }, 1000)
     }
-    function showModal(id, key) {
-        console.log("ID", id)
+    function showModal(data, key) {
+        console.log("data", data)
+        // alert(data.name)
         setTimeout(() => {
             Modal.confirm({
                 title: '是否手动处理',
@@ -22,7 +23,7 @@ export default memo(function Queue(props) {
                 content: "排队序号:" + key,
                 okText: '确认',
                 cancelText: '取消',
-                onOk: () => props.mannualHandle(id)
+                onOk: () => props.mannualHandle({name:data.name,id:data.id})
             });
         }, 0);
     }
@@ -41,7 +42,7 @@ export default memo(function Queue(props) {
                 <Column title="操作" dataIndex="action"
                     render={(_, data) => {
                         return (
-                            <Button type="error" onClick={() => showModal(data.id, data.key)} ghost style={{ borderColor: 'orange', color: 'orange', marginRight: 12 }}>手动处理</Button>
+                            <Button type="error" onClick={() => showModal(data, data.key)} ghost style={{ borderColor: 'orange', color: 'orange', marginRight: 12 }}>手动处理</Button>
                         )
                     }}
                 />

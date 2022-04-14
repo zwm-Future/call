@@ -16,7 +16,7 @@ export function callApi(type, window, workerId) {
     case "现场":
       url = '/call/siteCall'
       break
-    case "加急":
+    case "对外":
       url = '/call/urgentCall'
       break
     default:
@@ -36,13 +36,13 @@ export function getQueue(name) {
     url: '/signIn/findQueueByName',
     method: "GET",
     params: {
-      name
+      name:(name==='对外队列')?'加急队列':name
     }
   })
 }
 
 // 滞后
-export function delay(type, userId) {
+export function delay(type, params) {
   let url = ''
   switch (type) {
     case "预约":
@@ -51,7 +51,7 @@ export function delay(type, userId) {
     case "现场":
       url = '/signIn/siteLag'
       break
-    case "加急":
+    case "对外":
       url = "/signIn/urgentLag"
       break
     default:
@@ -61,28 +61,26 @@ export function delay(type, userId) {
   return request({
     url,
     method: "GET",
-    params: {
-      userId
-    }
+    params
   })
 }
 
 // 手动处理完成
-export function mannual(type, userNumber, workerId) {
+export function mannual(type, query2, workerId) {
   let data = {};
   let url = ''
   switch (type) {
     case "预约":
       url = '/call/signFinish';
-      data = { userNumber, workerId }
+      data = { userNumber:query2, workerId }
       break
     case "现场":
       url = '/call/siteFinish'
-      data = { userNumber }
+      data = { userNumber:query2 }
       break
-    case "加急":
+    case "对外":
       url = '/call/urgentFinish'
-      data = { userNumber }
+      data = { name:query2 }
       break
     default:
       return Promise.reject({ data: "类型错误" })
@@ -96,8 +94,7 @@ export function mannual(type, userNumber, workerId) {
 
 }
 
-// // 预约手动完成
-
+ // 预约手动完成
 export function appointmentMannual(number, workerId) {
   return request({
     url: "/appointment/editSelf",
