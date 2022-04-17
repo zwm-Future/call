@@ -3,7 +3,7 @@ import Header from './header'
 import Queue from './queue'
 import ProcessTable from './processTable'
 
-import { callApi, getQueue, delay, mannual,appointmentMannual} from '@/api/call.js'
+import { callApi, getQueue, delay, mannual, appointmentMannual } from '@/api/call.js'
 import { getWorker } from '@/utils/user'
 import { handleQueueAtP } from '@/utils/handleQueueData'
 import { message } from 'antd'
@@ -22,7 +22,7 @@ export default memo(function Processing(props) {
 
     // eslint-disable-next-line
     let [MannualPersonInfo, updateMannualPersonInfo] = useState(defaultInfo())
-    let [isMannual, switchMannul] = useState(0)
+    // let [isMannual, switchMannul] = useState(0)
 
     let [workerId, getWorkerId] = useState('0')
     useEffect(() => {
@@ -37,13 +37,13 @@ export default memo(function Processing(props) {
     function handleDelay(userInfo) {
         console.log(userInfo);
 
-        if (isMannual) {
-            switchMannul(0)
-            return
-        }
-        let {id,name} = userInfo;
+        // if (isMannual) {
+        //     switchMannul(0)
+        //     return
+        // }
+        let { id, name } = userInfo;
         let query = {}
-        if(title === '对外') query.name = name
+        if (title === '对外') query.name = name
         else query.userId = id
         // console.log("DELAYID", userId);
         delay(title, query)
@@ -62,74 +62,71 @@ export default memo(function Processing(props) {
     }
 
     // 叫号 （下一位）
-    function callNext(isDelay = false) {
-        if (isMannual) {  // 处于手动状态
-            switchMannul(0)
+    async function callNext(isDelay = false) {
+        // if (isMannual) {  // 处于手动状态
+        //     switchMannul(0)
+        //     return
+        // }
+        const res = await callApi(title, window, workerId)
+        
+        if (res.code === 1) {
+            message.warning(res.message)
+            updatePersonInfo(defaultInfo())
             return
         }
 
-        callApi(title, window,workerId)
-            .then(res => {
-                if (res.code === 1) {
-                    message.warning(res.message)
-                    updatePersonInfo(defaultInfo())
-                    return
-                }
-               
-                let { user, appointments, location } = JSON.parse(res.message)
-                console.log("appointments", appointments)
-                let infor = {
-                    id: user.number,  // 学号
-                    name: user.name,
-                    number: appointments ? appointments[0].reservationNumber : location,
-                    appointments: handleTickets(appointments)
-                }
-                updatePersonInfo(infor)
-                getQueueData(true)
-                console.log("personInfo", personInfo);
-            }).catch(err => {
-                console.log('err', err)
-            })
+        let { user, appointments, location } = JSON.parse(res.message)
+        // console.log("appointments", appointments)
+        let infor = {
+            id: user.number,  // 学号
+            name: user.name,
+            number: appointments ? appointments[0].reservationNumber : location,
+            appointments: handleTickets(appointments)
+        }
+        updatePersonInfo(infor)
+        getQueueData(true)
+        console.log("personInfo", personInfo);
+
     }
 
     // 手动处理
-    function mannualHandle({name,id}) {
+    function mannualHandle({ name, id }) {
         console.log(title + "手动处理ID", id)
 
         if (title === "预约") {
-        //     queueData.some(v => {
-        //         if (v.id === userId) {
-        //             // updateMannualPersonInfo()
-        //             console.log("手动处理人的信息?", v)
-        //             let { appointments } = v
-        //             console.log("appointments", appointments)
-        //             let infor = {
-        //                 id: userId,  // 学号
-        //                 name: v.name,
-        //                 number: appointments ? appointments[0].reservationNumber : 1,
-        //                 appointments: handleTickets(appointments)
-        //             }
-        //             updateMannualPersonInfo(infor)
-        //             switchMannul(++isMannual)
-        //             return true
-        //         }
-        //         return false
-        //     })
-        appointmentMannual(id, workerId).then(res => {
-            console.log("手动处理!", res);
-            if (res.message === "还没有人被叫号") {
-                message.warning("请先叫号")
-            }
-            getQueueData(true)
+            //     queueData.some(v => {
+            //         if (v.id === userId) {
+            //             // updateMannualPersonInfo()
+            //             console.log("手动处理人的信息?", v)
+            //             let { appointments } = v
+            //             console.log("appointments", appointments)
+            //             let infor = {
+            //                 id: userId,  // 学号
+            //                 name: v.name,
+            //                 number: appointments ? appointments[0].reservationNumber : 1,
+            //                 appointments: handleTickets(appointments)
+            //             }
+            //             updateMannualPersonInfo(infor)
+            //             switchMannul(++isMannual)
+            //             return true
+            //         }
+            //         return false
+            //     })
+            appointmentMannual(id, workerId).then(res => {
+                // console.log("手动处理!", res);
+                if (res.message === "还没有人被叫号") {
+                    message.warning("请先叫号")
+                }
+                getQueueData(true)
 
-        }).catch(err => {
-            console.log("手动处理 ERROR ", err);
-            message.error("手动处理失败")
-        })
+            }).catch(err => {
+                console.log("手动处理 ERROR ", err);
+                message.error("手动处理失败")
+            })
             return;
         }
         let query2 = id
-        if(title === '对外') query2 = name
+        if (title === '对外') query2 = name
         mannual(title, query2, workerId).then(res => {
             console.log("手动处理!", res);
             if (res.message === "还没有人被叫号") {
@@ -151,7 +148,7 @@ export default memo(function Processing(props) {
         let newAppointments = []
         appointments.forEach(v => {
             newAppointments.push({
-                key: v.id,
+                key: v.orderNumber,
                 userId: v.userId,
             })
         })
@@ -161,10 +158,10 @@ export default memo(function Processing(props) {
     // 刷新队列
     function getQueueData(alert = false) {
         getQueue(title + '队列').then(res => {
-            console.log("队列信息", res);
+            // console.log("队列信息", res);
             updateQueue(handleQueueAtP(res.other))
             if (alert) return
-            console.log(title + '队列信息', res.other)
+            // console.log(title + '队列信息', res.other)
             message.success("数据刷新成功")
         }).catch(err => {
             message.warning("获取信息失败")
@@ -179,7 +176,7 @@ export default memo(function Processing(props) {
                 display: 'flex'
             }}>
                 <div style={{ width: '40%' }}><Queue list={queueData} title={title} getQueueData={getQueueData} mannualHandle={mannualHandle} /></div>
-                <div style={{ width: '60%' }} ><ProcessTable isMannual={isMannual} personInfo={personInfo} MannualPersonInfo={MannualPersonInfo} callNext={callNext} handleDelay={handleDelay} /></div>
+                <div style={{ width: '60%' }} ><ProcessTable personInfo={personInfo} MannualPersonInfo={MannualPersonInfo} callNext={callNext} handleDelay={handleDelay} /></div>
             </div>
         </div>
     )
