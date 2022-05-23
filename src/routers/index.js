@@ -49,12 +49,6 @@ const routes = [
                 path: '/home/message',
                 component: Message,
                 title: '信息查询',
-            },
-            {
-                path: '*',
-                render: () => (
-                    <Redirect to={"/404"} />
-                )
             }
         ]
     },
