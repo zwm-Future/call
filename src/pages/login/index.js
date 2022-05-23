@@ -1,15 +1,18 @@
-import React, { memo, useState } from 'react'
+import React, { memo, useState,useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Form, Input, Button, message } from 'antd';
-import { LockOutlined, SmileOutlined } from '@ant-design/icons';
+import { LockOutlined, SmileOutlined,UserOutlined } from '@ant-design/icons';
 import { login } from '@/api/user'
 import { saveWorker } from '@/utils/user'
 import './index.less'
 
 export default memo(function Login() {
     const [isLoading, setLoading] = useState(false);
+    const [codeImg, setCodeImg] = useState('https://cwcwx.gdut.edu.cn/reservation/api/verify/getCode')
     const { push } = useHistory()
-
+    useEffect(() => {
+        refreshCode();
+      },[])
     const onFinish = async (values) => {
         try {
             const res = await login(values);
@@ -37,7 +40,9 @@ export default memo(function Login() {
     const handleClick = () => {
         setLoading(true)
     }
-
+    const refreshCode = () => {
+            setCodeImg(`https://cwcwx.gdut.edu.cn/reservation/api/verify/getCode?id=${Math.random()*10000 + 1}`)
+    }
     return (
         <div className="login-wrap">
             <div className="form-wrap">
@@ -73,9 +78,23 @@ export default memo(function Login() {
                         ]}
                     >
                         <Input.Password
-                            prefix={<LockOutlined className="site-form-item-icon" />}
+                            prefix={<UserOutlined className="site-form-item-icon" />}
                             placeholder="密码"
                         />
+                    </Form.Item>
+                    <Form.Item
+                        name="code"
+                        rules={[
+                            {
+                                required: true,
+                                message: '请输入验证码',
+                            }
+                        ]}
+                    >
+                        <div style={{ display: 'flex' }}>
+                            <Input className='ipt-item' prefix={<LockOutlined className="site-form-item-icon" />} placeholder="验证码" />
+                            <img src={codeImg} alt="验证码" onClick={refreshCode} />
+                        </div>
                     </Form.Item>
                     <Form.Item className="login-button-item">
                         <Button loading={isLoading} onClick={handleClick} type="primary" htmlType="submit" className="login-form-button">
