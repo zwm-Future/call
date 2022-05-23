@@ -1,13 +1,14 @@
-const { 
-  override, 
-  fixBabelImports, 
-  addLessLoader, 
-  addWebpackAlias, 
-  addDecoratorsLegacy 
+const {
+  override,
+  fixBabelImports,
+  addLessLoader,
+  addWebpackAlias,
+  addDecoratorsLegacy,
+  addWebpackPlugin
 } = require('customize-cra');
 
 const path = require('path')
-
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 module.exports = override(
   fixBabelImports('import', {
     libraryName: 'antd',
@@ -21,5 +22,6 @@ module.exports = override(
   addDecoratorsLegacy(),
   addWebpackAlias({
     '@': path.resolve(__dirname, 'src'),
-  })
+  }),
+  addWebpackPlugin(new UglifyJsPlugin())
 );
