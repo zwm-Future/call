@@ -11,9 +11,10 @@ export function login(data) {
     })
 }
 
-export function logout() {
+export function logout(data) {
     return request({
       url: '/worker/logout',
-      method: 'DELETE',
+      method: 'POST',
+      data
     })
   }
