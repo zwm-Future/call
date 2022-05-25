@@ -88,7 +88,7 @@ export function mannual(type, query2, workerId) {
 
   return request({
     url,
-    method: "DELETE",
+    method: "POST",
     data
   })
 
@@ -98,7 +98,7 @@ export function mannual(type, query2, workerId) {
 export function appointmentMannual(number, workerId) {
   return request({
     url: "/appointment/editSelf",
-    method: "PUT",
+    method: "POST",
     data: {
       number,
       workerId
