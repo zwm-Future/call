@@ -1,17 +1,18 @@
-import React, { memo, useState, useEffect,useRef } from 'react'
+import React, { memo, useState, useEffect, useRef } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Form, Input, Button, message } from 'antd';
 import { LockOutlined, SmileOutlined, UserOutlined } from '@ant-design/icons';
 import { login } from '@/api/user'
+import { verifyCodeUrl } from '../../api/baseUrl';
 import { saveWorker } from '@/utils/user'
 import './index.less'
 
 export default memo(function Login() {
     const [isLoading, setLoading] = useState(false);
-    const [codeImg, setCodeImg] = useState('https://cwcwx.gdut.edu.cn/reservation/api/verify/getCode')
+    const [codeImg, setCodeImg] = useState(verifyCodeUrl)
     const { push } = useHistory()
-  let timerCode = useRef(null);
-  useEffect(() => {
+    let timerCode = useRef(null);
+    useEffect(() => {
         refreshCode();
     }, [])
     const onFinish = async (values) => {
@@ -42,7 +43,7 @@ export default memo(function Login() {
         setLoading(true)
     }
     const refreshCode = () => {
-        setCodeImg(`https://cwcwx.gdut.edu.cn/reservation/api/verify/getCode?id=${Math.random() * 10000 + 1}`)
+        setCodeImg(`${verifyCodeUrl}?id=${Date.now()}`)
     }
     //防抖
     const clickCode = () => {
