@@ -45,6 +45,10 @@ const routeRender = (route, authPath = '/login', props, extraProps) => {
         return route.render
             ? route.render()
             : <route.component {...props} authPath={authPath} {...extraProps} route={route} />;
+    }else {
+        return (
+            <Redirect to={{ pathname: '/404' }} />
+        )
     }
 
     // Process --> //注释 ⬆  放开⬇
