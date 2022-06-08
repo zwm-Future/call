@@ -23,30 +23,21 @@ let columns = [
     }
 ]
 
-// let dataSource = []
-// for (let i = 1; i <= 23; i++) {
-//     let status = i <= 5 ? i : 0
-//     dataSource.push({
-//         name: 'Jack' + i,
-//         number: 'am-' + i,
-//         key: i,
-//         windowNum: (<div style={{ textAlign: 'center', color: status ? 'red' : '#000', fontWeight: status ? 'bold' : 'normal' }} > {status ? status : '待定'}</ div>)
-//     })
-// }
 
 export default memo(function Cqueue(props) {
     // console.log('是否全屏', props.isFullScreen)
-    console.log('ListInfo', props.list)
+    // console.log('ListInfo', props.list)
     return (
         <div className="queue_con" >
             <div className="header" >
                 <div className="title" >{props.type}队列</div>
                 <div className="total" >共（{props.list.length}）人</div>
             </div>
+            {/* <Table
+                bordered pagination={false}
+                columns={columns} dataSource={props.list} /> */}
             <Table
-                scroll={{
-                    y: props.isFullScreen ? '87vh' : '71vh'
-                }}
+                scroll={props.list.length > 0 ? { y: props.isFullScreen ? '87vh' : '69vh' } : {}}
                 bordered pagination={false}
                 columns={columns} dataSource={props.list} />
         </div>

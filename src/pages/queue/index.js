@@ -7,12 +7,12 @@ import Speaker from "@/utils/Speaker";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { handleQueues, callQueue } from "@/utils/handleQueueData";
 import { message } from "antd";
-import { webSocketUrl,QRCodeUrl } from "@/api/baseUrl";
+import { webSocketUrl, QRCodeUrl } from "@/api/baseUrl";
 import { getTips } from "@/api/tips";
 import img from "@/assets/img/queue.svg";
 
 export default memo(function Queue(props) {
-    // const QueueSpeaker = useRef(new Speaker('zh-CN', 2, 2, 2)).current
+
     const QueueSpeaker = new Speaker({
         lang: "zh-CN",
         pitch: 1,
@@ -81,7 +81,7 @@ export default memo(function Queue(props) {
                     // console.log("应该叫");
                     // alert(data.name)
                     // eslint-disable-next-line
-                    data.name = (data.name == "加急队列")? "对外队列" : data.name;
+                    data.name = (data.name == "加急队列") ? "对外队列" : data.name;
                     callPerson(callQueue(data.name, data.user));
                 }
             }
@@ -216,12 +216,12 @@ export default memo(function Queue(props) {
                     </div>
                 </div>
             </div>
-            <div className="dandelions">
+            {/* <div className="dandelions">
                 <img src={img} className="item" style={{ "--i": 3, "--d": 1 }} alt="" />
                 <img src={img} className="item" style={{ "--i": 1, "--d": 2 }} alt="" />
                 <img src={img} className="item" style={{ "--i": 4, "--d": 3 }} alt="" />
                 <img src={img} className="item" style={{ "--i": 2, "--d": 4 }} alt="" />
-            </div>
+            </div> */}
         </div>
     );
 });
