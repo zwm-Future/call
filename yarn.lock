@@ -7152,6 +7152,7 @@
     "jest-snapshot" "^26.6.2"
 
 "jest-resolve@*":
+  "integrity" "sha1-Bw/nFZr4ewPlD1LqXhfulbvuQOE="
   "version" "26.6.0"
   dependencies:
     "@jest/types" "^26.6.0"
@@ -11076,6 +11077,11 @@
     "range-parser" "~1.2.1"
     "statuses" "~1.5.0"
 
+"serialize-javascript@^1.7.0":
+  "integrity" "sha512-0Vb/54WJ6k5v8sSWN09S0ora+Hnr+cX40r9F170nT+mSkaxltoE/7R3OrIdBSUv1OoiobH1QoWQbCnAO+e8J1A=="
+  "resolved" "https://registry.npmmirror.com/serialize-javascript/-/serialize-javascript-1.9.1.tgz"
+  "version" "1.9.1"
+
 "serialize-javascript@^4.0.0":
   "integrity" "sha512-GaNA54380uFefWghODBWEGisLZFj00nS5ACs6yHa9nLqlLpVLO8ChDGeKRjZnV4Nh4n0Qi7nhYZD/9fCPzEqkw=="
   "resolved" "https://registry.npmjs.org/serialize-javascript/-/serialize-javascript-4.0.0.tgz"
@@ -11440,9 +11446,9 @@
     "tweetnacl" "~0.14.0"
 
 "ssri@^6.0.1":
-  "integrity" "sha512-3Wge10hNcT1Kur4PDFwEieXSCMCJs/7WvSACcrMYrNp+b8kDL1/0wJch5Ni2WrtwEa2IO8OsVfeKIciKCDx/QA=="
-  "resolved" "https://registry.npmjs.org/ssri/-/ssri-6.0.1.tgz"
-  "version" "6.0.1"
+  "integrity" "sha512-cepbSq/neFK7xB6A50KHN0xHDotYzq58wWCa5LeWqnPrHG8GzfEjO/4O8kpmcGW+oaxkvhEJCWgbgNk4/ZV93Q=="
+  "resolved" "https://registry.npmmirror.com/ssri/-/ssri-6.0.2.tgz"
+  "version" "6.0.2"
   dependencies:
     "figgy-pudding" "^3.5.1"
 
@@ -12174,6 +12180,26 @@
   "integrity" "sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c="
   "resolved" "https://registry.npmjs.org/typedarray/-/typedarray-0.0.6.tgz"
   "version" "0.0.6"
+
+"uglify-js@^3.6.0":
+  "integrity" "sha512-FEikl6bR30n0T3amyBh3LoiBdqHRy/f4H80+My34HOesOKyHfOsxAPAxOoqC0JUnC1amnO0IwkYC3sko51caSw=="
+  "resolved" "https://registry.npmmirror.com/uglify-js/-/uglify-js-3.16.0.tgz"
+  "version" "3.16.0"
+
+"uglifyjs-webpack-plugin@^2.2.0":
+  "integrity" "sha512-mHSkufBmBuJ+KHQhv5H0MXijtsoA1lynJt1lXOaotja8/I0pR4L9oGaPIZw+bQBOFittXZg9OC1sXSGO9D9ZYg=="
+  "resolved" "https://registry.npmmirror.com/uglifyjs-webpack-plugin/-/uglifyjs-webpack-plugin-2.2.0.tgz"
+  "version" "2.2.0"
+  dependencies:
+    "cacache" "^12.0.2"
+    "find-cache-dir" "^2.1.0"
+    "is-wsl" "^1.1.0"
+    "schema-utils" "^1.0.0"
+    "serialize-javascript" "^1.7.0"
+    "source-map" "^0.6.1"
+    "uglify-js" "^3.6.0"
+    "webpack-sources" "^1.4.0"
+    "worker-farm" "^1.7.0"
 
 "unicode-canonical-property-names-ecmascript@^1.0.4":
   "integrity" "sha512-jDrNnXWHd4oHiTZnx/ZG7gtUTVp+gCcTTKr8L0HjlwphROEW3+Him+IpvC+xcJEFegapiMZyZe02CyuOnRmbnQ=="

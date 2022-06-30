@@ -1,7 +1,7 @@
 import { memo, useEffect, useState } from 'react'
 import Header from './header'
 import Queue from './queue'
-import ProcessTable from './processTable'
+import ProcessTable from './/processTable'
 
 import { callApi, getQueue, delay, mannual, appointmentMannual } from '@/api/call.js'
 import { getWorker } from '@/utils/user'
@@ -68,7 +68,7 @@ export default memo(function Processing(props) {
         //     return
         // }
         const res = await callApi(title, window, workerId)
-        
+
         if (res.code === 1) {
             message.warning(res.message)
             updatePersonInfo(defaultInfo())
