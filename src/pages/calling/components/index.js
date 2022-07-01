@@ -20,10 +20,6 @@ export default memo(function Processing(props) {
     let [queueData, updateQueue] = useState([])
     let [personInfo, updatePersonInfo] = useState(defaultInfo())
 
-    // eslint-disable-next-line
-    let [MannualPersonInfo, updateMannualPersonInfo] = useState(defaultInfo())
-    // let [isMannual, switchMannul] = useState(0)
-
     let [workerId, getWorkerId] = useState('0')
     useEffect(() => {
         const { id: _workerId } = getWorker()
@@ -37,20 +33,22 @@ export default memo(function Processing(props) {
     function handleDelay(userInfo) {
         console.log(userInfo);
 
-        // if (isMannual) {
-        //     switchMannul(0)
-        //     return
-        // }
         let { id, name } = userInfo;
         let query = {}
         if (title === '对外') query.name = name
         else query.userId = id
-        // console.log("DELAYID", userId);
+
         delay(title, query)
             .then(res => {
-                console.log("Delay", res.message)
+                console.log("Delay", res)
                 if (res.message === "滞后成功") {
-                    callNext(true)
+                    // 如果还有人在排队
+                    if (res.other > 1) {
+                        callNext(true)
+                    } else {
+                        getQueueData(true)
+                        updatePersonInfo(defaultInfo())
+                    }
                 } else {
                     message.error("滞后失败")
                 }
@@ -63,10 +61,6 @@ export default memo(function Processing(props) {
 
     // 叫号 （下一位）
     async function callNext(isDelay = false) {
-        // if (isMannual) {  // 处于手动状态
-        //     switchMannul(0)
-        //     return
-        // }
         const res = await callApi(title, window, workerId)
 
         if (res.code === 1) {
@@ -76,7 +70,7 @@ export default memo(function Processing(props) {
         }
 
         let { user, appointments, location } = JSON.parse(res.message)
-        // console.log("appointments", appointments)
+
         let infor = {
             id: user.number,  // 学号
             name: user.name,
@@ -86,7 +80,6 @@ export default memo(function Processing(props) {
         updatePersonInfo(infor)
         getQueueData(true)
         console.log("personInfo", personInfo);
-
     }
 
     // 手动处理
@@ -94,26 +87,7 @@ export default memo(function Processing(props) {
         console.log(title + "手动处理ID", id)
 
         if (title === "预约") {
-            //     queueData.some(v => {
-            //         if (v.id === userId) {
-            //             // updateMannualPersonInfo()
-            //             console.log("手动处理人的信息?", v)
-            //             let { appointments } = v
-            //             console.log("appointments", appointments)
-            //             let infor = {
-            //                 id: userId,  // 学号
-            //                 name: v.name,
-            //                 number: appointments ? appointments[0].reservationNumber : 1,
-            //                 appointments: handleTickets(appointments)
-            //             }
-            //             updateMannualPersonInfo(infor)
-            //             switchMannul(++isMannual)
-            //             return true
-            //         }
-            //         return false
-            //     })
             appointmentMannual(id, workerId).then(res => {
-                // console.log("手动处理!", res);
                 if (res.message === "还没有人被叫号") {
                     message.warning("请先叫号")
                 }
@@ -156,16 +130,37 @@ export default memo(function Processing(props) {
     }
 
     // 刷新队列
-    function getQueueData(alert = false) {
+    function getQueueData(NotAlert = false) {
         getQueue(title + '队列').then(res => {
-            // console.log("队列信息", res);
+
             updateQueue(handleQueueAtP(res.other))
-            if (alert) return
-            // console.log(title + '队列信息', res.other)
+            checkUnFinish(res.data)
+            if (NotAlert) return
+
             message.success("数据刷新成功")
         }).catch(err => {
             message.warning("获取信息失败")
             console.log("ERR", err);
+        })
+    }
+
+    // 检查是否有未处理完的任务
+    function checkUnFinish(calledList = []) {
+        // eslint-disable-next-line array-callback-return
+        calledList.some(v => {
+            if (v.status == window) {
+                let { user, appointments, location } = v
+
+                let infor = {
+                    id: user.number,  // 学号
+                    name: user.name,
+                    number: appointments ? appointments[0].reservationNumber : location,
+                    appointments: handleTickets(appointments)
+                }
+                updatePersonInfo(infor)
+                return true
+            }
+            return false
         })
     }
 
@@ -176,7 +171,7 @@ export default memo(function Processing(props) {
                 display: 'flex'
             }}>
                 <div style={{ width: '40%' }}><Queue list={queueData} title={title} getQueueData={getQueueData} mannualHandle={mannualHandle} /></div>
-                <div style={{ width: '60%' }} ><ProcessTable personInfo={personInfo} MannualPersonInfo={MannualPersonInfo} callNext={callNext} handleDelay={handleDelay} /></div>
+                <div style={{ width: '60%' }} ><ProcessTable title={title} personInfo={personInfo} callNext={callNext} handleDelay={handleDelay} /></div>
             </div>
         </div>
     )

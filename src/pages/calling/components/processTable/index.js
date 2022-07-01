@@ -9,12 +9,7 @@ export default memo(function ProcessTable(props) {
     let [processInfo, updateProcessInfo] = useState({})  // 当前处理的信息
 
     useEffect(() => {
-        // console.log('process-table', props);
-        // if (props.isMannual)
-        //     updateProcessInfo({ ...props.MannualPersonInfo })
-        // else
-            updateProcessInfo({ ...props.personInfo })
-        // switchMannul(props.isMannual)
+        updateProcessInfo({ ...props.personInfo })
 
         return () => {
         }
@@ -23,16 +18,15 @@ export default memo(function ProcessTable(props) {
 
 
     // 点击叫号 
-   async function handleCall() {
+    async function handleCall() {
         switchLoading(true)
         try {
-            await  props.callNext()
+            await props.callNext()
             switchLoading(false)
-        } catch(err){
+        } catch (err) {
             switchLoading(false)
         }
     }
-
 
     return (
         <div className="h_pro_table">
@@ -41,7 +35,7 @@ export default memo(function ProcessTable(props) {
             }}>
                 <div>
                     <div className="item"> <div className="lable">当前客户</div>：{processInfo.name} </div>
-                    <div className="item"> <div className="lable">工学号</div>：{processInfo.id}</div>
+                    {props.title === "对外" ? '' : <div className="item"> <div className="lable">工学号</div>：{processInfo.id}</div>}
                     <div className="item"> <div className="lable">排队序号</div>：{processInfo.number}</div>
                 </div>
             </div>
