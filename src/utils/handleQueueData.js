@@ -34,10 +34,12 @@ function handleName(userName) {
 // 获取叫号信息，返回叫号数组
 export function callQueue(queue, user) {
     let window = user.status;
+    let userName = user.user.name;
+    console.log('用户',user);
     let number = user.appointments ?
         user.appointments[0].reservationNumber : user.location;
     // let text = numToChNum(`请排队序号为-${number}-到-${window}号窗口`)
-    let text = `请${queue}。排队序号为,${number},到,${window}号窗口`
+    let text = `请${queue}。排队序号为,${number},${userName},到${window}号窗口`
     // alert(text)
     return [[text, text, text].join('。。')]
 }
