@@ -34,6 +34,3 @@ export const verifyCodeUrl = 'https://cwcwx.gdut.edu.cn/reservation/api/verify/g
 */
 // export const baseURL = 'http://192.168.9.198:8081/reservation/api/'
 // export const verifyCodeUrl = 'http://192.168.9.198:8081/reservation/api/verify/getCode';
-
-
-
