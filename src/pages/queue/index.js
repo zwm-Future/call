@@ -61,7 +61,7 @@ export default memo(function Queue(props) {
 
     function getMes(e) {
         let data = JSON.parse(e.data);
-        // console.log("数据变动Data", data);
+        console.log("数据变动Data", data);
         if (data.other) {
             // 数据变动
             let other = JSON.parse(data.other);
@@ -92,6 +92,8 @@ export default memo(function Queue(props) {
             }
         } else if (data.siteCall) {
             // 第一次连接
+
+            console.log("@", data.siteCall)
 
             let {
                 siteCall,

@@ -15,14 +15,14 @@ export function handleQueues(arr) {
 
 // 处理姓名
 function handleName(userName) {
-    if (userName.length < 2) {
-        return userName
-    }
+    userName = userName.trim()
+    let Len = userName.length
+
     if (userName.length === 2) {
         return userName.substr(0, 1) + '*'
     }
     else {
-        let middle = '', len = userName.length - 2
+        let middle = '', len = Len - 2
         while (len > 0) {
             middle += '*'
             len--
