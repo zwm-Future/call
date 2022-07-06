@@ -15,19 +15,20 @@ export function handleQueues(arr) {
 
 // 处理姓名
 function handleName(userName) {
-    if (userName.length < 2) {
-        return userName
+    let name = userName.trim();
+    if (name.length < 2) {
+        return name
     }
-    if (userName.length === 2) {
-        return userName.substr(0, 1) + '*'
+    if (name.length === 2) {
+        return name.substr(0, 1) + '*'
     }
     else {
-        let middle = '', len = userName.length - 2
+        let middle = '', len = name.length - 2
         while (len > 0) {
             middle += '*'
             len--
         }
-        return userName.substr(0, 1) + middle + userName.substr(-1, 1)
+        return name.substr(0, 1) + middle + name.substr(-1, 1)
     }
 }
 
