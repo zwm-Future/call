@@ -13,7 +13,7 @@ import { handleQueues, callQueue } from "@/utils/handleQueueData";
 
 // API
 import { webSocketUrl, QRCodeUrl } from "@/api/baseUrl";
-import { getTips } from "@/api/tips";
+import { getTips, getTips2 } from "@/api/tips";
 
 export default memo(function Queue(props) {
 
@@ -30,11 +30,14 @@ export default memo(function Queue(props) {
     // 队列数据
     const [appointmentList, updateAList] = useState([]);
     const [siteList, updateSList] = useState([]);
-    const [uergentList, updateUKist] = useState([]);
+    // const [uergentList, updateUKist] = useState([]);
 
     // 是否全屏
     const [isFullScreen, updateFSstatues] = useState(false);
     const [tips, setTips] = useState("");
+
+    // temp may change in the future
+    const [tips2, setTips2] = useState("");
     useEffect(() => {
         async function getText() {
             try {
@@ -44,6 +47,17 @@ export default memo(function Queue(props) {
             } catch (err) {
                 message.error(err.message);
             }
+
+            try {
+                const res = await getTips2();
+                const { code, message: mes } = await getTips2();
+                console.log("tips2", mes);
+                !code && mes && setTips2(mes);
+                code && mes && message.error(mes);
+            } catch (err) {
+                message.error(err.message);
+            }
+
         }
         getText();
         // websocket实例 开启连接
@@ -74,18 +88,15 @@ export default memo(function Queue(props) {
                 case "现场队列":
                     updateSList(handleQueues([...queueMessage, ...other]));
                     break;
-                case "加急队列":
-                    updateUKist(handleQueues([...queueMessage, ...other]));
-                    break;
+                // case "加急队列":
+                //     updateUKist(handleQueues([...queueMessage, ...other]));
+                //     break;
                 default:
                     message.error("匹配失败");
             }
             if (data.user) {
                 // 有人被叫
-                if (data.user.status !== -1) {
-                    // console.log("应该叫");
-                    // alert(data.name)
-                    // eslint-disable-next-line
+                if (data.user.status != -1) {
                     data.name = (data.name == "加急队列") ? "对外队列" : data.name;
                     callPerson(callQueue(data.name, data.user));
                 }
@@ -100,13 +111,11 @@ export default memo(function Queue(props) {
                 siteUnCall,
                 subscribeCall,
                 subscribeUnCall,
-                urgentCall,
-                urgentUnCall,
             } = data;
 
             updateAList(handleQueues([...subscribeCall, ...subscribeUnCall]));
             updateSList(handleQueues([...siteCall, ...siteUnCall]));
-            updateUKist(handleQueues([...urgentCall, ...urgentUnCall]));
+            // updateUKist(handleQueues([...urgentCall, ...urgentUnCall]));
         }
     }
 
@@ -147,7 +156,7 @@ export default memo(function Queue(props) {
             {/* 队列数据 */}
             <div
                 style={{
-                    width: "86%",
+                    width: "82%"
                 }}
             >
                 <div
@@ -157,8 +166,8 @@ export default memo(function Queue(props) {
                     <div
                         style={{
                             boxSizing: "border-box",
-                            width: "34%",
-                            paddingRight: "2.1%",
+                            width: "50%",
+                            paddingRight: "2%",
                         }}
                     >
                         <Cqueue
@@ -170,23 +179,23 @@ export default memo(function Queue(props) {
                     <div
                         style={{
                             boxSizing: "border-box",
-                            width: "34%",
-                            paddingRight: "2.1%",
+                            width: "50%",
+                            paddingRight: "2%",
                         }}
                     >
                         <Cqueue isFullScreen={isFullScreen} type="现场" list={siteList} />
                     </div>
-                    <div style={{ boxSizing: "border-box", width: "32%" }}>
+                    {/* <div style={{ boxSizing: "border-box", width: "32%" }}>
                         <Cqueue
                             isFullScreen={isFullScreen}
                             type="对外"
                             list={uergentList}
                         />
-                    </div>
+                    </div> */}
                 </div>
             </div>
             {/* 二维码 */}
-            <div style={{ width: "14%" }} onMouseMove={handleMove}>
+            <div style={{ width: "18%" }} onMouseMove={handleMove}>
                 <div className={btn_class}>
                     <FullBtn
                         ele=".queue-container"
@@ -195,9 +204,9 @@ export default memo(function Queue(props) {
                     ></FullBtn>
                 </div>
                 <div className="qr-wrap">
-
                     <img className="qr-code" src={QRCodeUrl} alt="签到码" />
                     <div className="qr-tip">请扫码签到排队</div>
+                    <div className="qr-tip hightlight" style={{ fontWeight: isFullScreen ? 'bold' : 'normal' }}>{tips2}</div>
                 </div>
                 <div className="alter">
                     <div className="alter_title">

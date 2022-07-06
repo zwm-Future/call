@@ -22,10 +22,10 @@
     }
 
     .qr-wrap {
-        margin-top: 6vw;
+        margin-top: 2vw;
         width: 100%;
         // background-color: #fff;
-        margin-bottom: 80px;
+        margin-bottom: 30px;
 
         .qr-code {
             width: 100%;
@@ -39,6 +39,10 @@
             letter-spacing: 3px;
             line-height: 1.2;
             font-weight: bold;
+        }
+
+        .hightlight {
+            color: red;
         }
     }
 
@@ -60,45 +64,6 @@
             line-height: 1.4;
             white-space: pre-line;
             // text-align: center;
-        }
-    }
-
-    .dandelions {
-        position: absolute;
-        bottom: 0;
-
-        .item {
-            opacity: 0.4;
-            position: absolute;
-            width: 8vh;
-
-            animation: Fly 15s calc(var(--d)*3s) linear infinite;
-                // Float 2s linear infinite;
-        }
-
-        @keyframes Fly {
-            0% {
-                transform: translate(calc(var(--i)*6vw), 0);
-            }
-
-            100% {
-                transform: translate(calc(var(--i)*20vw), -90vh);
-                opacity: 0;
-            }
-        }
-
-        @keyframes Float {
-            0% {
-                top: 0;
-            }
-
-            50% {
-                top: 30px;
-            }
-
-            100% {
-                top: 0px;
-            }
         }
     }
 }
