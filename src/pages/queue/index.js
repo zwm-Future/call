@@ -1,24 +1,29 @@
 import React, { memo, useEffect, useRef, useState } from "react";
 import "./index.less";
+import { message } from "antd";
+import { InfoCircleOutlined } from "@ant-design/icons";
+
 import createWebSocket from "@/utils/websocket";
 import FullBtn from "@/components/fullBtn";
-import Cqueue from "@/components/Cqueue";
+import Cqueue from "./Cqueue";
 import Speaker from "@/utils/Speaker";
-import { InfoCircleOutlined } from "@ant-design/icons";
+
 import { handleQueues, callQueue } from "@/utils/handleQueueData";
-import { message } from "antd";
-import { webSocketUrl,QRCodeUrl } from "@/api/baseUrl";
+
+
+// API
+import { webSocketUrl, QRCodeUrl } from "@/api/baseUrl";
 import { getTips } from "@/api/tips";
-import img from "@/assets/img/queue.svg";
 
 export default memo(function Queue(props) {
-    // const QueueSpeaker = useRef(new Speaker('zh-CN', 2, 2, 2)).current
+
     const QueueSpeaker = new Speaker({
         lang: "zh-CN",
         pitch: 1,
         rate: 0.9,
         volume: 1,
     });
+
     const full_timer = useRef(null);
     const [btn_class, setClass] = useState("full-btn");
 
@@ -56,7 +61,7 @@ export default memo(function Queue(props) {
 
     function getMes(e) {
         let data = JSON.parse(e.data);
-        console.log("数据变动Data", data);
+        // console.log("数据变动Data", data);
         if (data.other) {
             // 数据变动
             let other = JSON.parse(data.other);
@@ -81,7 +86,7 @@ export default memo(function Queue(props) {
                     // console.log("应该叫");
                     // alert(data.name)
                     // eslint-disable-next-line
-                    data.name = (data.name == "加急队列")? "对外队列" : data.name;
+                    data.name = (data.name == "加急队列") ? "对外队列" : data.name;
                     callPerson(callQueue(data.name, data.user));
                 }
             }
@@ -100,10 +105,6 @@ export default memo(function Queue(props) {
             updateAList(handleQueues([...subscribeCall, ...subscribeUnCall]));
             updateSList(handleQueues([...siteCall, ...siteUnCall]));
             updateUKist(handleQueues([...urgentCall, ...urgentUnCall]));
-
-            // console.log("现场队列", [...siteCall, ...siteUnCall])
-            // console.log("预约队列", [...subscribeCall, ...subscribeUnCall])
-            // console.log("对外队列", [...urgentCall, ...urgentUnCall])
         }
     }
 
@@ -194,12 +195,6 @@ export default memo(function Queue(props) {
                 <div className="qr-wrap">
 
                     <img className="qr-code" src={QRCodeUrl} alt="签到码" />
-                    {/* <img
-                        className="qr-code"
-                        src="http://192.168.9.198:8081/reservation/QRCode/QRCode.jpg"
-                        alt="签到码"
-                    /> */}
-                    {/* <img className="qr-code" src="https://www.rdcmy.com/reservation/QRCode/QRCode.jpg" alt="签到码" /> */}
                     <div className="qr-tip">请扫码签到排队</div>
                 </div>
                 <div className="alter">
@@ -210,17 +205,9 @@ export default memo(function Queue(props) {
                         温馨提示
                     </div>
                     <div className="alter_body">
-                        {/* 请扫码签到，选择相应的业务后进行排队！注意排队无法临时取消！如有特殊情况，请联系现场工作人员处理.
-                        <div>对外窗口(办理医药费报销、校内转账业务、无须预约，请现场排队)</div> */}
                         {tips}
                     </div>
                 </div>
-            </div>
-            <div className="dandelions">
-                <img src={img} className="item" style={{ "--i": 3, "--d": 1 }} alt="" />
-                <img src={img} className="item" style={{ "--i": 1, "--d": 2 }} alt="" />
-                <img src={img} className="item" style={{ "--i": 4, "--d": 3 }} alt="" />
-                <img src={img} className="item" style={{ "--i": 2, "--d": 4 }} alt="" />
             </div>
         </div>
     );

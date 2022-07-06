@@ -2,8 +2,6 @@ import axios from 'axios'
 import { notification } from 'antd'
 import { removeWorker } from '@/utils/user'
 import { baseURL } from '@/api/baseUrl'
-// const baseURL = "http://114.132.235.87/"
-// const baseURL = "https://www.rdcmy.com/reservationSystem/"
 
 
 export default function request(option) {
@@ -12,11 +10,11 @@ export default function request(option) {
         const services = axios.create({
             baseURL,
             timeout: 10000,
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-            },
+            // headers: {
+            //     "Access-Control-Allow-Origin": "*",
+            // },
             withCredentials: true,
-            
+
         });
 
         // 请求拦截

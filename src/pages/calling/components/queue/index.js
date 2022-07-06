@@ -6,12 +6,12 @@ const { Column } = Table;
 
 export default memo(function Queue(props) {
     let [isSpin, Spin] = useState(false)
-    function loadingQueue() {
+    async function loadingQueue() {
         Spin(true)
-        props.getQueueData()
-        setTimeout(() => {
+        await props.getQueueData()
+        setTimeout(()=>{
             Spin(false)
-        }, 1000)
+        },1000)
     }
     function showModal(data, key) {
         console.log("data", data)
@@ -23,12 +23,12 @@ export default memo(function Queue(props) {
                 content: "排队序号:" + key,
                 okText: '确认',
                 cancelText: '取消',
-                onOk: () => props.mannualHandle({name:data.name,id:data.id})
+                onOk: () => props.mannualHandle({ name: data.name, id: data.id })
             });
         }, 0);
     }
 
-    console.log('queue', props);
+    // console.log('queue', props);
     return (
         <div className="h_queue h_scroll" >
             <div className="queue_header"><div>当前排队信息</div><SyncOutlined onClick={() => loadingQueue()} spin={isSpin} style={{ color: "#68656a" }} /></div>
