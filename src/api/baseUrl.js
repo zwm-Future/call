@@ -22,6 +22,6 @@ export const verifyCodeUrl = 'https://cwcwx.gdut.edu.cn/reservation/api/verify/g
 /*
    192
 */
-// export const webSocketUrl = 'ws://192.168.9.198:8081/reservation/api/queue'
+// export const baseURL = 'http://192.168.9.198:8081/reservation/api/'
 // export const verifyCodeUrl = 'http://192.168.9.198:8081/reservation/api/verify/getCode';
 
