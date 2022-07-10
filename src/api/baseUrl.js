@@ -14,10 +14,10 @@
 /* 
    cwc-baseurl
 */
-export const baseURL = 'https://cwcwx.gdut.edu.cn/reservation/api/'
+// export const baseURL = 'https://cwcwx.gdut.edu.cn/reservation/api/'
 export const webSocketUrl = 'wss://cwcwx.gdut.edu.cn/reservation/api/queue'
 export const QRCodeUrl = 'https://cwcwx.gdut.edu.cn/reservation/QRCode/QRCode.jpg'
-export const verifyCodeUrl = 'https://cwcwx.gdut.edu.cn/reservation/api/verify/getCode';
+// export const verifyCodeUrl = 'https://cwcwx.gdut.edu.cn/reservation/api/verify/getCode';
 
 
 /*
@@ -32,5 +32,5 @@ export const verifyCodeUrl = 'https://cwcwx.gdut.edu.cn/reservation/api/verify/g
 /*
    192
 */
-// export const baseURL = 'http://192.168.9.198:8081/reservation/api/'
-// export const verifyCodeUrl = 'http://192.168.9.198:8081/reservation/api/verify/getCode';
+export const baseURL = 'http://192.168.9.198:8081/reservation/api/'
+export const verifyCodeUrl = 'http://192.168.9.198:8081/reservation/api/verify/getCode';
