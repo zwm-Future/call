@@ -19,19 +19,21 @@ export default memo(function Login() {
         try {
             const res = await login(values);
             const { code, other, data } = res;
-            if (code == 0 && res.message == "成功") {
+            if (!code && res.message == "成功") {
                 // 本地存token user
                 localStorage.setItem("authed", other)
                 saveWorker(JSON.stringify(data));
                 push('/home/index');
             } else {
+                refreshCode();
+                setLoading(false);
                 message.warning(res.message)
             }
         } catch (err) {
+            refreshCode();
+            setLoading(false);
             err.message && message.error(err.message)
         }
-        refreshCode();
-        setLoading(false);
     };
 
     const onFinishFailed = (errorInfo) => {
