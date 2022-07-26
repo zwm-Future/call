@@ -22,14 +22,66 @@
     }
 
     .qr-wrap {
-        margin-top: 6vw;
+        margin-top: 2.2vw;
         width: 100%;
         // background-color: #fff;
-        margin-bottom: 80px;
+        margin-bottom: 30px;
 
-        .qr-code {
+        .qr-code-box {
+            position: relative;
             width: 100%;
-            height: 100%
+            min-height: 100px;
+
+            .qr-code {
+                width: 100%;
+            }
+
+            .btn-shadow {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+
+                opacity: 0;
+                background-color: rgba(255, 255, 255, 0.7);
+                animation: show 0.25s linear forwards;
+            }
+
+            .hidden-qr {
+                opacity: 0;
+            }
+
+            @keyframes show {
+                0% {
+                    opacity: 0;
+                }
+
+                100% {
+                    opacity: 1;
+                }
+            }
+
+            .hidden-show-btn {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+
+                padding: 8px 16px;
+
+                word-break: keep-all;
+                word-wrap: normal;
+
+                font-size: 2.8vh;
+                color: rgb(45, 129, 255);
+
+                border: 1px solid rgb(36, 124, 255);
+                border-radius: 4px;
+
+                background-color: rgba(116, 174, 255, 0.9);
+                cursor: pointer;
+            }
         }
 
         .qr-tip {
@@ -39,6 +91,12 @@
             letter-spacing: 3px;
             line-height: 1.2;
             font-weight: bold;
+        }
+
+        .hightlight {
+            padding: 10px 10px 0;
+            color: red;
+            font-size: 2.6vh;
         }
     }
 
@@ -60,45 +118,6 @@
             line-height: 1.4;
             white-space: pre-line;
             // text-align: center;
-        }
-    }
-
-    .dandelions {
-        position: absolute;
-        bottom: 0;
-
-        .item {
-            opacity: 0.4;
-            position: absolute;
-            width: 8vh;
-
-            animation: Fly 15s calc(var(--d)*3s) linear infinite;
-                // Float 2s linear infinite;
-        }
-
-        @keyframes Fly {
-            0% {
-                transform: translate(calc(var(--i)*6vw), 0);
-            }
-
-            100% {
-                transform: translate(calc(var(--i)*20vw), -90vh);
-                opacity: 0;
-            }
-        }
-
-        @keyframes Float {
-            0% {
-                top: 0;
-            }
-
-            50% {
-                top: 30px;
-            }
-
-            100% {
-                top: 0px;
-            }
         }
     }
 }

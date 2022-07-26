@@ -1,4 +1,15 @@
-//  ws 和 QRC 与 叫号的 url 不一样 
+/* 
+  线上的部署 url 配置
+  因区分内外网访问 ， cwc 可
+  需要打包两份
+  一份 ：
+   webSocketUrl ：cwc
+   QRC:cwc
+   base : 192
+   veri:192
+
+ 另一份：all cwc
+*/
 
 /* 
    cwc-baseurl
@@ -7,7 +18,6 @@
 export const webSocketUrl = 'wss://cwcwx.gdut.edu.cn/reservation/api/queue'
 export const QRCodeUrl = 'https://cwcwx.gdut.edu.cn/reservation/QRCode/QRCode.jpg'
 // export const verifyCodeUrl = 'https://cwcwx.gdut.edu.cn/reservation/api/verify/getCode';
-
 
 
 /*
@@ -24,4 +34,3 @@ export const QRCodeUrl = 'https://cwcwx.gdut.edu.cn/reservation/QRCode/QRCode.jp
 */
 export const baseURL = 'http://192.168.9.198:8081/reservation/api/'
 export const verifyCodeUrl = 'http://192.168.9.198:8081/reservation/api/verify/getCode';
-
