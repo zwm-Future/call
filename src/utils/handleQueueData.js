@@ -48,21 +48,6 @@ export function callQueue(queue, user) {
     return [[text, text, text].join('。。')]
 }
 
-
-/* 将传入的字符串里的阿拉伯数字转换成汉语数字
-function numToChNum(str) {
-    return str.replace(/1/g, '一')
-        .replace(/2/g, '二')
-        .replace(/3/g, '三')
-        .replace(/4/g, '四')
-        .replace(/5/g, '五')
-        .replace(/6/g, '六')
-        .replace(/7/g, '七')
-        .replace(/8/g, '八')
-        .replace(/9/g, '九')
-        .replace(/0/g, '零')
-} */
-
 // 处理业务页面的队列
 export function handleQueueAtP(arr) {
     let newList = []
