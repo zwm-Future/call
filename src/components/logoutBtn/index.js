@@ -15,7 +15,7 @@ export default function LogoutBtn() {
     const handleOk = async () => {
         //删除token user
         const authed = localStorage.getItem("authed");
-        authed && await logout({ token: authed });
+        authed &&  logout({ token: authed });
         localStorage.removeItem("authed")
         removeWorker();
         setIsModalVisible(false);
