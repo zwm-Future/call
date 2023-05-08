@@ -23,5 +23,9 @@ module.exports = override(
   addWebpackAlias({
     '@': path.resolve(__dirname, 'src'),
   }),
-  addWebpackPlugin(new UglifyJsPlugin())
+  addWebpackPlugin(new UglifyJsPlugin({
+    cache: true,
+    parallel: true,
+    exclude: /node_modules/
+  })),
 );

@@ -32,5 +32,7 @@ export const QRCodeUrl = 'https://cwcwx.gdut.edu.cn/reservation/QRCode/QRCode.jp
 /*
    192
 */
-export const baseURL = 'http://192.168.9.198:8081/reservation/api/'
-export const verifyCodeUrl = 'http://192.168.9.198:8081/reservation/api/verify/getCode';
+// export const baseURL = 'http://192.168.9.198:8081/reservation/api/'
+export const baseURL = '/api'
+// export const verifyCodeUrl = 'http://192.168.9.198:8081/reservation/api/verify/getCode';
+export const verifyCodeUrl = '/api/verify/getCode';

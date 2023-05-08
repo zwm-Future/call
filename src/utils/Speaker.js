@@ -1,21 +1,31 @@
 import { message } from "antd";
 
-// 获取 语音合成
-const synth = window.speechSynthesis
-
+/**
+ * 叫号接口
+ * @class Speaker
+ * 
+ * config 配置
+ * lang 语言
+ * pitch 音高
+ * rate 速度
+ * volume 音量
+ */
 class Speaker {
-
+  // 获取 语音合成
+    static synth = window.speechSynthesis
     constructor(config = {}, lifeF) {
 
         this.msg = new SpeechSynthesisUtterance()
 
-        this.msg.lang = config.lang !== undefined ? config.lang : 'zh-CN'
-        this.msg.pitch = config.pitch !== undefined ? config.pitch : 2
-        this.msg.rate = config.rate !== undefined ? config.rate : 1.5
-        this.msg.volume = config.volume !== undefined ? config.volume : 1
+        this.msg.lang =  config.lang || 'zh-CN'
+        this.msg.pitch = config.pitch || 2
+        this.msg.rate = config.rate || 1.5
+        this.msg.volume = config.volume || 1
 
+        // 文本数组
         this.sentenceList = []
 
+        // 生命函数
         if (lifeF) {
             this.lifeF = lifeF
             this.msg.onerror = (lifeF.handleError) ? lifeF.handleError : null
@@ -37,29 +47,25 @@ class Speaker {
     // 单次
     speak(text) {
         this.msg.text = text
-        // if (synth.speaking) {
-        //     message.warn('上一呼叫未结束，请稍后')
-        //     return
-        // }
-        synth.speak(this.msg)
+        Speaker.synth.speak(this.msg)
     }
 
     // 多次
     speakMany(arr, index = 0) {
-        let i = index
-        if (i >= arr.length) {
+        if (index >= arr.length) {
             this.msg.onend = (this.lifeF && this.lifeF.endCallb) ? this.lifeF.endCallb : null
             return
         }
+
         if (synth.speaking) {
             message.warn('上一呼叫未结束，请稍后')
             return
         }
 
-        this.speak(arr[i++])
+        this.speak(arr[index++])
 
         this.msg.onend = () => {
-            this.speakMany(arr, i)
+            this.speakMany(arr, index)
         }
     }
 
@@ -73,17 +79,15 @@ class Speaker {
             this.msg.onend = (this.lifeF && this.lifeF.endCallb) ? this.lifeF.endCallb : null
             return
         }
-        // alert(synth.speaking)
+
         if (synth.speaking) {
             this.msg.onend = () => {
-                this.speak(this.sentenceList[0])
-                this.sentenceList.shift()
+                this.speak(this.sentenceList.shift())
                 this.activeSpeak([])
             }
         }
         else {
-            this.speak(this.sentenceList[0])
-            this.sentenceList.shift()
+            this.speak(this.sentenceList.shift())
             this.msg.onend = () => {
                 this.activeSpeak([])
             }

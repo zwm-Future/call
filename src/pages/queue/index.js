@@ -1,20 +1,26 @@
-import React, { memo, useEffect, useRef, useState } from "react";
 import "./index.less";
+import React, { memo, useEffect, useRef, useState } from "react";
+
+
+/* components */
 import { message } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
-
-import createWebSocket from "@/utils/websocket";
 import FullBtn from "@/components/fullBtn";
 import Cqueue from "./Cqueue";
-import Speaker from "@/utils/Speaker";
 
+
+
+/* utils */
+import createWebSocket from "@/utils/websocket";
+import Speaker from "@/utils/Speaker";
 import { handleQueues, callQueue } from "@/utils/handleQueueData";
 
-// API
+/* API */
 import { webSocketUrl, QRCodeUrl } from "@/api/baseUrl";
 import { getTips, getTips2 } from "@/api/tips";
 
 export default memo(function Queue(props) {
+  /* 语言 */
 	const QueueSpeaker = new Speaker({
 		lang: "zh-CN",
 		pitch: 1,
@@ -22,19 +28,22 @@ export default memo(function Queue(props) {
 		volume: 1,
 	});
 
+  /* 全屏按钮 */
 	const full_timer = useRef(null);
 	const [btn_class, setClass] = useState("full-btn");
 
-	// 队列数据
-	const [appointmentList, updateAList] = useState([]);
+  /* 队列数据 */
+  // 预约
+	const [appointmentList, updateAList] = useState([]); 
+  // 现场
 	const [siteList, updateSList] = useState([]);
-	// const [uergentList, updateUKist] = useState([]);
 
 	// 是否全屏
 	const [isFullScreen, updateFSstatues] = useState(false);
-	const [tips, setTips] = useState("");
 
-	// temp may change in the future
+
+	// 提示
+  const [tips, setTips] = useState("");
 	const [tips2, setTips2] = useState("");
 
 	// 二维码是否显示
@@ -44,6 +53,7 @@ export default memo(function Queue(props) {
 
 	useEffect(() => {
 		async function getText() {
+      /* 获取提示信息 */
 			try {
 				const { code, message: mes } = await getTips();
 				!code && mes && setTips(mes);
@@ -53,9 +63,7 @@ export default memo(function Queue(props) {
 			}
 
 			try {
-				const res = await getTips2();
 				const { code, message: mes } = await getTips2();
-				console.log("tips2", mes);
 				!code && mes && setTips2(mes);
 				code && mes && message.error(mes);
 			} catch (err) {
@@ -63,6 +71,8 @@ export default memo(function Queue(props) {
 			}
 		}
 		getText();
+
+
 		// websocket实例 开启连接
 		const call_ws = new createWebSocket(webSocketUrl, getMes);
 
@@ -76,9 +86,9 @@ export default memo(function Queue(props) {
 		// eslint-disable-next-line
 	}, []);
 
-	function getMes(e) {
-		let data = JSON.parse(e.data);
-		console.log("数据变动Data", data);
+	function getMes({data:raw}) {
+		let data = JSON.parse(raw);
+
 		if (data.other) {
 			// 数据变动
 			let other = JSON.parse(data.other);
@@ -91,9 +101,6 @@ export default memo(function Queue(props) {
 				case "现场队列":
 					updateSList(handleQueues([...queueMessage, ...other]));
 					break;
-				// case "加急队列":
-				//     updateUKist(handleQueues([...queueMessage, ...other]));
-				//     break;
 				default:
 					message.error("匹配失败");
 			}
@@ -107,13 +114,10 @@ export default memo(function Queue(props) {
 		} else if (data.siteCall) {
 			// 第一次连接
 
-			console.log("@", data.siteCall);
-
 			let { siteCall, siteUnCall, subscribeCall, subscribeUnCall } = data;
 
 			updateAList(handleQueues([...subscribeCall, ...subscribeUnCall]));
 			updateSList(handleQueues([...siteCall, ...siteUnCall]));
-			// updateUKist(handleQueues([...urgentCall, ...urgentUnCall]));
 		}
 	}
 
@@ -121,6 +125,7 @@ export default memo(function Queue(props) {
 	function callPerson(callV) {
 		QueueSpeaker.activeSpeak(callV);
 	}
+
 	// 处理移动显示全屏icon
 	function handleMove() {
 		if (full_timer.current) clearTimeout(full_timer.current);
@@ -134,7 +139,6 @@ export default memo(function Queue(props) {
 	// 点击全屏回调
 	function fullScreenCallb() {
 		updateFSstatues(true);
-		console.log(isFullScreen);
 	}
 	// 退出全屏时回调
 	function quitFullScreenCallb() {
@@ -146,13 +150,7 @@ export default memo(function Queue(props) {
 	function handleMoveInQr(flag) {
 		// 当二维码显示时
 		if (isShowQr) {
-			if (flag) {
-				// 显示按钮
-				toggleShowBtn(true);
-			} else {
-				// 隐藏按钮
-				toggleShowBtn(false);
-			}
+      toggleShowBtn(flag);
 		}
 		return;
 	}
@@ -182,7 +180,7 @@ export default memo(function Queue(props) {
 							width: "50%",
 							paddingRight: "2%",
 						}}
-					>
+					> 
 						<Cqueue
 							isFullScreen={isFullScreen}
 							type="预约"
