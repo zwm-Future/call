@@ -1,0 +1,40 @@
+.queue_con {
+    --titleFontsize: 3.0vh;
+    --totalFontsize: 2.6vh;
+    --tableCellFontsize: 2.5vh;
+    height: 100%;
+
+    // 标题部分
+    .header {
+        display: flex;
+        justify-content: space-between;
+
+        height: 2.6vh;
+        line-height: 1.4vh;
+
+        padding: 0 10px 0 20px;
+
+        .title {
+            font-weight: bold;
+            font-size: var(--titleFontsize);
+        }
+
+        .total {
+            font-size: var(--totalFontsize);
+        }
+    }
+
+    .ant-table-cell{
+        font-size: var(--tableCellFontsize);
+        font-weight: bold;
+        text-align: center;
+    }
+}
+
+@media screen and (max-height:970px) {
+    .queue_con {
+        --titleFontsize: 22px;
+        --totalFontsize: 18px;
+        --tableCellFontsize: 16px;
+    }
+}

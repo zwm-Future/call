@@ -6,38 +6,31 @@
     flex-wrap: nowrap;
     height: 100%;
     .view-item {
-        transition: all 1s;
+        display: flex;
+        align-items: center;
+        color:#109efc;
+        background-color: #fff;
+        transition: all .5s;
+        overflow: hidden;
     }
     .previous-view {
-        display: flex;
-        justify-content: center;
-        align-items: center;
         height: 40px;
         font-family:'Microsoft YaHei';
         font:  900  25px 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-        color:#109efc;
-        background-color: #fff;
         border-radius: 20px;
         align-self: end;
-        transition: all .5s;
         cursor: pointer;
     }
     .previous-view:hover {
         height: 80px;
         font-size: 50px;
         letter-spacing: 5px;
-        color:#109efc;
         border-radius: 40px; 
     }
     .current-view {
-        display: flex;
-        justify-content: center;
-        align-items: center;
         height: 80px;
         font:  900  50px 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
         letter-spacing: 5px;
-        color:#109efc;
-        background-color: #fff;
         border-radius: 40px;  
     }
     .title {

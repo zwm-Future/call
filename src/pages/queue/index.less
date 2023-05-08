@@ -1,0 +1,129 @@
+.queue-container {
+    --Fontsize: 2.3vh;
+    width: 100%;
+    height: 100%;
+    background-color: #ddf0ff;
+    position: relative;
+
+    .full-btn {
+        position: absolute;
+        top: 0;
+        right: 0;
+        opacity: 0;
+        padding: 6px;
+        transition: all .5s;
+        cursor: pointer;
+        z-index: 99;
+    }
+
+    .full-btn-move {
+        opacity: 1;
+        background-color: rgba(0, 110, 255, 0.308);
+    }
+
+    .qr-wrap {
+        margin-top: 2.2vw;
+        width: 100%;
+        // background-color: #fff;
+        margin-bottom: 30px;
+
+        .qr-code-box {
+            position: relative;
+            width: 100%;
+            min-height: 100px;
+
+            .qr-code {
+                width: 100%;
+            }
+
+            .btn-shadow {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+
+                opacity: 0;
+                background-color: rgba(255, 255, 255, 0.7);
+                animation: show 0.25s linear forwards;
+            }
+
+            .hidden-qr {
+                opacity: 0;
+            }
+
+            @keyframes show {
+                0% {
+                    opacity: 0;
+                }
+
+                100% {
+                    opacity: 1;
+                }
+            }
+
+            .hidden-show-btn {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+
+                padding: 8px 16px;
+
+                word-break: keep-all;
+                word-wrap: normal;
+
+                font-size: 2.8vh;
+                color: rgb(45, 129, 255);
+
+                border: 1px solid rgb(36, 124, 255);
+                border-radius: 4px;
+
+                background-color: rgba(116, 174, 255, 0.9);
+                cursor: pointer;
+            }
+        }
+
+        .qr-tip {
+            padding-top: 10px;
+            text-align: center;
+            font-size: var(--Fontsize);
+            letter-spacing: 3px;
+            line-height: 1.2;
+            font-weight: bold;
+        }
+
+        .hightlight {
+            padding: 10px 10px 0;
+            color: red;
+            font-size: 2.6vh;
+        }
+    }
+
+    .alter {
+        border: 1px solid #8adcff;
+        width: 90%;
+        margin: 0 auto;
+        padding: 10px;
+        background-color: #e6f9ff;
+
+        .alter_title {
+            text-align: center;
+            font-size: var(--Fontsize);
+        }
+
+        .alter_body {
+            margin-top: 6px;
+            font-size: 2.4vh;
+            line-height: 1.4;
+            white-space: pre-line;
+            // text-align: center;
+        }
+    }
+}
+
+@media screen and (max-height:900px) {
+    .queue-container {
+        --Fontsize: 20px;
+    }
+}

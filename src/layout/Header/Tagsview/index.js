@@ -1,4 +1,4 @@
-import React, { useEffect, createRef, useContext } from 'react'
+import React, {  memo } from 'react'
 import { useHistory } from 'react-router-dom'
 import './index.less'
 import {
@@ -6,13 +6,12 @@ import {
     TransitionGroup
 } from 'react-transition-group';
 
-import { HeaderContext } from '../../index'
 import routes from '@/routers'
 
-
+// 匹配路由表，获取当前路由标签
 function getViews(pathName, routes) {
     let views = [];
-    routes.map(r => {
+    routes.forEach(r => {
         if (r.title && pathName.search(r.path) !== -1) {
             views.push(r);
         }
@@ -24,47 +23,33 @@ function getViews(pathName, routes) {
 }
 
 
-export default function TagView(props) {
-    const { pathName } = useContext(HeaderContext)
-    const {push} = useHistory()
+export default memo(function TagView(props) {
+    const { pathName } = props
+    const { push } = useHistory()
     const views = getViews(pathName, routes)
 
-    let refs = [];
-
-    useEffect(() => {
-        refs = creacteRefs();
-        console.log('refs', refs);
-        console.log('views', views);
-        console.log('props', props);
-    })
-
-    function creacteRefs() {
-        const r = []
-        for (let i = 0; i < views.length; i++) {
-            r.push(createRef());
-        }
-        return r;
-    }
     return (
         <div className="tagviews-container">
             <TransitionGroup className="breadcrumb-container" >
-                {views.map((v, i) => (
-                    <CSSTransition appear key={v.path} timeout={1000} classNames="breadcrumb" nodeRef={refs[i]}>
-                        {
-                            i == views.length - 1 ?
-                                (
-                                    <div ref={refs[i]} className='current-view view-item'>
-                                        <div className="title">{v.title}</div>
+                {views.map(({ path, title }, index) => {
+                    return (
+                        <CSSTransition appear key={path} timeout={1000} classNames="breadcrumb" >
+                            {
+                                index === views.length - 1 ?
+                                    (
+                                        <div  className='current-view view-item'>
+                                            <div className="title">{title}</div>
+                                        </div>
+                                    ) :
+                                    (<div onClick={() => { push(path) }}  className='previous-view view-item'>
+                                        <div className="title">{title}</div>
                                     </div>
-                                ) :
-                                (   <div onClick={() => {push(v.path)}}  ref={refs[i]} className='previous-view view-item'>
-                                        <div className="title">{v.title}</div>
-                                    </div>
-                                )
-                        }
-                    </CSSTransition>
-                ))}
+                                    )
+                            }
+                        </CSSTransition>
+                    )
+                })}
             </TransitionGroup>
         </div>
     )
-}
+})
